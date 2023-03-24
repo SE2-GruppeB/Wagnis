@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
         android:fontFamily="sans-serif-black"
-        android:text="Risiko"
+        android:text="Wagnis"
         android:textAlignment="center"
         android:textColor="#BCB9B5"
         android:textSize="60sp"

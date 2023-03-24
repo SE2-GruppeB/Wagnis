@@ -7,8 +7,13 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.util.Xml;
 import android.view.ContextThemeWrapper;
@@ -17,7 +22,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
@@ -31,17 +38,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     FloatingActionButton endTurn;
+    ImageView adjacencies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         hideNavigationBar();
-
+        adjacencies = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
 
        drawHubs("100;100/200;200/150;100");
 
+       //Test for Adjacency
+       Hub test = GlobalVariables.findHubById(81);
+       test.addAdjacency(82);
+       //
+
+       drawAdjacencies();
     }
     @Override
     public void onBackPressed() {
@@ -125,12 +139,46 @@ public class MainActivity extends AppCompatActivity {
                     diceRollPopUp(hub);
                 }
             });
+            GlobalVariables.hubs.add(new Hub(hub));
             layout.addView(hub);
+
 
             cs.clone(layout);
             cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lastTOP);
             cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,lastLEFT);
             cs.applyTo(layout);
         }
+    }
+
+    public void drawAdjacencies(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(8);
+        paint.setAntiAlias(true);
+
+        for(Hub hub : GlobalVariables.hubs){
+            for(Hub h : hub.adjacencies){
+               float pxWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 31, getResources().getDisplayMetrics());
+               float pxHeight =  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+
+               int startX = ((ConstraintLayout.LayoutParams) hub.getHubButton().getLayoutParams()).leftMargin +(int)pxWidth;
+               int startY = ((ConstraintLayout.LayoutParams) hub.getHubButton().getLayoutParams()).topMargin + (int)pxHeight;
+               int endX = ((ConstraintLayout.LayoutParams) h.getHubButton().getLayoutParams()).leftMargin +(int) pxWidth;
+               int endY = ((ConstraintLayout.LayoutParams) h.getHubButton().getLayoutParams()).topMargin+(int)pxHeight;
+               System.out.println(startX + "," +startY + ","+endX+ ","+endY);
+                canvas.drawLine(startX,startY,endX,endY,paint);
+
+            }
+        }
+
+        adjacencies.setImageBitmap(bitmap);
     }
 }

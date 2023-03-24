@@ -57,7 +57,7 @@ public class MenuActivity extends AppCompatActivity {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
         int width = (int)px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = false; // lets taps outside the popup also dismiss it
+        boolean focusable = false; // true lets taps outside the popup also dismiss it
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 

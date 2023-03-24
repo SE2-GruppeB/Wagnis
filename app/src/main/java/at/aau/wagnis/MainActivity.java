@@ -1,25 +1,37 @@
 package at.aau.wagnis;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.util.Xml;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
+import android.widget.ThemedSpinnerAdapter;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.xmlpull.v1.XmlPullParser;
 
 public class MainActivity extends AppCompatActivity {
 
 
     FloatingActionButton endTurn;
-    Button hub_1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,14 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         endTurn = findViewById(R.id.btn_EndTurn);
 
-        hub_1 = findViewById(R.id.btn_hub_1);
-        hub_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                diceRollPopUp(hub_1);
-            }
-        });
-
+       drawHubs("100;100/200;200/150;100");
 
     }
     @Override
@@ -94,6 +99,38 @@ public class MainActivity extends AppCompatActivity {
             dice[i].setMaxValue(6);
             dice[i].setMinValue(1);
             dice[i].setValue(values[i]);
+        }
+    }
+
+    public void drawHubs(String seed){//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...
+        ConstraintLayout layout = findViewById(R.id.layout_activity_main);
+        ConstraintSet cs = new ConstraintSet();
+        int nextId = 80;
+        int lastTOP = 0;
+        int lastLEFT = 0;
+
+        for(String s : seed.split("/")){
+            String[] coords = s.split(";");
+            lastTOP = lastTOP+Integer.parseInt(coords[0]);
+            lastLEFT = lastLEFT+Integer.parseInt(coords[1]);
+
+
+            Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
+            nextId++;
+            hub.setId(nextId);
+            hub.setText("Hub: "+hub.getId());
+            hub.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    diceRollPopUp(hub);
+                }
+            });
+            layout.addView(hub);
+
+            cs.clone(layout);
+            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lastTOP);
+            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,lastLEFT);
+            cs.applyTo(layout);
         }
     }
 }

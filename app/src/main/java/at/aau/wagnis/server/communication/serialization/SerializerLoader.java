@@ -1,10 +1,17 @@
 package at.aau.wagnis.server.communication.serialization;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.util.Objects;
 import java.util.ServiceLoader;
 
 public class SerializerLoader {
 
-    public <T> Serializer<T> forObject(T obj) {
+    @Nullable
+    public <T> Serializer<T> forObject(@NonNull T obj) {
+        Objects.requireNonNull(obj);
+
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             if (serializer.getTargetClass().isAssignableFrom(obj.getClass())) {
                 return castUnchecked(serializer);
@@ -14,7 +21,11 @@ public class SerializerLoader {
         return null;
     }
 
-    public <T> Serializer<T> forTag(String tag, Class<T> expectedClass) {
+    @Nullable
+    public <T> Serializer<T> forTag(@NonNull String tag, @NonNull Class<T> expectedClass) {
+        Objects.requireNonNull(tag);
+        Objects.requireNonNull(expectedClass);
+
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             if (serializer.getTypeTag().equals(tag) && expectedClass.isAssignableFrom(serializer.getTargetClass())) {
                 return castUnchecked(serializer);

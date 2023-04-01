@@ -1,6 +1,7 @@
 package at.aau.wagnis.server.communication.command;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,7 +14,7 @@ public class ProcessChatMessageCommand implements ServerCommand, ClientCommand {
 
     private final String message;
 
-    public ProcessChatMessageCommand(String message) {
+    public ProcessChatMessageCommand(@NonNull String message) {
         this.message = Objects.requireNonNull(message);
     }
 
@@ -23,13 +24,18 @@ public class ProcessChatMessageCommand implements ServerCommand, ClientCommand {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         ProcessChatMessageCommand command = (ProcessChatMessageCommand) o;
 
         return message.equals(command.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return message.hashCode();
     }
 
     @NonNull
@@ -42,23 +48,29 @@ public class ProcessChatMessageCommand implements ServerCommand, ClientCommand {
 
     public static class CommandSerializer implements Serializer<ProcessChatMessageCommand> {
 
+        @NonNull
         @Override
         public Class<ProcessChatMessageCommand> getTargetClass() {
             return ProcessChatMessageCommand.class;
         }
 
+        @NonNull
         @Override
         public String getTypeTag() {
             return "process-chat-message";
         }
 
         @Override
-        public void writeToStream(ProcessChatMessageCommand command, DataOutputStream stream) throws IOException {
+        public void writeToStream(
+                @NonNull ProcessChatMessageCommand command,
+                @NonNull DataOutputStream stream
+        ) throws IOException {
             stream.writeUTF(command.message);
         }
 
+        @NonNull
         @Override
-        public ProcessChatMessageCommand readFromStream(DataInputStream stream) throws IOException {
+        public ProcessChatMessageCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
             return new ProcessChatMessageCommand(stream.readUTF());
         }
     }

@@ -1,5 +1,7 @@
 package at.aau.wagnis.server.communication.serialization;
 
+import androidx.annotation.NonNull;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Objects;
@@ -10,12 +12,17 @@ public class DeserializingReader<T> {
     private final DataInputStream inputStream;
     private final SerializerLoader serializerLoader;
 
-    public DeserializingReader(Class<T> inputType, DataInputStream stream, SerializerLoader serializerLoader) {
+    public DeserializingReader(
+            @NonNull Class<T> inputType,
+            @NonNull DataInputStream stream,
+            @NonNull SerializerLoader serializerLoader
+    ) {
         this.inputType = Objects.requireNonNull(inputType);
         this.inputStream = Objects.requireNonNull(stream);
         this.serializerLoader = Objects.requireNonNull(serializerLoader);
     }
 
+    @NonNull
     public T readNext() throws IOException, SerializationException {
         String messageTag = inputStream.readUTF();
 

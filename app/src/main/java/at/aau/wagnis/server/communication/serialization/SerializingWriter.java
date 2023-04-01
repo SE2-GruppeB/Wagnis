@@ -1,5 +1,7 @@
 package at.aau.wagnis.server.communication.serialization;
 
+import androidx.annotation.NonNull;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Objects;
@@ -9,12 +11,12 @@ public class SerializingWriter<T> {
     private final DataOutputStream outputStream;
     private final SerializerLoader serializerLoader;
 
-    public SerializingWriter(DataOutputStream stream, SerializerLoader serializerLoader) {
+    public SerializingWriter(@NonNull DataOutputStream stream, @NonNull SerializerLoader serializerLoader) {
         this.outputStream = Objects.requireNonNull(stream);
         this.serializerLoader = Objects.requireNonNull(serializerLoader);
     }
 
-    public void write(T obj) throws IOException, SerializationException {
+    public void write(@NonNull T obj) throws IOException, SerializationException {
         Serializer<T> serializer = serializerLoader.forObject(obj);
 
         if (serializer == null) {

@@ -28,4 +28,8 @@ public class SerializingWriter<T> {
     public void flush() throws IOException {
         this.outputStream.flush();
     }
+
+    public void close() throws IOException {
+        this.outputStream.close();
+    }
 }

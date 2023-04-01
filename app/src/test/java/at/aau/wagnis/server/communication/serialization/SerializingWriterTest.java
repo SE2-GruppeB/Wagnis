@@ -73,4 +73,13 @@ public class SerializingWriterTest {
         // then
         verify(outputStream).flush();
     }
+
+    @Test
+    public void close() throws IOException {
+        // when
+        subject.close();
+
+        // then
+        verify(outputStream).close();
+    }
 }

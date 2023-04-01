@@ -31,4 +31,8 @@ public class DeserializingReader<T> {
 
         return serializer.readFromStream(inputStream);
     }
+
+    public void close() throws IOException {
+        inputStream.close();
+    }
 }

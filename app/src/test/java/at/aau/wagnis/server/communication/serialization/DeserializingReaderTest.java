@@ -69,4 +69,13 @@ public class DeserializingReaderTest {
         verify(loader).forTag(eq(TAG), same(EXPECTED_CLASS));
         verifyNoMoreInteractions(loader, dataInputStream, serializer);
     }
+
+    @Test
+    public void close() throws IOException {
+        // when
+        subject.close();
+
+        // then
+        verify(dataInputStream).close();
+    }
 }

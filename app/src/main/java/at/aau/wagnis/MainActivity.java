@@ -23,6 +23,8 @@ import android.widget.PopupWindow;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,17 +41,12 @@ public class MainActivity extends AppCompatActivity {
         endTurn = findViewById(R.id.btn_EndTurn);
 
         setDisplayMetrics();
-        drawHubs("100;100/200;200/150;100");
+        drawHubs(GlobalVariables.getSeed());
+        GlobalVariables.setAdjacencies();
+        drawAdjacencies();
+       //GlobalVariables.findHubById(81).setText(1,4,5);
 
-       //Adjacency Test
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(82),GlobalVariables.findHubById(83)));
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81),GlobalVariables.findHubById(88)));
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(83),GlobalVariables.findHubById(91)));
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81),GlobalVariables.findHubById(82)));
-       //
-       GlobalVariables.findHubById(81).setText(1,4,5);
 
-       drawAdjacencies();
     }
     @Override
     public void onBackPressed() {
@@ -109,56 +106,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void drawHubs(String seed){//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...
+    public void drawHubs(String seed){
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
         ConstraintSet cs = new ConstraintSet();
-       /*
-        int nextId = 80;
-        int lastTOP = 0;
-        int lastLEFT = 0;
 
+        for(int i=1;i<=seed.length();i++){
+            if(i%2==0){
+                GlobalVariables.seeds.add(seed.substring(i-2,i));
+            }
+        }
 
+        int hubs = 0;
+        GlobalVariables.hubsPerLine = (int)Math.ceil(GlobalVariables.seeds.size()/6f);
+        int lineHubCount = 0;
 
-        for(String s : seed.split("/")){
-            String[] coords = s.split(";");
-            lastTOP = lastTOP+Integer.parseInt(coords[0]);
-            lastLEFT = lastLEFT+Integer.parseInt(coords[1]);
-
-
-            Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            nextId++;
-            hub.setId(nextId);
-            hub.setText("Hub: "+hub.getId());
-            hub.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    diceRollPopUp(hub);
-                }
-            });
-            GlobalVariables.hubs.add(new Hub(hub));
-            layout.addView(hub);
-
-
-            cs.clone(layout);
-            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lastTOP);
-            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,lastLEFT);
-            cs.applyTo(layout);
-        }*/
-
-        int hubs = 1;
-        int width = GlobalVariables.getDisplayWidthPx();
+        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-180)/GlobalVariables.hubsPerLine;
         int height = GlobalVariables.getDisplayHeightPx();
-
-        int dpWidth = 63;
-        int pxWidth = dpToPx(dpWidth);
-
-        int widthSpace = ((width-(7*pxWidth))/7);
         int heightSpace = height/6;
 
-        int lineCount = 0;
-        int hubCount = 0;
-        while(hubs<=42){
+        //System.out.println("HubsPerLine:" + hubsPerLine);
+        //System.out.println("HubWidthSpace"+hubWidthSpace);
+        //System.out.println("HeightSpace:"+heightSpace);
 
+        for(String s : GlobalVariables.seeds){
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
             hub.setId(80+hubs);
             hub.setText("Hub: "+hub.getId());
@@ -166,24 +136,26 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     diceRollPopUp(hub);
-                    System.out.println("Hub:" +hub.getId()); //Test Button Accuracy
+                    System.out.println("Hub:" +hub.getId());
                 }
             });
             GlobalVariables.hubs.add(new Hub(hub));
             layout.addView(hub);
 
-           cs.clone(layout);
-            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lineCount*heightSpace);
-            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,hubCount*widthSpace+hubCount*pxWidth);
+            int top = (hubs/GlobalVariables.hubsPerLine)*heightSpace;
+            int pos = hubWidthSpace/100*Integer.parseInt(s);
+            int left = hubWidthSpace*lineHubCount+pos;
+            //System.out.println("Position:" + top+","+left);
 
+            cs.clone(layout);
+            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,top);
+            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,left);
             cs.applyTo(layout);
-            hubCount++;
-            if(hubs%7==0){
-                lineCount++;
-                hubCount=0;
-            }
-
             hubs++;
+            lineHubCount++;
+            if(lineHubCount==GlobalVariables.hubsPerLine){
+                lineHubCount=0;
+            }
         }
     }
 
@@ -200,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
 
         for(Adjacency adjacency : GlobalVariables.adjacencies){
-            int pxWidth = dpToPx(31);
-            int pxHeight=dpToPx(50);
+            int pxWidth = dpToPx(25);
+            int pxHeight=dpToPx(40);
 
                int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin +pxWidth;
                int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;

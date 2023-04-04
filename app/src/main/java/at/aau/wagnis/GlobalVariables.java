@@ -1,7 +1,5 @@
 package at.aau.wagnis;
 
-import android.media.MediaRouter2;
-
 import java.util.ArrayList;
 
 public class GlobalVariables {
@@ -54,18 +52,19 @@ public class GlobalVariables {
             chance = Integer.parseInt(seeds.get(i));
 
             if(chance%2==0){
-                if(lineHubCount!=hubsPerLine) {
+                if(lineHubCount%hubsPerLine==0) {
                     adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
                 }else{
                     adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
-                    lineHubCount=0;
+                    lineHubCount=1;
                     }
             }if (chance %3==0){
                 adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
-            }if (chance % 5==0) {
-                adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine+1)));
+            }else if (chance % 5==0) {
+                adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine-1)));
             }else{
-                //no adjacency
+                adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine-1)));
+
             }
             lineHubCount++;
         }
@@ -73,4 +72,20 @@ public class GlobalVariables {
             adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
         }
     }
+
+    public static void seedGenerator(){
+        String seed="";
+        for(int i=0;i<42;i++){
+            int s = 0;
+            while(s <=10){
+                s =(int)(Math.random()*100);
+            }
+           // System.out.println("Sprawl:"+s+" ,Hub:"+i);
+            seed=seed+s;
+        }
+
+        GlobalVariables.setSeed(seed);
+    }
+    //Crash Seed:
+    //68179234930771929929724485086607546726839753241425246208531155890852076377819
 }

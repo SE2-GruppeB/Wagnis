@@ -23,7 +23,6 @@ import android.widget.PopupWindow;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,9 +40,12 @@ public class MainActivity extends AppCompatActivity {
         endTurn = findViewById(R.id.btn_EndTurn);
 
         setDisplayMetrics();
+        GlobalVariables.seedGenerator();
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
+
+
        //GlobalVariables.findHubById(81).setText(1,4,5);
 
 
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(String s : GlobalVariables.seeds){
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            hub.setId(80+hubs);
+            hub.setId(100+hubs);
             hub.setText("Hub: "+hub.getId());
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override

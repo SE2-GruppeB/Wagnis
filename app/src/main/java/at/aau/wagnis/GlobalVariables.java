@@ -1,9 +1,11 @@
 package at.aau.wagnis;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 public class GlobalVariables {
-
+    public static Context baseContext;
     public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";
     public static ArrayList<String> seeds = new ArrayList<>();
     public static ArrayList<Hub> hubs = new ArrayList<>();

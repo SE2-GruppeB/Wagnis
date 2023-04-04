@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GlobalVariables.baseContext = this;
         hideNavigationBar();
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
@@ -45,10 +47,7 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
 
-
        //GlobalVariables.findHubById(81).setText(1,4,5);
-
-
     }
     @Override
     public void onBackPressed() {
@@ -64,18 +63,18 @@ public class MainActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
-    public void diceRollPopUp(View view) {
+    public static void diceRollPopUp() {
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_diceroll, null);
 
 
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, GlobalVariables.baseContext.getResources().getDisplayMetrics());
         int width = (int)px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // true lets tap outside the popup and dismiss it
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
 
         Button btnBack = popUp.findViewById(R.id.btn_Back);
@@ -86,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         });
-
-
         NumberPicker n1 = popUp.findViewById(R.id.dice1);
         NumberPicker n2 = popUp.findViewById(R.id.dice2);
         NumberPicker n3 = popUp.findViewById(R.id.dice3);
@@ -137,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    diceRollPopUp(hub);
+                    diceRollPopUp();
                     System.out.println("Hub:" +hub.getId());
                 }
             });
@@ -183,9 +180,7 @@ public class MainActivity extends AppCompatActivity {
                int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+ pxHeight;
               // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
                 canvas.drawLine(startX,startY,endX,endY,paint);
-
         }
-
         adjacencyView.setImageBitmap(bitmap);
     }
 

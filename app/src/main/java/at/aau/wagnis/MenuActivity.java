@@ -1,6 +1,7 @@
 package at.aau.wagnis;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -60,12 +61,13 @@ public class MenuActivity extends AppCompatActivity {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
         int width = (int)px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = false; // true lets taps outside the popup also dismiss it
+        boolean focusable = false;
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 
         Button btnClose = popUp.findViewById(R.id.btn_Close);
+
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,4 +106,20 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void goToUrl (String url) {
+        Uri uriUrl = Uri.parse(url);
+        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+        startActivity(launchBrowser);
+    }
+    public void goToAppIcon (View view) {
+        goToUrl ( "https://icons8.de");
+    }
+    public void goToBackground (View view) {
+        goToUrl ( "https://www.vecteezy.com/vector-art/17535964-mars-landscape-with-craters-and-red-rocky-surface");
+    }
+    public void goToSurface (View view) {
+        goToUrl ( "https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
+    }
+
 }

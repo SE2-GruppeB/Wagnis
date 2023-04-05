@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -86,11 +89,15 @@ public class MenuActivity extends AppCompatActivity {
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-
         Button btnAccept = popUp.findViewById(R.id.btn_Accept);
+        RadioGroup rg = popUp.findViewById(R.id.radio);
+
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RadioButton selectedTeam=popUp.findViewById(rg.getCheckedRadioButtonId());
+                GlobalVariables.setAgency(selectedTeam.getText().toString());
+                Toast.makeText(MenuActivity.this, "Agency: "+GlobalVariables.getAgency(), Toast.LENGTH_SHORT).show();
                 popupWindow.dismiss();
                 changeActivity();
                 return;

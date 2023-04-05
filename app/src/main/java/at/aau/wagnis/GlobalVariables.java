@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.ArrayList;
 
 public class GlobalVariables {
+    public static String agency ="" ;
     public static Context baseContext;
     public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";
     public static ArrayList<String> seeds = new ArrayList<>();
@@ -21,6 +22,14 @@ public class GlobalVariables {
             }
         }
         return null;
+    }
+
+    public static String getAgency() {
+        return agency;
+    }
+
+    public static void setAgency(String team) {
+        GlobalVariables.agency = team;
     }
 
     public static String getSeed() {

@@ -14,5 +14,22 @@ public class PLRNG {
         return diceValue;
     }
 
+    public Cards genCard(){
+        Random randomGen = new Random();
+        // Int range ist 0 bis (1-hubs.size()); addiert mit 100 liefert 100 bis (100 + hubs.size())
+        int hubId = randomGen.nextInt(GlobalVariables.getHubs().size()) + 100;
+        int type = randomGen.nextInt(3);
+        if (type == 0){
+            Log.d("Info :","Created new Card ID :" + hubId + " ; Type : " + Troops.infantry);
+            return new Cards(hubId,Troops.infantry);
+        } else if (type == 1) {
+            Log.d("Info :","Created new Card ID :" + hubId + " ; Type : " + Troops.cavalry);
+            return new Cards(hubId,Troops.cavalry);
+        } else {
+            Log.d("Info :","Created new Card ID :" + hubId + " ; Type : " + Troops.artillery);
+            return new Cards(hubId,Troops.artillery);
+        }
+    }
+
 
 }

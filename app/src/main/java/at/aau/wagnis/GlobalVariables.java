@@ -33,4 +33,8 @@ public class GlobalVariables {
     public static void setDisplayHeightPx(int displayHeightPx) {
         GlobalVariables.displayHeightPx = displayHeightPx;
     }
+
+    public static ArrayList<Hub> getHubs() {
+        return hubs;
+    }
 }

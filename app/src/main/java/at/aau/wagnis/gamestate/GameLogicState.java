@@ -1,4 +1,4 @@
-package at.aau.wagnis;
+package at.aau.wagnis.gamestate;
 
 public abstract class GameLogicState {
     public void attack(){}

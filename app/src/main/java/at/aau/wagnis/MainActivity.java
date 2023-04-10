@@ -80,16 +80,10 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(hubOwners);
     }
 
-    private void assignTroopsToHubs(){
+    private void assignTroopsToHubs(List<Hub> unassignedHubs, List<Player> players){
+        Map<Integer, Map<Troops, Integer>> playerTroops = new HashMap<>();
 
     }
-
-
-
-
-
-
-
 
 
     @Override

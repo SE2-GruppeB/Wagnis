@@ -1,5 +1,5 @@
 package at.aau.wagnis;
 
 public enum Troops {
-    infantry,cavalry, artillery
+    infantry,cavalry, artillery;
 }

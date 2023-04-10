@@ -1,30 +1,21 @@
 package at.aau.wagnis;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
+    private int playerId;
 
-    int soldiers;
-    //boolean[] hubs = {true,false,true,false};
-    boolean hub1;
-    //.
-    //.
-    //.
-    boolean hub42;
-
-    public Player(int soldiers, boolean hub1, boolean hub42){
-        this.soldiers = soldiers;
-        this.hub1 = hub1;
-        this.hub42 = hub42;
+    public Player(int playerId) {
+        this.playerId = playerId;
     }
 
-
-
-
-
-
-
-
-
+    public int getPlayerId() {
+        return playerId;
     }
 
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
 
-
+}

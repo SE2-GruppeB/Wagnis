@@ -1,5 +1,7 @@
 package at.aau.wagnis;
 
+import static at.aau.wagnis.GlobalVariables.hubs;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -22,6 +24,11 @@ import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +57,41 @@ public class MainActivity extends AppCompatActivity {
        GlobalVariables.findHubById(81).setText(1,4,5);
 
        drawAdjacencies();
+
+        List<Hub> unassignedCountries = new ArrayList<>(hubs);
+        List<Player> players = new ArrayList<>();
+
+        players.add(new Player(1));
+        players.add(new Player(2));
+
+        assignCountries(unassignedCountries, players);
+
     }
+
+    private void assignCountries(List<Hub> unassignedHubs, List<Player> players) {
+        Map<Integer, Integer> hubOwners = new HashMap<>();
+        for (int i = 0; i < unassignedHubs.size(); i++) {
+            Hub hub = unassignedHubs.get(i);
+            Player player = players.get(i % players.size());
+            int playerId = player.getPlayerId();
+            hubOwners.put(hub.getId(), playerId);
+            player.setPlayerId(playerId);
+        }
+        System.out.println(hubOwners);
+    }
+
+    private void assignTroopsToHubs(){
+
+    }
+
+
+
+
+
+
+
+
+
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);

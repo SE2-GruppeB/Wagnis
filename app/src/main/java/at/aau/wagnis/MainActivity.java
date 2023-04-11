@@ -26,9 +26,13 @@ import android.widget.PopupWindow;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,15 +52,15 @@ public class MainActivity extends AppCompatActivity {
         setDisplayMetrics();
         drawHubs("100;100/200;200/150;100");
 
-       //Adjacency Test
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(82),GlobalVariables.findHubById(83)));
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81),GlobalVariables.findHubById(88)));
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(83),GlobalVariables.findHubById(91)));
-       GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81),GlobalVariables.findHubById(82)));
-       //
-       GlobalVariables.findHubById(81).setText(1,4,5);
+        //Adjacency Test
+        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(82), GlobalVariables.findHubById(83)));
+        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81), GlobalVariables.findHubById(88)));
+        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(83), GlobalVariables.findHubById(91)));
+        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81), GlobalVariables.findHubById(82)));
+        //
+        GlobalVariables.findHubById(81).setText(1, 4, 5);
 
-       drawAdjacencies();
+        drawAdjacencies();
 
         List<Hub> unassignedCountries = new ArrayList<>(hubs);
         List<Player> players = new ArrayList<>();
@@ -64,25 +68,87 @@ public class MainActivity extends AppCompatActivity {
         players.add(new Player(1));
         players.add(new Player(2));
 
-        assignCountries(unassignedCountries, players);
+        Map<Integer, Integer> hubOwners = assignCountries(unassignedCountries, players);
+        assignTroopsToHubs(hubOwners);
 
     }
 
-    private void assignCountries(List<Hub> unassignedHubs, List<Player> players) {
+    private Map<Integer, Integer> assignCountries(List<Hub> unassignedCountries, List<Player> players) {
         Map<Integer, Integer> hubOwners = new HashMap<>();
-        for (int i = 0; i < unassignedHubs.size(); i++) {
-            Hub hub = unassignedHubs.get(i);
+        for (int i = 0; i < unassignedCountries.size(); i++) {
+            Hub hub = unassignedCountries.get(i);
             Player player = players.get(i % players.size());
             int playerId = player.getPlayerId();
             hubOwners.put(hub.getId(), playerId);
             player.setPlayerId(playerId);
         }
         System.out.println(hubOwners);
+        return hubOwners;
     }
 
-    private void assignTroopsToHubs(List<Hub> unassignedHubs, List<Player> players){
+    private void assignTroopsToHubs(Map<Integer, Integer> hubOwners) {
         Map<Integer, Map<Troops, Integer>> playerTroops = new HashMap<>();
+        Map<Integer, Map<Troops, Integer>> hubTroops = new HashMap<>();
 
+        Random rand = new Random();
+
+        for (Integer playerId : hubOwners.values()) {
+            Map<Troops, Integer> troops = new HashMap<>();
+            troops.put(Troops.infantry, 40);
+            troops.put(Troops.cavalry, 12);
+            troops.put(Troops.artillery, 8);
+            playerTroops.put(playerId, troops);
+        }
+        //System.out.println(playerTroops);
+
+        Set<Integer> playerIds = playerTroops.keySet();
+
+        int troopsToAddOnEachIteration = 1;
+
+        for (Integer playerId : playerIds) {
+            Map<Troops, Integer> troops = playerTroops.get(playerId);
+            while (hasTroops(troops)) {
+                for (Integer hubId : hubOwners.keySet()) {
+                    if (!hasTroops(troops)){
+                        continue;
+                    }
+                    if (hubOwners.get(hubId) == playerId) {
+                        Troops troop = getRandomTroop();
+                        while (troops.get(troop) <= 0) {
+                            troop = getRandomTroop();
+                        }
+                        Map<Troops, Integer> currentHubTroops = hubTroops.get(hubId);
+                        int amount = 0;
+                        if (currentHubTroops == null) {
+                            currentHubTroops = new HashMap<>();
+                        }
+                        if(currentHubTroops.containsKey(troop)){
+                            amount = currentHubTroops.get(troop);
+                        }
+                        currentHubTroops.put(troop, amount + troopsToAddOnEachIteration);
+                        hubTroops.put(hubId, currentHubTroops);
+                        removeTroopAmount(troops, troop, troopsToAddOnEachIteration);
+                    }
+                }
+            }
+
+        }
+        System.out.println(hubTroops);
+    }
+
+    private Troops getRandomTroop() {
+        List<Troops> t = Arrays.asList(Troops.values());
+        Collections.shuffle(t);
+        return t.get(0);
+    }
+
+    private boolean hasTroops(Map<Troops, Integer> troops) {
+        return (troops.values().stream().mapToInt(Integer::intValue).sum() > 0);
+    }
+
+    private void removeTroopAmount(Map<Troops, Integer> troops, Troops troop, int amount) {
+        int currentTroopAmount = troops.get(troop);
+        troops.put(troop, currentTroopAmount - amount);
     }
 
 
@@ -90,16 +156,19 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         moveTaskToBack(true);
     }
+
     @Override
     public void onResume() {
         super.onResume();
         hideNavigationBar();
     }
-    private void hideNavigationBar(){
+
+    private void hideNavigationBar() {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
+
     public void diceRollPopUp(View view) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -107,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        int width = (int)px;
+        int width = (int) px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // true lets tap outside the popup and dismiss it
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
@@ -130,21 +199,21 @@ public class MainActivity extends AppCompatActivity {
         NumberPicker n4 = popUp.findViewById(R.id.dice4);
         NumberPicker n5 = popUp.findViewById(R.id.dice5);
 
-        NumberPicker[] dice = {n1,n2,n3,n4,n5};
+        NumberPicker[] dice = {n1, n2, n3, n4, n5};
 
-        int[] values ={1,2,3,4,5};
-        setDice(dice,values);
+        int[] values = {1, 2, 3, 4, 5};
+        setDice(dice, values);
     }
 
-    public static void setDice(NumberPicker[] dice, int[] values){
-        for(int i = 0;i<dice.length;i++){
+    public static void setDice(NumberPicker[] dice, int[] values) {
+        for (int i = 0; i < dice.length; i++) {
             dice[i].setMaxValue(6);
             dice[i].setMinValue(1);
             dice[i].setValue(values[i]);
         }
     }
 
-    public void drawHubs(String seed){//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...
+    public void drawHubs(String seed) {//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
         ConstraintSet cs = new ConstraintSet();
        /*
@@ -187,42 +256,42 @@ public class MainActivity extends AppCompatActivity {
         int dpWidth = 63;
         int pxWidth = dpToPx(dpWidth);
 
-        int widthSpace = ((width-(7*pxWidth))/7);
-        int heightSpace = height/6;
+        int widthSpace = ((width - (7 * pxWidth)) / 7);
+        int heightSpace = height / 6;
 
         int lineCount = 0;
         int hubCount = 0;
-        while(hubs<=42){
+        while (hubs <= 42) {
 
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            hub.setId(80+hubs);
-            hub.setText("Hub: "+hub.getId());
+            hub.setId(80 + hubs);
+            hub.setText("Hub: " + hub.getId());
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     diceRollPopUp(hub);
-                    System.out.println("Hub:" +hub.getId()); //Test Button Accuracy
+                    System.out.println("Hub:" + hub.getId()); //Test Button Accuracy
                 }
             });
             GlobalVariables.hubs.add(new Hub(hub));
             layout.addView(hub);
 
-           cs.clone(layout);
-            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lineCount*heightSpace);
-            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,hubCount*widthSpace+hubCount*pxWidth);
+            cs.clone(layout);
+            cs.connect(hub.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, lineCount * heightSpace);
+            cs.connect(hub.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, hubCount * widthSpace + hubCount * pxWidth);
 
             cs.applyTo(layout);
             hubCount++;
-            if(hubs%7==0){
+            if (hubs % 7 == 0) {
                 lineCount++;
-                hubCount=0;
+                hubCount = 0;
             }
 
             hubs++;
         }
     }
 
-    public void drawAdjacencies(){
+    public void drawAdjacencies() {
         int height = GlobalVariables.getDisplayHeightPx();
         int width = GlobalVariables.getDisplayWidthPx();
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -234,30 +303,30 @@ public class MainActivity extends AppCompatActivity {
         paint.setStrokeWidth(8);
         paint.setAntiAlias(true);
 
-        for(Adjacency adjacency : GlobalVariables.adjacencies){
+        for (Adjacency adjacency : GlobalVariables.adjacencies) {
             int pxWidth = dpToPx(31);
-            int pxHeight=dpToPx(50);
+            int pxHeight = dpToPx(50);
 
-               int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin +pxWidth;
-               int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;
-               int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin + pxWidth;
-               int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+ pxHeight;
-              // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
-                canvas.drawLine(startX,startY,endX,endY,paint);
+            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
+            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;
+            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin + pxWidth;
+            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin + pxHeight;
+            // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
+            canvas.drawLine(startX, startY, endX, endY, paint);
 
         }
 
         adjacencyView.setImageBitmap(bitmap);
     }
 
-    public void setDisplayMetrics(){
-        DisplayMetrics displayMetrics= new DisplayMetrics();
+    public void setDisplayMetrics() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         GlobalVariables.setDisplayWidthPx(displayMetrics.widthPixels);
         GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
     }
 
-    public int dpToPx(int dp){
-        return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    public int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 }

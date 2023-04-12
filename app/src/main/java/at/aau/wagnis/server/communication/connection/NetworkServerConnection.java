@@ -2,8 +2,11 @@ package at.aau.wagnis.server.communication.connection;
 
 import androidx.annotation.NonNull;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
@@ -24,6 +27,18 @@ public class NetworkServerConnection implements ServerConnection {
         this.input = Objects.requireNonNull(input);
         this.output = Objects.requireNonNull(output);
         this.commandConsumer = Objects.requireNonNull(commandConsumer);
+    }
+
+    public static NetworkServerConnection fromSocket(
+            @NonNull Socket socket,
+            @NonNull Function<Runnable, Thread> threadFactory,
+            @NonNull Consumer<ClientCommand> commandConsumer
+    ) throws IOException {
+        return new NetworkServerConnection(
+                ActiveDeserializingReader.fromStream(ClientCommand.class, socket.getInputStream(), threadFactory),
+                ActiveSerializingWriter.fromStream(socket.getOutputStream(), threadFactory),
+                commandConsumer
+        );
     }
 
     /**
@@ -48,6 +63,8 @@ public class NetworkServerConnection implements ServerConnection {
 
     @Override
     public void close() {
+        // TODO client logic should react on close
+
         synchronized (this) {
             input.close();
             output.close();

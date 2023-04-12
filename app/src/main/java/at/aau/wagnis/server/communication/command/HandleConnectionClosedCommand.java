@@ -1,5 +1,7 @@
 package at.aau.wagnis.server.communication.command;
 
+import androidx.annotation.NonNull;
+
 public class HandleConnectionClosedCommand implements ServerCommand {
 
     private final int clientId;
@@ -10,6 +12,14 @@ public class HandleConnectionClosedCommand implements ServerCommand {
 
     public int getClientId() {
         return clientId;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "HandleConnectionClosedCommand{" +
+                "clientId=" + clientId +
+                '}';
     }
 
     @Override

@@ -2,9 +2,12 @@ package at.aau.wagnis.server.communication.connection;
 
 import androidx.annotation.NonNull;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
@@ -24,6 +27,16 @@ public class NetworkClientConnection implements ClientConnection {
     ) {
         this.input = Objects.requireNonNull(input);
         this.output = Objects.requireNonNull(output);
+    }
+
+    public static NetworkClientConnection fromSocket(
+            @NonNull Socket socket,
+            @NonNull Function<Runnable, Thread> threadFactory
+    ) throws IOException {
+        return new NetworkClientConnection(
+                ActiveDeserializingReader.fromStream(ClientOriginatedServerCommand.class, socket.getInputStream(), threadFactory),
+                ActiveSerializingWriter.fromStream(socket.getOutputStream(), threadFactory)
+        );
     }
 
     @Override

@@ -1,11 +1,14 @@
 package at.aau.wagnis.server.communication.connection;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +16,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
@@ -104,5 +112,37 @@ public class NetworkServerConnectionTest {
 
         // then
         verify(output).write(input);
+    }
+
+    @Test
+    public void fromSocketSanityCheck() throws IOException {
+        // given
+        InputStream inputStream = mock(InputStream.class);
+        OutputStream outputStream = mock(OutputStream.class);
+
+        Socket socket = mock(Socket.class);
+        when(socket.getInputStream()).thenReturn(inputStream);
+        when(socket.getOutputStream()).thenReturn(outputStream);
+
+        Function<Runnable, Thread> threadFactory = mockFunction();
+
+        // when
+        NetworkServerConnection result = NetworkServerConnection.fromSocket(
+                socket,
+                threadFactory,
+                commandConsumer
+        );
+
+        // then
+        assertNotNull(result);
+
+        verify(socket).getInputStream();
+        verify(socket).getOutputStream();
+        verifyNoInteractions(commandConsumer);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T, U> Function<T, U> mockFunction() {
+        return mock(Function.class);
     }
 }

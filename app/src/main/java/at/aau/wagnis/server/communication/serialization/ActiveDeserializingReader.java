@@ -3,7 +3,9 @@ package at.aau.wagnis.server.communication.serialization;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -28,6 +30,21 @@ public class ActiveDeserializingReader<T> {
     ) {
         this.reader = Objects.requireNonNull(reader);
         this.threadFactory = Objects.requireNonNull(threadFactory);
+    }
+
+    public static <T> ActiveDeserializingReader<T> fromStream(
+            @NonNull Class<T> targetClass,
+            @NonNull InputStream inputStream,
+            @NonNull Function<Runnable, Thread> threadFactory
+    ) {
+        Objects.requireNonNull(targetClass);
+        Objects.requireNonNull(inputStream);
+        Objects.requireNonNull(threadFactory);
+
+        return new ActiveDeserializingReader<>(
+                new DeserializingReader<>(targetClass, new DataInputStream(inputStream), new SerializerLoader()),
+                threadFactory
+        );
     }
 
     /**

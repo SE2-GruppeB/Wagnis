@@ -3,7 +3,9 @@ package at.aau.wagnis.server.communication.serialization;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
@@ -29,6 +31,19 @@ public class ActiveSerializingWriter<T> {
     ) {
         this.writer = Objects.requireNonNull(writer);
         this.threadFactory = Objects.requireNonNull(threadFactory);
+    }
+
+    public static <T> ActiveSerializingWriter<T> fromStream(
+            @NonNull OutputStream outputStream,
+            @NonNull Function<Runnable, Thread> threadFactory
+    ) {
+        Objects.requireNonNull(outputStream);
+        Objects.requireNonNull(threadFactory);
+
+        return new ActiveSerializingWriter<>(
+                new SerializingWriter<>(new DataOutputStream(outputStream), new SerializerLoader()),
+                threadFactory
+        );
     }
 
     /**
@@ -58,6 +73,7 @@ public class ActiveSerializingWriter<T> {
 
     /**
      * Close this writer, also closing the wrapped writer.
+     * Objects not delivered yet will be dropped.
      */
     public synchronized void close() {
         if (closed) {
@@ -83,7 +99,9 @@ public class ActiveSerializingWriter<T> {
      * @param obj The object to enqueue
      * @throws IllegalStateException If the writer has not been started yet, has been closed, or in case of queue overflow
      */
-    public synchronized void write(T obj) throws IllegalStateException {
+    public synchronized void write(@NonNull T obj) throws IllegalStateException {
+        Objects.requireNonNull(obj);
+
         if (closed) {
             throw new IllegalStateException("Writer has been closed");
         } else if (thread == null) {

@@ -10,9 +10,10 @@ import java.util.Objects;
 
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
-public class ProcessChatMessageCommand implements ServerCommand, ClientCommand {
+public class ProcessChatMessageCommand implements ClientCommand, ClientOriginatedServerCommand {
 
     private final String message;
+    private Integer clientId = null;
 
     public ProcessChatMessageCommand(@NonNull String message) {
         this.message = Objects.requireNonNull(message);
@@ -30,12 +31,15 @@ public class ProcessChatMessageCommand implements ServerCommand, ClientCommand {
 
         ProcessChatMessageCommand command = (ProcessChatMessageCommand) o;
 
-        return message.equals(command.message);
+        if (!message.equals(command.message)) return false;
+        return Objects.equals(clientId, command.clientId);
     }
 
     @Override
     public int hashCode() {
-        return message.hashCode();
+        int result = message.hashCode();
+        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
+        return result;
     }
 
     @NonNull
@@ -44,6 +48,20 @@ public class ProcessChatMessageCommand implements ServerCommand, ClientCommand {
         return "ProcessChatMessageCommand{" +
                 "message='" + message + '\'' +
                 '}';
+    }
+
+    @Override
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
+    @Override
+    public int getClientId() {
+        if (this.clientId != null) {
+            return clientId;
+        } else {
+            throw new IllegalStateException("ClientId has not been set");
+        }
     }
 
     public static class CommandSerializer implements Serializer<ProcessChatMessageCommand> {

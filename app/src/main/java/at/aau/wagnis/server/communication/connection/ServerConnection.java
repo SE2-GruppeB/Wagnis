@@ -1,6 +1,8 @@
 package at.aau.wagnis.server.communication.connection;
 
-import at.aau.wagnis.server.communication.command.ServerCommand;
+import androidx.annotation.NonNull;
+
+import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 
 public interface ServerConnection {
 
@@ -9,7 +11,7 @@ public interface ServerConnection {
      *
      * @param command The command to send.
      */
-    void send(ServerCommand command);
+    void send(@NonNull ClientOriginatedServerCommand command);
 
     /**
      * Close the underlying connection

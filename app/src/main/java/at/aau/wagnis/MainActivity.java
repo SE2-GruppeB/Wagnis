@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton endTurn;
     ImageView adjacencyView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,5 +194,26 @@ public class MainActivity extends AppCompatActivity {
 
     public int dpToPx(int dp){
         return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
+    public void setDifferentHubColour(int id, int teamId) {
+        if(teamId == 1) {
+            GlobalVariables.findHubById(id).getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome_x42);
+        }
+        if(teamId == 2) {
+            GlobalVariables.findHubById(id).getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome2_x42);
+        }
+        if(teamId == 3) {
+            GlobalVariables.findHubById(id).getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome3_x42);
+        }
+        if(teamId == 4) {
+            GlobalVariables.findHubById(id).getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome4_x42);
+        }
+        if(teamId == 5) {
+            GlobalVariables.findHubById(id).getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome5_x42);
+        }
+        if(teamId == 6) {
+            GlobalVariables.findHubById(id).getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome6_x42);
+        }
     }
 }

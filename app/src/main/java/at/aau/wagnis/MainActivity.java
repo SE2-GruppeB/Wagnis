@@ -2,10 +2,6 @@ package at.aau.wagnis;
 
 import static at.aau.wagnis.GlobalVariables.hubs;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,17 +19,17 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.StartGameState;
 
 
@@ -41,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton endTurn;
     ImageView adjacencyView;
+
+    public static void setDice(NumberPicker[] dice, int[] values) {
+        for (int i = 0; i < dice.length; i++) {
+            dice[i].setMaxValue(6);
+            dice[i].setMinValue(1);
+            dice[i].setValue(values[i]);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +73,17 @@ public class MainActivity extends AppCompatActivity {
         players.add(new Player(1));
         players.add(new Player(2));
 
-        GameState gameState = new GameState(hubs, players);
-
         StartGameState startState = new StartGameState();
 
         startState.start(unassignedCountries, players);
+
+        Map<Integer, Integer> hubOwners = startState.getHubOwners(unassignedCountries, players);
+
+        MoveTroopsState moveTroops = new MoveTroopsState();
+
+        moveTroops.move(hubOwners);
+
+
     }
 
     @Override
@@ -127,14 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         int[] values = {1, 2, 3, 4, 5};
         setDice(dice, values);
-    }
-
-    public static void setDice(NumberPicker[] dice, int[] values) {
-        for (int i = 0; i < dice.length; i++) {
-            dice[i].setMaxValue(6);
-            dice[i].setMinValue(1);
-            dice[i].setValue(values[i]);
-        }
     }
 
     public void drawHubs(String seed) {//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...

@@ -1,6 +1,6 @@
 package at.aau.wagnis.gamestate;
 
-public class AttackGameState {
+public class AttackGameState extends GameLogicState{
 
     
 }

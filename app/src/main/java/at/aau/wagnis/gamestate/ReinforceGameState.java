@@ -1,4 +1,4 @@
 package at.aau.wagnis.gamestate;
 
-public class ReinforceGameState {
+public class ReinforceGameState extends GameLogicState {
 }

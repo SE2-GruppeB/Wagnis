@@ -10,7 +10,7 @@ import at.aau.wagnis.DefaultTroop;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
-public class StartGameState extends GameLogicState{
+public class StartGameState extends GameLogicState {
 
     @Override
     public void start(List<Hub> unassignedCountries, List<Player> players) {
@@ -30,6 +30,8 @@ public class StartGameState extends GameLogicState{
         System.out.println(hubOwners);
         return hubOwners;
     }
+
+
 
     private void assignTroopsToHubs(Map<Integer, Integer> hubOwners) {
         Map<Integer, Map<DefaultTroop, Integer>> playerTroops = new HashMap<>();
@@ -59,20 +61,17 @@ public class StartGameState extends GameLogicState{
                         if (currentHubTroops.containsKey(DefaultTroop.troop)) {
                             amount = currentHubTroops.get(DefaultTroop.troop);
                         }
-                        if (amount == 0 ) {
+                        if (amount == 0) {
                             int troopsToAdd = 1;
                             currentHubTroops.put(DefaultTroop.troop, troopsToAdd);
                             hubTroops.put(hubId, currentHubTroops);
                             removeTroopAmount(troops, DefaultTroop.troop, troopsToAdd);
-                        }else {
+                        } else {
                             int troopsToAdd = new Random().nextInt(3) + 1;
                             currentHubTroops.put(DefaultTroop.troop, amount + troopsToAdd);
                             hubTroops.put(hubId, currentHubTroops);
                             removeTroopAmount(troops, DefaultTroop.troop, troopsToAdd);
-
-
                         }
-
                     }
                 }
             }
@@ -88,4 +87,10 @@ public class StartGameState extends GameLogicState{
         int currentTroopAmount = troops.get(troop);
         troops.put(troop, currentTroopAmount - amount);
     }
+
+    public Map<Integer, Integer> getHubOwners(List<Hub> unassignedCountries, List<Player> players) {
+        return assignCountries(unassignedCountries, players);
+    }
+
+
 }

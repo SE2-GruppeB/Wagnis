@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MenuActivity extends AppCompatActivity {
     Button start;
     Button sources;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +40,17 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    public void hideNavigationBar(){
+    public void hideNavigationBar() {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
+
     private void changeActivity() {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
         startActivity(switchActivityIntent);
     }
+
     public void showSources(View view) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -55,7 +58,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        int width = (int)px;
+        int width = (int) px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // true lets taps outside the popup also dismiss it
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
@@ -80,7 +83,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        int width = (int)px;
+        int width = (int) px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // lets taps outside the popup also dismiss it
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);

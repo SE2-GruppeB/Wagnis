@@ -31,12 +31,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
+
+import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.StartGameState;
 
 
 public class MainActivity extends AppCompatActivity {
-
 
     FloatingActionButton endTurn;
     ImageView adjacencyView;
@@ -68,89 +69,12 @@ public class MainActivity extends AppCompatActivity {
         players.add(new Player(1));
         players.add(new Player(2));
 
-        Map<Integer, Integer> hubOwners = assignCountries(unassignedCountries, players);
-        assignTroopsToHubs(hubOwners);
+        GameState gameState = new GameState(hubs, players);
 
+        StartGameState startState = new StartGameState();
+
+        startState.start(unassignedCountries, players);
     }
-
-    private Map<Integer, Integer> assignCountries(List<Hub> unassignedCountries, List<Player> players) {
-        Map<Integer, Integer> hubOwners = new HashMap<>();
-        for (int i = 0; i < unassignedCountries.size(); i++) {
-            Hub hub = unassignedCountries.get(i);
-            Player player = players.get(i % players.size());
-            int playerId = player.getPlayerId();
-            hubOwners.put(hub.getId(), playerId);
-            player.setPlayerId(playerId);
-        }
-        System.out.println(hubOwners);
-        return hubOwners;
-    }
-
-    private void assignTroopsToHubs(Map<Integer, Integer> hubOwners) {
-        Map<Integer, Map<Troops, Integer>> playerTroops = new HashMap<>();
-        Map<Integer, Map<Troops, Integer>> hubTroops = new HashMap<>();
-
-        Random rand = new Random();
-
-        for (Integer playerId : hubOwners.values()) {
-            Map<Troops, Integer> troops = new HashMap<>();
-            troops.put(Troops.infantry, 40);
-            troops.put(Troops.cavalry, 12);
-            troops.put(Troops.artillery, 8);
-            playerTroops.put(playerId, troops);
-        }
-        //System.out.println(playerTroops);
-
-        Set<Integer> playerIds = playerTroops.keySet();
-
-        int troopsToAddOnEachIteration = 1;
-
-        for (Integer playerId : playerIds) {
-            Map<Troops, Integer> troops = playerTroops.get(playerId);
-            while (hasTroops(troops)) {
-                for (Integer hubId : hubOwners.keySet()) {
-                    if (!hasTroops(troops)){
-                        continue;
-                    }
-                    if (hubOwners.get(hubId) == playerId) {
-                        Troops troop = getRandomTroop();
-                        while (troops.get(troop) <= 0) {
-                            troop = getRandomTroop();
-                        }
-                        Map<Troops, Integer> currentHubTroops = hubTroops.get(hubId);
-                        int amount = 0;
-                        if (currentHubTroops == null) {
-                            currentHubTroops = new HashMap<>();
-                        }
-                        if(currentHubTroops.containsKey(troop)){
-                            amount = currentHubTroops.get(troop);
-                        }
-                        currentHubTroops.put(troop, amount + troopsToAddOnEachIteration);
-                        hubTroops.put(hubId, currentHubTroops);
-                        removeTroopAmount(troops, troop, troopsToAddOnEachIteration);
-                    }
-                }
-            }
-
-        }
-        System.out.println(hubTroops);
-    }
-
-    private Troops getRandomTroop() {
-        List<Troops> t = Arrays.asList(Troops.values());
-        Collections.shuffle(t);
-        return t.get(0);
-    }
-
-    private boolean hasTroops(Map<Troops, Integer> troops) {
-        return (troops.values().stream().mapToInt(Integer::intValue).sum() > 0);
-    }
-
-    private void removeTroopAmount(Map<Troops, Integer> troops, Troops troop, int amount) {
-        int currentTroopAmount = troops.get(troop);
-        troops.put(troop, currentTroopAmount - amount);
-    }
-
 
     @Override
     public void onBackPressed() {

@@ -1,4 +1,4 @@
 package at.aau.wagnis.gamestate;
 
-public class EndGameState {
+public class EndGameState{
 }

@@ -46,6 +46,7 @@ public class StartGameState extends GameLogicState {
             playerTroops.put(playerId, troops);
         }
 
+
         Set<Integer> playerIds = playerTroops.keySet();
 
         for (Integer playerId : playerIds) {

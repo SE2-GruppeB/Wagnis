@@ -1,5 +1,6 @@
 package at.aau.wagnis;
 
+
 import android.graphics.Color;
 
 import java.lang.reflect.Array;
@@ -9,6 +10,8 @@ public class Player {
 
     private static int maxCardsInHand = 5;
     private static int baseTroopsPerRound = 3;
+
+    private int playerId;
 
     private int allTroopsPerRound;
     private Color playerColor;
@@ -46,6 +49,18 @@ public class Player {
         this.hand = hand;
     }
 
+    public Player(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
     public boolean addCardToHand(Cards card){
         for (int i = 0; i < maxCardsInHand ; i++){
             if (hand[i] == null){
@@ -79,9 +94,9 @@ public class Player {
 
     public void useCards(int firstCId,int secCId,int thirdCId){
          if (Cards.checkIfCardSameType(hand[firstCId],hand[secCId],hand[thirdCId])){
-             if (hand[firstCId].getType().equals(Troops.infantry)){
+             if (hand[firstCId].getType().equals(Troops.INFANTRY)){
                  allTroopsPerRound += 1;
-             } else if (hand[firstCId].getType().equals(Troops.cavalry)) {
+             } else if (hand[firstCId].getType().equals(Troops.CAVALRY)) {
                  allTroopsPerRound += 3;
              } else {
                  allTroopsPerRound += 5;
@@ -102,4 +117,6 @@ public class Player {
     public void resetTroopsPerRound() {
        allTroopsPerRound = baseTroopsPerRound;
     }
+
+
 }

@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
         MoveTroopsState moveTroops = new MoveTroopsState();
 
         moveTroops.move(hubOwners);
-
-
     }
 
     @Override

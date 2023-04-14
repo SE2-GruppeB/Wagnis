@@ -3,7 +3,6 @@ package at.aau.wagnis.gamestate;
 import java.util.List;
 import java.util.Map;
 
-import at.aau.wagnis.DefaultTroop;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 

@@ -2,15 +2,32 @@ package at.aau.wagnis;
 
 import android.graphics.Color;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Player {
 
     private static int maxCardsInHand = 5;
+    private static int baseTroopsPerRound = 3;
+
+    private int allTroopsPerRound;
     private Color playerColor;
     private Cards[] hand;
+    private ArrayList<Hub> ownedHubs;
 
-    public Player(Color playerColor) {
+    public Player(Color playerColor,ArrayList<Hub> HubsToOwn) {
         this.playerColor = playerColor;
         this.hand = new Cards[maxCardsInHand];
+        this.ownedHubs = HubsToOwn;
+        allTroopsPerRound = baseTroopsPerRound;
+    }
+
+    public ArrayList<Hub> getOwnedHubs() {
+        return ownedHubs;
+    }
+
+    public void setOwnedHubs(ArrayList<Hub> ownedHubs) {
+        this.ownedHubs = ownedHubs;
     }
 
     public Color getPlayerColor() {
@@ -60,21 +77,29 @@ public class Player {
         deleteCardById(id3);
     }
 
-    public int useCards(int firstCId,int secCId,int thirdCId){
-         int retVal = 0;
+    public void useCards(int firstCId,int secCId,int thirdCId){
          if (Cards.checkIfCardSameType(hand[firstCId],hand[secCId],hand[thirdCId])){
              if (hand[firstCId].getType().equals(Troops.infantry)){
-                 retVal += 1;
+                 allTroopsPerRound += 1;
              } else if (hand[firstCId].getType().equals(Troops.cavalry)) {
-                 retVal += 3;
+                 allTroopsPerRound += 3;
              } else {
-                 retVal += 5;
+                 allTroopsPerRound += 5;
              }
              deleteGroupOfCardPerId(firstCId,secCId,thirdCId);
          } else if (Cards.checkIfEachCardDiffType(hand[firstCId],hand[secCId],hand[thirdCId])){
-             retVal += 10;
+             allTroopsPerRound += 10;
              deleteGroupOfCardPerId(firstCId,secCId,thirdCId);
          }
-         return retVal;
+    }
+
+    public int calcTroopsToDeploy(){
+        //TODO implement Method waiting for Merge
+
+        return allTroopsPerRound;
+    }
+
+    public void resetTroopsPerRound() {
+       allTroopsPerRound = baseTroopsPerRound;
     }
 }

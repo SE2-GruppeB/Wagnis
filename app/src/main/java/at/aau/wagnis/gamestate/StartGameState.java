@@ -2,6 +2,7 @@ package at.aau.wagnis.gamestate;
 
 import android.util.Log;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class StartGameState extends GameLogicState {
         Map<Integer, Map<DefaultTroop, Integer>> playerTroops = new HashMap<>();
         Map<Integer, Map<DefaultTroop, Integer>> hubTroops = new HashMap<>();
 
-        Random ran = new Random();
+        Random ran = new SecureRandom();
 
         for (Integer playerId : hubOwners.values()) {
             Map<DefaultTroop, Integer> troops = new HashMap<>();

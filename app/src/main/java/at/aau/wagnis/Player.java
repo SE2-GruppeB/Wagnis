@@ -54,5 +54,27 @@ public class Player {
         this.hand = sortedHand;
     }
 
+    public void deleteGroupOfCardPerId(int id1,int id2,int id3){
+        deleteCardById(id1);
+        deleteCardById(id2);
+        deleteCardById(id3);
+    }
 
+    public int useCards(int firstCId,int secCId,int thirdCId){
+         int retVal = 0;
+         if (Cards.checkIfCardSameType(hand[firstCId],hand[secCId],hand[thirdCId])){
+             if (hand[firstCId].getType().equals(Troops.infantry)){
+                 retVal += 1;
+             } else if (hand[firstCId].getType().equals(Troops.cavalry)) {
+                 retVal += 3;
+             } else {
+                 retVal += 5;
+             }
+             deleteGroupOfCardPerId(firstCId,secCId,thirdCId);
+         } else if (Cards.checkIfEachCardDiffType(hand[firstCId],hand[secCId],hand[thirdCId])){
+             retVal += 10;
+             deleteGroupOfCardPerId(firstCId,secCId,thirdCId);
+         }
+         return retVal;
+    }
 }

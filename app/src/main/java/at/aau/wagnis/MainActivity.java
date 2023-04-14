@@ -116,15 +116,10 @@ public class MainActivity extends AppCompatActivity {
         int nextId = 80;
         int lastTOP = 0;
         int lastLEFT = 0;
-
-
-
         for(String s : seed.split("/")){
             String[] coords = s.split(";");
             lastTOP = lastTOP+Integer.parseInt(coords[0]);
             lastLEFT = lastLEFT+Integer.parseInt(coords[1]);
-
-
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
             nextId++;
             hub.setId(nextId);
@@ -137,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
             });
             GlobalVariables.hubs.add(new Hub(hub));
             layout.addView(hub);
-
-
             cs.clone(layout);
             cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lastTOP);
             cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,lastLEFT);

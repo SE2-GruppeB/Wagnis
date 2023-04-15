@@ -8,6 +8,7 @@ public class MoveTroopsState {
     public void move(Map<Integer,Map<DefaultTroop, Integer>> hubTroops, Map<Integer, Integer> hubOwners, int fromHub, int toHub, int numTroops) {
         int playerId = hubOwners.get(fromHub);
 
+
         Map<DefaultTroop, Integer> fromTroops = hubTroops.get(fromHub);
 
 

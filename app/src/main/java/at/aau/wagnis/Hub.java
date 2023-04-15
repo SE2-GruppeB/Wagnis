@@ -7,6 +7,7 @@ import java.util.Map;
 public class Hub {
     int id;
     Button hubButton;
+    Player owner;
 
     public Hub(Button hubButton) {
         this.hubButton = hubButton;
@@ -30,7 +31,7 @@ public class Hub {
     }
 
     //to do:
-    public void setOwner(Object hubOwner) {
+    public void setOwner(Player hubOwner) {
         /*
 
          */
@@ -44,16 +45,8 @@ public class Hub {
 
     }
 
-    public Player getownedHub() {
-    return null;}
-//Todo
-
-    public Object getHubOwner() {
-        return null;
-    }
-
-    public int getOwner() {
-        return 0;
+    public Player getOwner() {
+        return this.owner;
     }
 }
 

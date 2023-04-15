@@ -13,5 +13,7 @@ public abstract class GameLogicState {
     public void move(Map<Integer, Integer> hubOwners){}
     public void end(){}
 
+    public void checkForVictory(){}
+
 
 }

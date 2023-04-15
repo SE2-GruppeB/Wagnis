@@ -5,15 +5,12 @@ import static java.util.Collections.reverse;
 
 import android.util.Log;
 
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Map;
 
 import at.aau.wagnis.DefaultTroop;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
-import at.aau.wagnis.Dice;
-import at.aau.wagnis.gamestate.StartGameState;
 
 public class AttackGameState extends GameLogicState {
 
@@ -96,10 +93,11 @@ public class AttackGameState extends GameLogicState {
 
         if (sourceHub.getTroops().get(DefaultTroop.TROOP) <= 1) {
             // Attacker no longer has enough troops to attack
-            sourceHub = null gameState.setAttackState(false);
+            sourceHub = null;
+            GameState.setAttackState(false);
             return;
         }
-        Hub destinationHub;
+        Hub destinationHub = null;
         if (destinationHub.getOwner() == Player.getPlayerId()) {
             // Defender cannot be attacked as they own the hub
             sourceHub = null;
@@ -119,7 +117,7 @@ public class AttackGameState extends GameLogicState {
         if (attackingCount == 0) {
             // Attacker no longer has enough troops to attack
             sourceHub = null;
-            gameState.setAttackState(false);
+            GameState.setAttackState(false);
             return;
         }
 
@@ -137,8 +135,8 @@ public class AttackGameState extends GameLogicState {
         reverse(defenderDiceRolls);
 
 // Determine number of troops lost by attacker and defender
-        int attackerLosses = 0;
-        int defenderLosses = 0;
+        attackerLosses = 0;
+        defenderLosses = 0;
         for (int i = 0; i < Math.min(attackingCount, defenderDiceRolls.length); i++) {
             if (attackerDiceRolls[i] > defenderDiceRolls[i]) {
                 defenderLosses++;
@@ -153,11 +151,11 @@ public class AttackGameState extends GameLogicState {
 
         if (destinationHub.getTroops().get(DefaultTroop.TROOP) == 0) {
             // Attacker has won the battle and conquered the destination hub
-            destinationHub.setOwner(currentPlayer.getId());
+            destinationHub.setOwner(Player.getPlayerId());
             destinationHub.getTroops().put(DefaultTroop.TROOP, attackingCount - attackerLosses);
             sourceHub.getTroops().put(DefaultTroop.TROOP, sourceHub.getTroops().get(DefaultTroop.TROOP) - attackingCount + attackerLosses);
-            gameState.setAttackState(false);
-            gameState.checkForVictory();
+            GameState.setAttackState(false);
+            GameState.checkForVictory();
         }
 
 

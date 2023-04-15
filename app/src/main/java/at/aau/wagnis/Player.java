@@ -11,7 +11,7 @@ public class Player {
     private static int maxCardsInHand = 5;
     private static int baseTroopsPerRound = 3;
 
-    private int playerId;
+    private static int playerId;
 
     private int allTroopsPerRound;
     private Color playerColor;
@@ -53,7 +53,7 @@ public class Player {
         this.playerId = playerId;
     }
 
-    public int getPlayerId() {
+    public static int getPlayerId() {
         return playerId;
     }
 

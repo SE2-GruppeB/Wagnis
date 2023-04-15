@@ -2,7 +2,6 @@ package at.aau.wagnis;
 
 import android.widget.Button;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Hub {
@@ -31,7 +30,7 @@ public class Hub {
     }
 
     //to do:
-    public void setOwner() {
+    public void setOwner(Object hubOwner) {
         /*
 
          */
@@ -51,6 +50,10 @@ public class Hub {
 
     public Object getHubOwner() {
         return null;
+    }
+
+    public int getOwner() {
+        return 0;
     }
 }
 

@@ -13,4 +13,12 @@ public class GameState {
         this.hubs = hubs;
         this.players = players;
     }
+
+    public static void setAttackState(boolean b) {
+
+    }
+
+    public static void checkForVictory() {
+
+    }
 }

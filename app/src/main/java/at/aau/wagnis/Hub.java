@@ -47,6 +47,11 @@ public class Hub {
 
     public Player getownedHub() {
     return null;}
+//Todo
+
+    public Object getHubOwner() {
+        return null;
+    }
 }
 
 

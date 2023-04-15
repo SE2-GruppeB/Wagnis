@@ -1,12 +1,13 @@
 package at.aau.wagnis;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class Dice {
     private Random random;
 
     public Dice() {
-        this.random = new Random();
+        this.random = new SecureRandom();
     }
 
     public int roll() {

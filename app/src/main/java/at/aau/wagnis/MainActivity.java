@@ -1,5 +1,6 @@
 package at.aau.wagnis;
 
+import static at.aau.wagnis.GlobalVariables.getAgency;
 import static at.aau.wagnis.GlobalVariables.hubs;
 
 import android.graphics.Bitmap;
@@ -32,9 +33,7 @@ import java.util.Map;
 import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.StartGameState;
 
-
 public class MainActivity extends AppCompatActivity {
-
     FloatingActionButton endTurn;
     ImageView adjacencyView;
 
@@ -73,16 +72,23 @@ public class MainActivity extends AppCompatActivity {
         players.add(new Player(1));
         players.add(new Player(2));
 
-        StartGameState startState = new StartGameState();
+        StartGameState startGameState = new StartGameState();
 
-        startState.start(unassignedCountries, players);
+        startGameState.start(unassignedCountries, players);
 
-        Map<Integer, Integer> hubOwners = startState.getHubOwners(unassignedCountries, players);
+        Map<Integer, Integer> hubOwners = startGameState.getHubOwners();
+
+        // for testing purposes
 
         MoveTroopsState moveTroops = new MoveTroopsState();
 
-        moveTroops.move(hubOwners);
+        Map<Integer, Map<DefaultTroop, Integer>> hubTroops = startGameState.getHubTroops();;
+
+        moveTroops.move(hubTroops, hubOwners, 81, 83, 1);
+        
     }
+
+
 
     @Override
     public void onBackPressed() {

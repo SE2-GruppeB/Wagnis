@@ -15,14 +15,20 @@ import at.aau.wagnis.Player;
 
 public class StartGameState extends GameLogicState {
 
+    private Map<Integer, Integer> hubOwners;
+
+    private Map<Integer, Map<DefaultTroop, Integer>> hubTroops;
+
+    private  Map<Integer, Map<DefaultTroop, Integer>> playerTroops;
+
     @Override
     public void start(List<Hub> unassignedCountries, List<Player> players) {
-        Map<Integer, Integer> hubOwners = assignCountries(unassignedCountries, players);
+        hubOwners = assignCountries(unassignedCountries, players);
         assignTroopsToHubs(hubOwners);
     }
 
     private Map<Integer, Integer> assignCountries(List<Hub> unassignedCountries, List<Player> players) {
-        Map<Integer, Integer> hubOwners = new HashMap<>();
+            hubOwners = new HashMap<>();
         for (int i = 0; i < unassignedCountries.size(); i++) {
             Hub hub = unassignedCountries.get(i);
             Player player = players.get(i % players.size());
@@ -34,9 +40,9 @@ public class StartGameState extends GameLogicState {
         return hubOwners;
     }
 
-    private void assignTroopsToHubs(Map<Integer, Integer> hubOwners) {
-        Map<Integer, Map<DefaultTroop, Integer>> playerTroops = new HashMap<>();
-        Map<Integer, Map<DefaultTroop, Integer>> hubTroops = new HashMap<>();
+    private Map<Integer, Map<DefaultTroop, Integer>> assignTroopsToHubs(Map<Integer, Integer> hubOwners) {
+        playerTroops = new HashMap<>();
+        hubTroops = new HashMap<>();
 
         Random ran = new SecureRandom();
 
@@ -45,7 +51,6 @@ public class StartGameState extends GameLogicState {
             troops.put(DefaultTroop.TROOP, 60);
             playerTroops.put(playerId, troops);
         }
-
 
         Set<Integer> playerIds = playerTroops.keySet();
 
@@ -82,6 +87,7 @@ public class StartGameState extends GameLogicState {
             }
         }
         Log.d("TAG", "Hub troops contents: " + hubTroops);
+        return hubTroops;
     }
 
     private boolean hasTroops(Map<DefaultTroop, Integer> troops) {
@@ -93,7 +99,12 @@ public class StartGameState extends GameLogicState {
         troops.put(TROOP, currentTroopAmount - amount);
     }
 
-    public Map<Integer, Integer> getHubOwners(List<Hub> unassignedCountries, List<Player> players) {
-        return assignCountries(unassignedCountries, players);
+    public Map<Integer, Integer> getHubOwners() {
+        return hubOwners;
     }
+
+    public Map<Integer, Map<DefaultTroop, Integer>> getHubTroops() {
+        return hubTroops;
+    }
+
 }

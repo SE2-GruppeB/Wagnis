@@ -14,6 +14,8 @@ import at.aau.wagnis.Player;
 
 public class AttackGameState extends GameLogicState {
 
+    /*
+
     Dice dice = new Dice();
 
     private Hub sourceHub;
@@ -157,7 +159,7 @@ public class AttackGameState extends GameLogicState {
             GameState.setAttackState(false);
             GameState.checkForVictory();
         }
-
+*/
 
     }
-}
+

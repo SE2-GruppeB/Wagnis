@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import static at.aau.wagnis.GlobalVariables.getAgency;
 import static at.aau.wagnis.GlobalVariables.hubs;
+import static at.aau.wagnis.GlobalVariables.players;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         drawAdjacencies();
 
         List<Hub> unassignedCountries = new ArrayList<>(hubs);
-        List<Player> players = new ArrayList<>();
 
         players.add(new Player(1));
         players.add(new Player(2));

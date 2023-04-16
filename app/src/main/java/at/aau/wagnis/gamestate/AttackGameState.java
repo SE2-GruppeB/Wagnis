@@ -5,10 +5,15 @@ import java.util.Map;
 
 import at.aau.wagnis.DefaultTroop;
 import at.aau.wagnis.Hub;
+import at.aau.wagnis.PLRNG;
 import at.aau.wagnis.Player;
 
-public class AttackGameState extends GameLogicState {
+/**
+ * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
+ */
 
+public class AttackGameState extends GameLogicState {
+private static final PLRNG RNG= new PLRNG();
     private Hub sourceHub, targetHub;
     private boolean attacker = false, defender = false;
 
@@ -16,6 +21,7 @@ public class AttackGameState extends GameLogicState {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
     }
+
 
     public Hub getSourceHub() {
         return sourceHub;
@@ -25,10 +31,9 @@ public class AttackGameState extends GameLogicState {
         return targetHub;
     }
 
-    public void attack(int attackerDiceRolls, int defenderDiceRolls) {
-        if (attackerDiceRolls <= 0 || defenderDiceRolls <= 0) {
-            throw new IllegalArgumentException("Invalid dice rolls");
-        }
+    public void attack () {
+        int attackerDiceRolls = RNG.diceRoll();
+        int defenderDiceRolls = RNG.diceRoll();
 
         Map<DefaultTroop, Integer> attackerTroops = sourceHub.getTroops();
         Map<DefaultTroop, Integer> defenderTroops = targetHub.getTroops();

@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import at.aau.wagnis.DefaultTroop;
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
@@ -17,9 +17,11 @@ public class StartGameState extends GameLogicState {
 
     private Map<Integer, Integer> hubOwners;
 
-    private Map<Integer, Map<DefaultTroop, Integer>> hubTroops;
+    private Map<Integer, Map<String, Integer>> hubTroops;
 
-    private  Map<Integer, Map<DefaultTroop, Integer>> playerTroops;
+    private  Map<Integer, Map<String, Integer>> playerTroops;
+
+
 
 
     public StartGameState(List<Hub> unassignedCountries, List<Player> players) {
@@ -46,22 +48,20 @@ public class StartGameState extends GameLogicState {
         return hubOwners;
     }
 
-    private Map<Integer, Map<DefaultTroop, Integer>> assignTroopsToHubs(Map<Integer, Integer> hubOwners) {
-        playerTroops = new HashMap<>();
-        hubTroops = new HashMap<>();
+    private Map<Integer, Map<String, Integer>> assignTroopsToHubs(Map<Integer, Integer> hubOwners) {
 
         Random ran = new SecureRandom();
 
         for (Integer playerId : hubOwners.values()) {
-            Map<DefaultTroop, Integer> troops = new HashMap<>();
-            troops.put(DefaultTroop.TROOP, 60);
+            Map<String, Integer> troops = new HashMap<>();
+            troops.put(GlobalVariables.troop, 60);
             playerTroops.put(playerId, troops);
         }
 
         Set<Integer> playerIds = playerTroops.keySet();
 
         for (Integer playerId : playerIds) {
-            Map<DefaultTroop, Integer> troops = playerTroops.get(playerId);
+            Map<String, Integer> troops = playerTroops.get(playerId);
             while (hasTroops(troops)) {
                 for (Map.Entry<Integer, Integer> entry : hubOwners.entrySet()) {
                     Integer hubId = entry.getKey();
@@ -69,24 +69,24 @@ public class StartGameState extends GameLogicState {
                         continue;
                     }
                     if (hubOwners.get(hubId).equals(playerId)) {
-                        Map<DefaultTroop, Integer> currentHubTroops = hubTroops.get(hubId);
+                        Map<String, Integer> currentHubTroops = hubTroops.get(hubId);
                         int amount = 0;
                         if (currentHubTroops == null) {
                             currentHubTroops = new HashMap<>();
                         }
-                        if (currentHubTroops.containsKey(DefaultTroop.TROOP)) {
-                            amount = currentHubTroops.get(DefaultTroop.TROOP);
+                        if (currentHubTroops.containsKey(GlobalVariables.troop)) {
+                            amount = currentHubTroops.get(GlobalVariables.troop);
                         }
                         if (amount == 0) {
                             int troopsToAdd = 1;
-                            currentHubTroops.put(DefaultTroop.TROOP, troopsToAdd);
+                            currentHubTroops.put(GlobalVariables.troop, troopsToAdd);
                             hubTroops.put(hubId, currentHubTroops);
-                            removeTroopAmount(troops, DefaultTroop.TROOP, troopsToAdd);
+                            removeTroopAmount(troops, GlobalVariables.troop, troopsToAdd);
                         } else {
                             int troopsToAdd = ran.nextInt(3) + 1;
-                            currentHubTroops.put(DefaultTroop.TROOP, amount + troopsToAdd);
+                            currentHubTroops.put(GlobalVariables.troop, amount + troopsToAdd);
                             hubTroops.put(hubId, currentHubTroops);
-                            removeTroopAmount(troops, DefaultTroop.TROOP, troopsToAdd);
+                            removeTroopAmount(troops, GlobalVariables.troop, troopsToAdd);
                         }
                     }
                 }
@@ -96,11 +96,11 @@ public class StartGameState extends GameLogicState {
         return hubTroops;
     }
 
-    private boolean hasTroops(Map<DefaultTroop, Integer> troops) {
+    private boolean hasTroops(Map<String, Integer> troops) {
         return (troops.values().stream().mapToInt(Integer::intValue).sum() > 0);
     }
 
-    private void removeTroopAmount(Map<DefaultTroop, Integer> troops, DefaultTroop TROOP, int amount) {
+    private void removeTroopAmount(Map<String, Integer> troops, String TROOP, int amount) {
         int currentTroopAmount = troops.get(TROOP);
         troops.put(TROOP, currentTroopAmount - amount);
     }
@@ -109,7 +109,7 @@ public class StartGameState extends GameLogicState {
         return hubOwners;
     }
 
-    public Map<Integer, Map<DefaultTroop, Integer>> getHubTroops() {
+    public Map<Integer, Map<String, Integer>> getHubTroops() {
         return hubTroops;
     }
 

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class GlobalVariables {
     public static String agency ="" ;
+
+    public final static String troop = "troop";
     public static Context baseContext;
     public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";
     public static ArrayList<String> seeds = new ArrayList<>();
@@ -59,6 +61,7 @@ public class GlobalVariables {
     public static ArrayList<Hub> getHubs() {
         return hubs;
     }
+
 
     public static void setAdjacencies(){
         int lineHubCount=1;

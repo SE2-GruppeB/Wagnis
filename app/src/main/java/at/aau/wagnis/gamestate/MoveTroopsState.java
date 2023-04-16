@@ -2,9 +2,9 @@ package at.aau.wagnis.gamestate;
 
 import java.util.Map;
 
-import at.aau.wagnis.DefaultTroop;
-
 public class MoveTroopsState {
+
+    /*
     public void move(Map<Integer,Map<DefaultTroop, Integer>> hubTroops, Map<Integer, Integer> hubOwners, int fromHub, int toHub, int numTroops) {
         int playerId = hubOwners.get(fromHub);
 
@@ -19,10 +19,12 @@ public class MoveTroopsState {
             throw new IllegalArgumentException("You can only move troops to a hub you own.");
         }
 
-        int availableTroops = fromTroops.getOrDefault(DefaultTroop.TROOP, 0);
+        int availableTroops = fromTroops.getOrDefault(, 0);
         if (numTroops <= 0 || numTroops > availableTroops) {
             throw new IllegalArgumentException("Invalid number of troops to move.");
         }
     }
+
+     */
 }
 

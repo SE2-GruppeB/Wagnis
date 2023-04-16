@@ -3,7 +3,7 @@ package at.aau.wagnis.gamestate;
 import java.util.ArrayList;
 import java.util.Map;
 
-import at.aau.wagnis.DefaultTroop;
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.PLRNG;
 import at.aau.wagnis.Player;
@@ -35,24 +35,24 @@ private static final PLRNG RNG= new PLRNG();
         int attackerDiceRolls = RNG.diceRoll();
         int defenderDiceRolls = RNG.diceRoll();
 
-        Map<DefaultTroop, Integer> attackerTroops = sourceHub.getTroops();
-        Map<DefaultTroop, Integer> defenderTroops = targetHub.getTroops();
+        Map<String, Integer> attackerTroops = sourceHub.getTroops();
+        Map<String, Integer> defenderTroops = targetHub.getTroops();
 
-        if (attackerTroops.get(DefaultTroop.TROOP) == 1 || defenderTroops.get(DefaultTroop.TROOP) <= 0) {
+        if (attackerTroops.get(GlobalVariables.troop) == 1 || defenderTroops.get(GlobalVariables.troop) <= 0) {
             throw new IllegalArgumentException("Illegal attack");
         }
 
         if (attackerDiceRolls > defenderDiceRolls) {
-            defenderTroops.put(DefaultTroop.TROOP, defenderTroops.get(DefaultTroop.TROOP) - 1);
+            defenderTroops.put(GlobalVariables.troop, defenderTroops.get(GlobalVariables.troop) - 1);
         } else if (attackerDiceRolls < defenderDiceRolls) {
-            attackerTroops.put(DefaultTroop.TROOP, attackerTroops.get(DefaultTroop.TROOP) - 1);
+            attackerTroops.put(GlobalVariables.troop, attackerTroops.get(GlobalVariables.troop) - 1);
         }
 
-        if (attackerTroops.get(DefaultTroop.TROOP) == 1 && defenderTroops.get(DefaultTroop.TROOP) >= 1) {
+        if (attackerTroops.get(GlobalVariables.troop) == 1 && defenderTroops.get(GlobalVariables.troop) >= 1) {
             throw new IllegalArgumentException("Attack failed");
         }
 
-        if (defenderTroops.get(DefaultTroop.TROOP) <= 0) {
+        if (defenderTroops.get(GlobalVariables.troop) <= 0) {
             Player attacker = sourceHub.getOwner();
             ArrayList<Hub> attackerHubs = attacker.getOwnedHubs();
             attackerHubs.add(targetHub);

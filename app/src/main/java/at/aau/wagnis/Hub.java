@@ -5,6 +5,7 @@ import android.widget.Button;
 import java.util.Map;
 
 public class Hub {
+
     int id;
     Button hubButton;
     Player owner;
@@ -26,7 +27,7 @@ public class Hub {
         this.hubButton.setText(infantry + "/" + cavalary + "/" + artillery);
     }
 
-    public Map<DefaultTroop, Integer> getTroops() {
+    public Map<String, Integer> getTroops() {
         return null;
     }
 
@@ -41,7 +42,7 @@ public class Hub {
     }
 
     //Todo
-    public void setTroops(Map<DefaultTroop, Integer> attackerTroops) {
+    public void setTroops(Map<String, Integer> attackerTroops) {
 
     }
 

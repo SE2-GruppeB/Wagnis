@@ -2,11 +2,12 @@ package at.aau.wagnis;
 
 import android.widget.Button;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public class Hub {
     int id;
     Button hubButton;
+    Player owner;
 
     public Hub(Button hubButton) {
         this.hubButton = hubButton;
@@ -21,7 +22,32 @@ public class Hub {
         return id;
     }
 
-    public void setText(int infantry,int cavalary,int artillery){
-        this.hubButton.setText(infantry+"/"+cavalary+"/"+artillery);
+    public void setText(int infantry, int cavalary, int artillery) {
+        this.hubButton.setText(infantry + "/" + cavalary + "/" + artillery);
+    }
+
+    public Map<DefaultTroop, Integer> getTroops() {
+        return null;
+    }
+
+    //to do:
+    public void setOwner(Player hubOwner) {
+        /*
+
+         */
+    }
+
+    public void addHub(Hub targetHub) {
+    }
+
+    //Todo
+    public void setTroops(Map<DefaultTroop, Integer> attackerTroops) {
+
+    }
+
+    public Player getOwner() {
+        return this.owner;
     }
 }
+
+

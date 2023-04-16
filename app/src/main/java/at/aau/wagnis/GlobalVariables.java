@@ -56,6 +56,10 @@ public class GlobalVariables {
         GlobalVariables.displayHeightPx = displayHeightPx;
     }
 
+    public static ArrayList<Hub> getHubs() {
+        return hubs;
+    }
+
     public static void setAdjacencies(){
         int lineHubCount=1;
         int chance = 0;
@@ -68,7 +72,7 @@ public class GlobalVariables {
                 }else{
                     adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
                     lineHubCount=1;
-                    }
+                }
             }if (chance %3==0){
                 adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
             }else if (chance % 5==0) {
@@ -95,7 +99,7 @@ public class GlobalVariables {
             while(s <=10){
                 s =(int)(Math.random()*100);
             }
-           // System.out.println("Sprawl:"+s+" ,Hub:"+i);
+            // System.out.println("Sprawl:"+s+" ,Hub:"+i);
             seed=seed+s;
         }
 

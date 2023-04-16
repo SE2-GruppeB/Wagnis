@@ -21,9 +21,15 @@ public class StartGameState extends GameLogicState {
 
     private  Map<Integer, Map<DefaultTroop, Integer>> playerTroops;
 
+
+    public StartGameState(List<Hub> unassignedCountries, List<Player> players) {
+        this.hubOwners = assignCountries(unassignedCountries, players);
+        this.playerTroops = new HashMap<>();
+        this.hubTroops = new HashMap<>();
+    }
+
     @Override
-    public void start(List<Hub> unassignedCountries, List<Player> players) {
-        hubOwners = assignCountries(unassignedCountries, players);
+    public void start() {
         assignTroopsToHubs(hubOwners);
     }
 

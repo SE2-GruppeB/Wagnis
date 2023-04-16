@@ -71,19 +71,10 @@ public class MainActivity extends AppCompatActivity {
         players.add(new Player(1));
         players.add(new Player(2));
 
-        StartGameState startGameState = new StartGameState();
+        StartGameState startGameState = new StartGameState(unassignedCountries, players);
 
-        startGameState.start(unassignedCountries, players);
+        startGameState.start();
 
-        Map<Integer, Integer> hubOwners = startGameState.getHubOwners();
-
-        // for testing purposes
-
-        MoveTroopsState moveTroops = new MoveTroopsState();
-
-        Map<Integer, Map<DefaultTroop, Integer>> hubTroops = startGameState.getHubTroops();;
-
-        moveTroops.move(hubTroops, hubOwners, 81, 83, 1);
 
     }
     @Override

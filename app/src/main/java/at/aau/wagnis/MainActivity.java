@@ -1,8 +1,12 @@
 package at.aau.wagnis;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import static at.aau.wagnis.GlobalVariables.getAgency;
 import static at.aau.wagnis.GlobalVariables.hubs;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -34,21 +38,16 @@ import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.StartGameState;
 
 public class MainActivity extends AppCompatActivity {
+
+
     FloatingActionButton endTurn;
     ImageView adjacencyView;
-
-    public static void setDice(NumberPicker[] dice, int[] values) {
-        for (int i = 0; i < dice.length; i++) {
-            dice[i].setMaxValue(6);
-            dice[i].setMinValue(1);
-            dice[i].setValue(values[i]);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GlobalVariables.baseContext = this;
         hideNavigationBar();
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
@@ -85,23 +84,18 @@ public class MainActivity extends AppCompatActivity {
         Map<Integer, Map<DefaultTroop, Integer>> hubTroops = startGameState.getHubTroops();;
 
         moveTroops.move(hubTroops, hubOwners, 81, 83, 1);
-        
+
     }
-
-
-
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
     }
-
     @Override
     public void onResume() {
         super.onResume();
         hideNavigationBar();
     }
-
-    private void hideNavigationBar() {
+    private void hideNavigationBar(){
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
@@ -137,23 +131,36 @@ public class MainActivity extends AppCompatActivity {
         NumberPicker n4 = popUp.findViewById(R.id.dice4);
         NumberPicker n5 = popUp.findViewById(R.id.dice5);
 
-        NumberPicker[] dice = {n1, n2, n3, n4, n5};
+        NumberPicker[] dice = {n1,n2,n3,n4,n5};
 
-        int[] values = {1, 2, 3, 4, 5};
-        setDice(dice, values);
+        int[] values ={1,2,3,4,5};
+        setDice(dice,values);
     }
 
-    public void drawHubs(String seed) {//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...
+    public static void setDice(NumberPicker[] dice, int[] values){
+        for(int i = 0;i<dice.length;i++){
+            dice[i].setMaxValue(6);
+            dice[i].setMinValue(1);
+            dice[i].setValue(values[i]);
+        }
+    }
+
+    public void drawHubs(String seed){//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
         ConstraintSet cs = new ConstraintSet();
        /*
         int nextId = 80;
         int lastTOP = 0;
         int lastLEFT = 0;
+
+
+
         for(String s : seed.split("/")){
             String[] coords = s.split(";");
             lastTOP = lastTOP+Integer.parseInt(coords[0]);
             lastLEFT = lastLEFT+Integer.parseInt(coords[1]);
+
+
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
             nextId++;
             hub.setId(nextId);
@@ -166,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
             });
             GlobalVariables.hubs.add(new Hub(hub));
             layout.addView(hub);
+
+
             cs.clone(layout);
             cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lastTOP);
             cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,lastLEFT);
@@ -214,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void drawAdjacencies() {
+    public void drawAdjacencies(){
         int height = GlobalVariables.getDisplayHeightPx();
         int width = GlobalVariables.getDisplayWidthPx();
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -242,14 +251,14 @@ public class MainActivity extends AppCompatActivity {
         adjacencyView.setImageBitmap(bitmap);
     }
 
-    public void setDisplayMetrics() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+    public void setDisplayMetrics(){
+        DisplayMetrics displayMetrics= new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         GlobalVariables.setDisplayWidthPx(displayMetrics.widthPixels);
         GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
     }
 
-    public int dpToPx(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    public int dpToPx(int dp){
+        return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 }

@@ -108,6 +108,5 @@ public class GlobalVariables {
 
         GlobalVariables.setSeed(seed);
     }
-    //Crash Seed:
-    //68179234930771929929724485086607546726839753241425246208531155890852076377819
+
 }

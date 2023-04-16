@@ -3,10 +3,11 @@ package at.aau.wagnis;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GlobalVariables {
     public static String agency ="" ;
-
+    public static List<Player> players = new ArrayList<>();
     public final static String troop = "troop";
     public static Context baseContext;
     public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";

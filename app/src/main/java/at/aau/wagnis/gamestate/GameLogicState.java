@@ -12,7 +12,6 @@ public abstract class GameLogicState {
     public void attack(){}
     public void move(){}
     public void end(){}
-
     public void checkForVictory(){}
 
 

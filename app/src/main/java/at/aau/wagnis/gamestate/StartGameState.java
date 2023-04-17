@@ -15,14 +15,11 @@ import at.aau.wagnis.Player;
 
 public class StartGameState extends GameLogicState {
 
-    private Map<Integer, Integer> hubOwners;
+    private static Map<Integer, Integer> hubOwners;
 
     private Map<Integer, Map<String, Integer>> hubTroops;
 
     private  Map<Integer, Map<String, Integer>> playerTroops;
-
-
-
 
     public StartGameState(List<Hub> unassignedCountries, List<Player> players) {
         this.hubOwners = assignCountries(unassignedCountries, players);

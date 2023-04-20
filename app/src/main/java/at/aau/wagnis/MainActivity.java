@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
-    public static void diceRollPopUp() {
+    public static void diceRollPopUp(int[] values) {
 
         LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_diceroll, null);
@@ -118,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
         NumberPicker n5 = popUp.findViewById(R.id.dice5);
 
         NumberPicker[] dice = {n1,n2,n3,n4,n5};
-
-        int[] values ={1,2,3,4,5};
         setDice(dice,values);
     }
 
@@ -160,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    diceRollPopUp();
+                    int[] v = {1,2,3,4,5};
+                    MainActivity.diceRollPopUp(v);
+                    GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
                     System.out.println("Hub:" +hub.getId());
                 }
             });

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GlobalVariables {
-    public static String agency ="" ;
+    public static String agency ="";
     public static List<Player> players = new ArrayList<>();
     public final static String troop = "troop";
     public static Context baseContext;

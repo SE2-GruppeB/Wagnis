@@ -38,4 +38,22 @@ public class Cards {
         }
         return false;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cards)) return false;
+
+        Cards cards = (Cards) o;
+
+        if (id != cards.id) return false;
+        return type == cards.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + type.hashCode();
+        return result;
+    }
 }

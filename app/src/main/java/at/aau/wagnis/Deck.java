@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class Deck {
 
-    private Cards[] cards;
-    private boolean[] isinDeck;
+    private static Cards[] cards;
+    private static boolean[] isinDeck;
 
     public Deck(int maxHubCount) {
         this.cards = new Cards[maxHubCount];
@@ -41,11 +41,48 @@ public class Deck {
 
     }
 
-    public Cards drawRandomCard(){
+    public static  Cards drawCardFromDeck(){
         Random randomGen = new SecureRandom();
         int cardPlaceinDeck = randomGen.nextInt(cards.length);
-        return cards[cardPlaceinDeck];
+        if (isinDeck[cardPlaceinDeck]) {
+            isinDeck[cardPlaceinDeck] = false;
+            return cards[cardPlaceinDeck];
+        } else if (numberOfCardsInDeck() == 0) {
+            return null;
+        } else {
+            for (int i = 0; i < cards.length; i++) {
+                if(i + cardPlaceinDeck < cards.length){
+                    if (isinDeck[i + cardPlaceinDeck]) {
+                        isinDeck[cardPlaceinDeck + i] = false;
+                        return cards[cardPlaceinDeck + i];
+                    }
+                }else {
+                    if(isinDeck[(cardPlaceinDeck + i) % cards.length]) {
+                    isinDeck[(cardPlaceinDeck + i) % cards.length] = false;
+                    return cards[(cardPlaceinDeck + i) % cards.length];
+                    }
+                }
+            }
+        }
+        return null;
     }
 
+    public static int numberOfCardsInDeck(){
+        int count = 0;
+        for (int i = 0; i < isinDeck.length; i++) {
+            if (isinDeck[i]) {
+                count++;
+            }
+        }
+        if (count == 0) {Log.d("Deck", "Deck is empty");}
+        return count;
+    }
 
+    public static void placeCardInDeck(Cards card){
+        for (int i = 0; i < cards.length; i++) {
+            if (cards[i].equals(card)){
+                isinDeck[i] = true;
+            }
+        }
+    }
 }

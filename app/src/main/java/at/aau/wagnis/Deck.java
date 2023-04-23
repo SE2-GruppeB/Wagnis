@@ -62,31 +62,6 @@ public class Deck {
         }
     }
 
-   /* public static  Cards drawCardFromDeck(){
-        Random randomGen = new SecureRandom();
-        int cardPlaceinDeck = randomGen.nextInt(cards.length);
-        if (isinDeck[cardPlaceinDeck]) {
-            isinDeck[cardPlaceinDeck] = false;
-            return cards[cardPlaceinDeck];
-        } else if (numberOfCardsInDeck() == 0) {
-            return null;
-        } else {
-            for (int i = 0; i < cards.length; i++) {
-                if(i + cardPlaceinDeck < cards.length){
-                    if (isinDeck[i + cardPlaceinDeck]) {
-                        isinDeck[cardPlaceinDeck + i] = false;
-                        return cards[cardPlaceinDeck + i];
-                    }
-                }else {
-                    if(isinDeck[(cardPlaceinDeck + i) % cards.length]) {
-                    isinDeck[(cardPlaceinDeck + i) % cards.length] = false;
-                    return cards[(cardPlaceinDeck + i) % cards.length];
-                    }
-                }
-            }
-        }
-        return null;
-    }*/
 
     public  Cards drawCardFromDeck() {
         Random randomGen = new SecureRandom();

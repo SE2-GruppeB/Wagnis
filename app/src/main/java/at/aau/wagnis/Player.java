@@ -5,6 +5,7 @@ import android.graphics.Color;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
@@ -18,10 +19,10 @@ public class Player {
     private Cards[] hand;
     private ArrayList<Hub> ownedHubs;
 
-    public Player(Color playerColor,ArrayList<Hub> HubsToOwn) {
+    public Player(Color playerColor, ArrayList<Hub> ownedHubs) {
         this.playerColor = playerColor;
         this.hand = new Cards[maxCardsInHand];
-        this.ownedHubs = HubsToOwn;
+        this.ownedHubs = ownedHubs;
         allTroopsPerRound = baseTroopsPerRound;
     }
 
@@ -121,5 +122,6 @@ public class Player {
 
 
     public void removeHub(Hub targetHub) {
+        //TODO implement Method
     }
 }

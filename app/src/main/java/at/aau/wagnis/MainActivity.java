@@ -54,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
         endTurn = findViewById(R.id.btn_EndTurn);
 
         setDisplayMetrics();
-        GlobalVariables.seedGenerator();
+        if(!GlobalVariables.getIsClient()){
+            GlobalVariables.seedGenerator();
+        }
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();

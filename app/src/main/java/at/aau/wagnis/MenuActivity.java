@@ -8,11 +8,15 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,6 +70,8 @@ public class MenuActivity extends AppCompatActivity {
                 demoThread = new Thread(this::createNetworkingDemoClient);
                 demoThread.start();
             }
+
+            joinGame(joinBtn);
         });
     }
 
@@ -139,6 +145,34 @@ public class MenuActivity extends AppCompatActivity {
                 Toast.makeText(MenuActivity.this, "Agency: "+GlobalVariables.getAgency(), Toast.LENGTH_SHORT).show();
                 popupWindow.dismiss();
                 changeActivity();
+                return;
+            }
+        });
+    }
+    public void joinGame(View view) {
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(R.layout.popup_connect, null);
+
+
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
+        int width = (int) px;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        Button btnConnect = popUp.findViewById(R.id.btn_connect);
+        EditText hostIP = popUp.findViewById(R.id.txtIP);
+
+
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalVariables.setHostIP(hostIP.getText().toString());
+                GlobalVariables.setIsClient(true);
+                popupWindow.dismiss();
+                chooseFighterPopUp(joinBtn);
                 return;
             }
         });

@@ -11,6 +11,8 @@ public class GlobalVariables {
     public static List<Player> players = new ArrayList<>();
     public final static String troop = "troop";
     public static Context baseContext;
+    public static String hostIP;
+    public static Boolean isClient = false;
     public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";
     public static ArrayList<String> seeds = new ArrayList<>();
     public static ArrayList<Hub> hubs = new ArrayList<>();
@@ -26,6 +28,22 @@ public class GlobalVariables {
             }
         }
         return null;
+    }
+
+    public static String getHostIP() {
+        return hostIP;
+    }
+
+    public static void setHostIP(String hostIP) {
+        GlobalVariables.hostIP = hostIP;
+    }
+
+    public static Boolean getIsClient() {
+        return isClient;
+    }
+
+    public static void setIsClient(Boolean isClient) {
+        GlobalVariables.isClient = isClient;
     }
 
     public static String getAgency() {

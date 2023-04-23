@@ -18,7 +18,6 @@ public class GlobalVariables {
     static int displayWidthPx,displayHeightPx;
     public static int hubsPerLine;
 
-
     public static Hub findHubById(int id){
         for(Hub h : hubs){
             if(h.getId()==id){

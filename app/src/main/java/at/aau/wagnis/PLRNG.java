@@ -15,8 +15,5 @@ public class PLRNG {
         return diceValue;
     }
 
-    public  void deployment(){
-        //TODO implement Method waiting for Merge
-    }
 
 }

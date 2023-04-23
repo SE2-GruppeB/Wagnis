@@ -36,12 +36,33 @@ public class Deck {
     }
 
     public void createMessageForCardGen(int hubId, Troops trooper){
-        String info ="Info",message = " Created new Card ID :", type = "Type";
+        String info ="Info";
+        String message = " Created new Card ID :";
+        String type = "Type";
         Log.d(info,message + hubId + type + trooper);
 
     }
 
-    public static  Cards drawCardFromDeck(){
+    public static int numberOfCardsInDeck(){
+        int count = 0;
+        for (boolean b : isinDeck) {
+            if (b) {
+                count++;
+            }
+        }
+        if (count == 0) {Log.d("Deck", "Deck is empty");}
+        return count;
+    }
+
+    public static void placeCardInDeck(Cards card){
+        for (int i = 0; i < cards.length; i++) {
+            if (cards[i].equals(card)){
+                isinDeck[i] = true;
+            }
+        }
+    }
+
+   /* public static  Cards drawCardFromDeck(){
         Random randomGen = new SecureRandom();
         int cardPlaceinDeck = randomGen.nextInt(cards.length);
         if (isinDeck[cardPlaceinDeck]) {
@@ -65,24 +86,23 @@ public class Deck {
             }
         }
         return null;
+    }*/
+
+    public static Cards drawCardFromDeck() {
+        Random randomGen = new SecureRandom();
+        if (numberOfCardsInDeck() == 0) {return null;}
+        int placeInDeck = randomGen.nextInt(numberOfCardsInDeck());
+        return drawCardFromDeckperID(placeInDeck);
     }
 
-    public static int numberOfCardsInDeck(){
-        int count = 0;
-        for (int i = 0; i < isinDeck.length; i++) {
-            if (isinDeck[i]) {
-                count++;
-            }
-        }
-        if (count == 0) {Log.d("Deck", "Deck is empty");}
-        return count;
-    }
-
-    public static void placeCardInDeck(Cards card){
-        for (int i = 0; i < cards.length; i++) {
-            if (cards[i].equals(card)){
-                isinDeck[i] = true;
-            }
+    public static Cards drawCardFromDeckperID(int placeInDeck) {
+        if (numberOfCardsInDeck() == 0) {return null;}
+        placeInDeck = placeInDeck % cards.length;
+        if (isinDeck[placeInDeck]) {
+            isinDeck[placeInDeck] = false;
+            return cards[placeInDeck];
+        } else {
+           return drawCardFromDeckperID(placeInDeck + 1);
         }
     }
 }

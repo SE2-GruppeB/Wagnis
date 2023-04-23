@@ -111,7 +111,7 @@ public class Player {
     }
 
     public int calcTroopsToDeploy(){
-        //TODO implement Method waiting for Merge
+        //TODO implement Method waiting
 
         return allTroopsPerRound;
     }

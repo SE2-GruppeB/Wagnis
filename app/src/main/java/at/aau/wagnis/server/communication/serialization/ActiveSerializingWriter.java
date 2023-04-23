@@ -33,6 +33,7 @@ public class ActiveSerializingWriter<T> {
         this.threadFactory = Objects.requireNonNull(threadFactory);
     }
 
+    @NonNull
     public static <T> ActiveSerializingWriter<T> fromStream(
             @NonNull OutputStream outputStream,
             @NonNull Function<Runnable, Thread> threadFactory

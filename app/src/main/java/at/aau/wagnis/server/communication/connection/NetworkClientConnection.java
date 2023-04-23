@@ -29,6 +29,7 @@ public class NetworkClientConnection implements ClientConnection {
         this.output = Objects.requireNonNull(output);
     }
 
+    @NonNull
     public static NetworkClientConnection fromSocket(
             @NonNull Socket socket,
             @NonNull Function<Runnable, Thread> threadFactory

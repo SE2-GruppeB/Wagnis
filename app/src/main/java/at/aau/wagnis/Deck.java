@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class Deck {
 
-    private static Cards[] cards;
-    private static boolean[] isinDeck;
+    private final Cards[] cards;
+    private final boolean[] isinDeck;
 
     public Deck(int maxHubCount) {
         this.cards = new Cards[maxHubCount];
@@ -22,13 +22,13 @@ public class Deck {
             int hubId = 100 + i;
             if (trooper == 0){
                 createMessageForCardGen(hubId, Troops.INFANTRY);
-                newCard = new Cards(hubId, Troops.INFANTRY);
+                newCard = new Cards(hubId, Troops.INFANTRY,this);
             } else if (trooper == 1) {
                 createMessageForCardGen(hubId, Troops.CAVALRY);
-                newCard = new Cards(hubId, Troops.CAVALRY);
+                newCard = new Cards(hubId, Troops.CAVALRY,this);
             } else {
                 createMessageForCardGen(hubId, Troops.ARTILLERY);
-                newCard = new Cards(hubId, Troops.ARTILLERY);
+                newCard = new Cards(hubId, Troops.ARTILLERY,this);
             }
             cards[i] = newCard;
             isinDeck[i] = true;
@@ -43,7 +43,7 @@ public class Deck {
 
     }
 
-    public static int numberOfCardsInDeck(){
+    public  int numberOfCardsInDeck(){
         int count = 0;
         for (boolean b : isinDeck) {
             if (b) {
@@ -54,7 +54,7 @@ public class Deck {
         return count;
     }
 
-    public static void placeCardInDeck(Cards card){
+    public  void placeCardInDeck(Cards card){
         for (int i = 0; i < cards.length; i++) {
             if (cards[i].equals(card)){
                 isinDeck[i] = true;
@@ -88,14 +88,14 @@ public class Deck {
         return null;
     }*/
 
-    public static Cards drawCardFromDeck() {
+    public  Cards drawCardFromDeck() {
         Random randomGen = new SecureRandom();
         if (numberOfCardsInDeck() == 0) {return null;}
         int placeInDeck = randomGen.nextInt(numberOfCardsInDeck());
         return drawCardFromDeckperID(placeInDeck);
     }
 
-    public static Cards drawCardFromDeckperID(int placeInDeck) {
+    public  Cards drawCardFromDeckperID(int placeInDeck) {
         if (numberOfCardsInDeck() == 0) {return null;}
         placeInDeck = placeInDeck % cards.length;
         if (isinDeck[placeInDeck]) {

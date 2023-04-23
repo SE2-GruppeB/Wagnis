@@ -71,7 +71,7 @@ public class Player {
     }
 
     public void deleteCardById(int i){
-        Deck.placeCardInDeck(hand[i]);
+        hand[i].placeCardInDeck();
         hand[i] = null;
     }
 

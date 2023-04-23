@@ -3,10 +3,20 @@ package at.aau.wagnis;
 public class Cards {
     private int id;
     private Troops type;
+    private Deck deck;
 
-    public Cards(int id, Troops type) {
+    public Cards(int id, Troops type, Deck deck) {
         this.id = id;
         this.type = type;
+        this.deck = deck;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
     }
 
     public Troops getType() {
@@ -37,6 +47,10 @@ public class Cards {
             return true;
         }
         return false;
+    }
+
+    public void placeCardInDeck(){
+        deck.placeCardInDeck(this);
     }
 
     @Override

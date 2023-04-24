@@ -12,8 +12,8 @@ import at.aau.wagnis.Player;
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
  */
 
-public class AttackGameState extends GameLogicState {
-private static final PLRNG RNG= new PLRNG();
+public class  AttackGameState extends GameLogicState {
+    private static final PLRNG RNG = new PLRNG();
     private Hub sourceHub, targetHub;
     private boolean attacker = false, defender = false;
 
@@ -31,7 +31,7 @@ private static final PLRNG RNG= new PLRNG();
         return targetHub;
     }
 
-    public void attack () {
+    public void attack() {
         int attackerDiceRolls = RNG.diceRoll();
         int defenderDiceRolls = RNG.diceRoll();
 
@@ -59,8 +59,19 @@ private static final PLRNG RNG= new PLRNG();
             Player defender = targetHub.getOwner();
             ArrayList<Hub> defenderHubs = defender.getOwnedHubs();
             defenderHubs.remove(targetHub);
+         if (gamewon(attacker)){
+             throw new IllegalArgumentException("Attack and Game won!");
+         }
             throw new IllegalArgumentException("Attack won");
         }
+    }
+
+    public boolean gamewon(Player player) {
+        if (player.getOwnedHubs().size() == 42) {
+            return true;
+        }
+        return false;
+
     }
 }
 

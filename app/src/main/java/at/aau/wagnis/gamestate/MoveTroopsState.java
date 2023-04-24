@@ -1,11 +1,12 @@
 package at.aau.wagnis.gamestate;
 
-import java.util.ArrayList;
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
-import at.aau.wagnis.Player;
 
 public class MoveTroopsState {
     private Hub sourceHub, targetHub;
@@ -23,21 +24,18 @@ public class MoveTroopsState {
 
     private void moveTroopsBetweenHubs(int numTroops) {
 
-        Map<String, Integer> sourceHubTroops = sourceHub.getTroops();
-        Map<String, Integer> targetHubTroops = targetHub.getTroops();
-
         if (sourceHub.getOwner() != targetHub.getOwner()) {
             throw new IllegalArgumentException("Cannot move troops between hubs owned by different players.");
         }
-        if (sourceHubTroops.get(GlobalVariables.troop) < 1) {
+        if (this.sourceHub.getAmountTroops() <= 1 || sourceHub.getAmountTroops()<=numTroops) {
             throw new IllegalArgumentException("Illegal move not enough troops at source hub");
         }
 
-        if (sourceHubTroops.get(GlobalVariables.troop) > 1 && sourceHub.getOwner() == targetHub.getOwner()) {
-            sourceHubTroops.put(GlobalVariables.troop, sourceHubTroops.get(GlobalVariables.troop) - numTroops);
-            targetHubTroops.put(GlobalVariables.troop, targetHubTroops.get(GlobalVariables.troop) + numTroops);
+        this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops()-numTroops);
+        this.targetHub.setAmountTroops(this.targetHub.getAmountTroops()+numTroops);
 
-        }
+        Log.d("TAG", "sourceHub");
+        Log.d("TAG", "targetHub");
     }
 }
 

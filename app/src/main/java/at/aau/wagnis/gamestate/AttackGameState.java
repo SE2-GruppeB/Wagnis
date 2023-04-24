@@ -1,9 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.PLRNG;
 import at.aau.wagnis.Player;
@@ -35,33 +31,28 @@ public class  AttackGameState extends GameLogicState {
         int attackerDiceRolls = RNG.diceRoll();
         int defenderDiceRolls = RNG.diceRoll();
 
-        Map<String, Integer> attackerTroops = sourceHub.getTroops();
-        Map<String, Integer> defenderTroops = targetHub.getTroops();
-
-        if (attackerTroops.get(GlobalVariables.troop) == 1 || defenderTroops.get(GlobalVariables.troop) <= 0) {
+        if (this.sourceHub.getAmountTroops() == 1 || this.targetHub.getAmountTroops() <= 0) {
             throw new IllegalArgumentException("Illegal attack");
         }
 
         if (attackerDiceRolls > defenderDiceRolls) {
-            defenderTroops.put(GlobalVariables.troop, defenderTroops.get(GlobalVariables.troop) - 1);
+            this.targetHub.setAmountTroops(this.targetHub.getAmountTroops() - 1);
         } else if (attackerDiceRolls < defenderDiceRolls) {
-            attackerTroops.put(GlobalVariables.troop, attackerTroops.get(GlobalVariables.troop) - 1);
+            this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - 1);
         }
 
-        if (attackerTroops.get(GlobalVariables.troop) == 1 && defenderTroops.get(GlobalVariables.troop) >= 1) {
+        if (this.sourceHub.getAmountTroops() == 1 && this.targetHub.getAmountTroops() >= 1) {
             throw new IllegalArgumentException("Attack failed");
         }
 
-        if (defenderTroops.get(GlobalVariables.troop) <= 0) {
-            Player attacker = sourceHub.getOwner();
-            ArrayList<Hub> attackerHubs = attacker.getOwnedHubs();
-            attackerHubs.add(targetHub);
+        if (this.targetHub.getAmountTroops() <= 0) {
+            Player attacker = this.sourceHub.getOwner();
+            attacker.addHub(this.targetHub);
             Player defender = targetHub.getOwner();
-            ArrayList<Hub> defenderHubs = defender.getOwnedHubs();
-            defenderHubs.remove(targetHub);
-         if (gamewon(attacker)){
-             throw new IllegalArgumentException("Attack and Game won!");
-         }
+            defender.removeHub(this.targetHub);
+            if (gamewon(attacker)) {
+                throw new IllegalArgumentException("Attack and Game won!");
+            }
             throw new IllegalArgumentException("Attack won");
         }
     }

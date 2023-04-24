@@ -9,6 +9,7 @@ import java.util.Map;
 public class GlobalVariables {
     public static String agency ="";
     public static List<Player> players = new ArrayList<>();
+    public static ArrayList<String> unavailableAgencies = new ArrayList<>();
     public final static String troop = "troop";
     public static Context baseContext;
     public static String hostIP;
@@ -28,6 +29,14 @@ public class GlobalVariables {
             }
         }
         return null;
+    }
+
+    public static ArrayList<String> getUnavailableAgencies() {
+        return unavailableAgencies;
+    }
+
+    public static void addUnavailableAgencies(String unavailableAgency) {
+        GlobalVariables.unavailableAgencies.add(unavailableAgency);
     }
 
     public static String getHostIP() {

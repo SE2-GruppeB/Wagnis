@@ -136,6 +136,8 @@ public class MenuActivity extends AppCompatActivity {
 
         Button btnAccept = popUp.findViewById(R.id.btn_Accept);
         RadioGroup rg = popUp.findViewById(R.id.radio);
+        setUnavailableAgencis(rg);
+
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +150,17 @@ public class MenuActivity extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+    public static void setUnavailableAgencis(RadioGroup rg){
+        for(int i = 0;i<rg.getChildCount();i++){
+            RadioButton rb = (RadioButton) rg.getChildAt(i);
+            for(String s : GlobalVariables.getUnavailableAgencies()){
+                if(rb.getText().toString().equals(s)){
+                    rb.setEnabled(false);
+                }
+            }
+        }
     }
     public void joinGame(View view) {
 

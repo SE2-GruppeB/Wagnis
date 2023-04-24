@@ -41,7 +41,7 @@ import at.aau.wagnis.gamestate.StartGameState;
 public class MainActivity extends AppCompatActivity {
 
 
-    FloatingActionButton endTurn;
+    FloatingActionButton endTurn,btnCards;
     ImageView adjacencyView;
 
     @Override
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         hideNavigationBar();
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
+        btnCards=findViewById(R.id.btn_Cards);
 
         setDisplayMetrics();
         if(!GlobalVariables.getIsClient()){
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
 
         startGameState.start();
 
+        btnCards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCards();
+                return;
+            }
+        });
 
 
 
@@ -89,6 +97,28 @@ public class MainActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
+    public static void showCards(){
+        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(R.layout.popup_cards, null);
+
+
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 420, GlobalVariables.baseContext.getResources().getDisplayMetrics());
+        int width = (int) px;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = false; // true lets tap outside the popup and dismiss it
+        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+        Button btnBack = popUp.findViewById(R.id.btn_Close);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                return;
+            }
+        });
+
+    }
     public static void diceRollPopUp(int[] values) {
 
         LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);

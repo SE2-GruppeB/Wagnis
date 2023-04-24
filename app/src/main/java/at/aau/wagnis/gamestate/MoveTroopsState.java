@@ -33,7 +33,7 @@ public class MoveTroopsState {
             throw new IllegalArgumentException("Illegal move not enough troops at source hub");
         }
 
-        if (sourceHubTroops.get(GlobalVariables.troop) > 1) {
+        if (sourceHubTroops.get(GlobalVariables.troop) > 1 && sourceHub.getOwner() == targetHub.getOwner()) {
             sourceHubTroops.put(GlobalVariables.troop, sourceHubTroops.get(GlobalVariables.troop) - numTroops);
             targetHubTroops.put(GlobalVariables.troop, targetHubTroops.get(GlobalVariables.troop) + numTroops);
 

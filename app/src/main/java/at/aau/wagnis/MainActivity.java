@@ -229,13 +229,13 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
 
         for (Adjacency adjacency : GlobalVariables.adjacencies) {
-            int pxWidth = dpToPx(25);
-            int pxHeight = dpToPx(40);
+            int pxWidth = dpToPx(21);
+            int pxHeight = dpToPx(60);
 
-            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
-            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;
-            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin + pxWidth;
-            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin + pxHeight;
+            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin;
+            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin+pxHeight;
+            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin;
+            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+pxHeight;
             // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
             canvas.drawLine(startX, startY, endX, endY, paint);
 

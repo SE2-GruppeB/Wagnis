@@ -23,8 +23,11 @@ public class Hub {
         return id;
     }
 
-    public void setText(int infantry, int cavalary, int artillery) {
-        this.hubButton.setText(infantry + "/" + cavalary + "/" + artillery);
+    public void setText(int troops) {
+        this.hubButton.setText(troops);
+    }
+    public int getText() {
+        return this.getText();
     }
 
     public Map<String, Integer> getTroops() {

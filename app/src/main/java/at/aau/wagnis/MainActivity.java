@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import at.aau.wagnis.gamestate.AttackGameState;
 import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.StartGameState;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton endTurn,btnCards,btnSettings;
     ImageView adjacencyView;
+    ArrayList<Hub> selectedHubs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,10 +250,26 @@ public class MainActivity extends AppCompatActivity {
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                 /*Pseudo Logic Integration
+
+                    if(gamesate == reinforceGamestate)
+                        reinforceTroops(hub);
+                    else if(gamestate == moveTroopsState|| gamestate == attackgamestate)
+                        if(selectedHubs.size()<=2){
+                            selectedHubs.add(GlobalVariables.findHubById(hub.getId()));
+                        }else{
+                            moveTroops();
+                            selectedHubs.removeAll(selectedHubs);
+                        }
+                 -------------*/
+
+
+                    /* Testing Grounds
                     int[] v = {1,2,3,4,5};
                     MainActivity.diceRollPopUp(v);
                     GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
-                    System.out.println("Hub:" +hub.getId());
+                    System.out.println("Hub:" +hub.getId());*/
                 }
             });
             GlobalVariables.hubs.add(new Hub(hub));
@@ -300,6 +318,55 @@ public class MainActivity extends AppCompatActivity {
         }
 
         adjacencyView.setImageBitmap(bitmap);
+    }
+
+    public void reinforceTroops(Button hubButton){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops,300,350,false);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
+        NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
+        np.setMaxValue(10);     //setMaxValue(Player.getUnassignedAvailableTroops)
+        np.setMinValue(0);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               int troops = np.getValue();
+                //player.setUnassindeAvailableTroops(=-troops)      //delete now used troops
+                Hub selected = GlobalVariables.findHubById(hubButton.getId());
+                selected.setText(selected.getText()+troops);
+                //selected.setAmountTroops(selected.getAmmountTroops+troops);   //set new troop count
+                popupWindow.dismiss();
+                return;
+            }
+        });
+    }
+
+    public void moveTroops(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops,300,350,false);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
+        NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
+        np.setMaxValue(10);     //setMaxValue(Hub.getAmountTroops)
+        np.setMinValue(1);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int troops = np.getValue();
+
+               // if(gamestate == AttackGameState){
+                    //calc battle
+               // }else{
+                //selectedHubs.get(0).setAmountTroops(selectedHubs.get(0).getAmountTroops()-troops);
+                //selectedHubs.get(1).setAmountTroops(selectedHubs.get(1).getAmountTroops()+troops);
+                //selectedHubs.get(0).setText(selectedHubs.get(0).getAmountTroops());
+                //selectedHubs.get(1).setText(selectedHubs.get(1).getAmountTroops());
+                //}
+                popupWindow.dismiss();
+                return;
+            }
+        });
     }
 
     public void setDisplayMetrics(){

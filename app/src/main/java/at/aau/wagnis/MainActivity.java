@@ -3,6 +3,8 @@ package at.aau.wagnis;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+
+import static at.aau.wagnis.GlobalVariables.findHubById;
 import static at.aau.wagnis.GlobalVariables.getAgency;
 import static at.aau.wagnis.GlobalVariables.hubs;
 import static at.aau.wagnis.GlobalVariables.players;
@@ -19,6 +21,7 @@ import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +33,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +49,7 @@ import at.aau.wagnis.gamestate.StartGameState;
 public class MainActivity extends AppCompatActivity {
 
 
-    FloatingActionButton endTurn,btnCards;
+    FloatingActionButton endTurn,btnCards,btnSettings;
     ImageView adjacencyView;
 
     @Override
@@ -53,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
         btnCards=findViewById(R.id.btn_Cards);
+        btnSettings=findViewById(R.id.btn_Settings);
 
         setDisplayMetrics();
         if(!GlobalVariables.getIsClient()){
@@ -78,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         });
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSettings();
+                return;
+            }
+        });
 
 
 
@@ -96,7 +112,44 @@ public class MainActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
+    public static void showSettings(){
+        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(R.layout.popup_settings, null);
 
+
+
+        int width = dpToPx(300);
+        int height = dpToPx(450);
+        boolean focusable = false;
+        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+        Button btnClose = popUp.findViewById(R.id.btn_Close);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                return;
+            }
+        });
+
+        ImageView qrCode = popUp.findViewById(R.id.qrCode);
+
+        //initializing MultiFormatWriter for QR code
+        MultiFormatWriter mWriter = new MultiFormatWriter();
+        try {
+            //BitMatrix class to encode entered text and set Width & Height
+            BitMatrix mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            BarcodeEncoder mEncoder = new BarcodeEncoder();
+            Bitmap mBitmap = mEncoder.createBitmap(mMatrix);//creating bitmap of code
+            qrCode.setImageBitmap(mBitmap);//Setting generated QR code to imageView
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     public static void showCards(){
         LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_cards, null);
@@ -119,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     public static void diceRollPopUp(int[] values) {
 
         LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -251,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
     }
 
-    public int dpToPx(int dp){
-        return dp *(getResources().getDisplayMetrics().densityDpi/160);
+    public static int dpToPx(int dp){
+        return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
     }
 }

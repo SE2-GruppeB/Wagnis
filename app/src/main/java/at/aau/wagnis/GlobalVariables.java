@@ -1,10 +1,14 @@
 package at.aau.wagnis;
 
 import android.content.Context;
+import android.net.wifi.WifiManager;
+import android.text.format.Formatter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.WIFI_SERVICE;
 
 public class GlobalVariables {
     public static String agency ="";
@@ -136,6 +140,11 @@ public class GlobalVariables {
         }
 
         GlobalVariables.setSeed(seed);
+    }
+
+    public static String getIpAddress(){
+        WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 
 }

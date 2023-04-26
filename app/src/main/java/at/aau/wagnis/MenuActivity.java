@@ -8,17 +8,15 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -31,6 +29,9 @@ import at.aau.wagnis.server.communication.connection.ClientConnectionBusImpl;
 import at.aau.wagnis.server.communication.connection.ClientConnectionListener;
 import at.aau.wagnis.server.communication.connection.NetworkClientConnection;
 import at.aau.wagnis.server.communication.connection.NetworkServerConnection;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -163,7 +164,10 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
     public void joinGame(View view) {
+        try {
+            readQrCode();
 
+        } catch (Exception e) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_connect, null);
 
@@ -189,6 +193,35 @@ public class MenuActivity extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+        //TODO: Initiate Server Connection
+
+    }
+
+    private void readQrCode(){
+        IntentIntegrator ig11 = new IntentIntegrator(this);
+        ig11.setOrientationLocked(true);
+        ig11.setPrompt("Scan a QR Code");
+        ig11.initiateScan();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if (intentResult != null) {
+            if (intentResult.getContents() == null) {
+                Toast.makeText(getBaseContext(), "Invalid Code", Toast.LENGTH_SHORT).show();
+            } else {
+                GlobalVariables.setHostIP(intentResult.getContents());
+                GlobalVariables.setIsClient(true);
+                chooseFighterPopUp(joinBtn);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void createNetworkingDemoClient() {

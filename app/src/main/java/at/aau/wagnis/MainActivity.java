@@ -113,7 +113,10 @@ public class MainActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
     public static void showSettings(){
-        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+       PopupWindow popupWindow= createPopUp(R.layout.popup_settings,300,450,false);
+
+        /*LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_settings, null);
 
 
@@ -123,8 +126,9 @@ public class MainActivity extends AppCompatActivity {
         boolean focusable = false;
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
-
-        Button btnClose = popUp.findViewById(R.id.btn_Close);
+    */
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,16 +137,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView qrCode = popUp.findViewById(R.id.qrCode);
-
-        //initializing MultiFormatWriter for QR code
+        ImageView qrCode = popupWindow.getContentView().findViewById(R.id.qrCode);
         MultiFormatWriter mWriter = new MultiFormatWriter();
         try {
-            //BitMatrix class to encode entered text and set Width & Height
             BitMatrix mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
             BarcodeEncoder mEncoder = new BarcodeEncoder();
-            Bitmap mBitmap = mEncoder.createBitmap(mMatrix);//creating bitmap of code
-            qrCode.setImageBitmap(mBitmap);//Setting generated QR code to imageView
+            Bitmap mBitmap = mEncoder.createBitmap(mMatrix);
+            qrCode.setImageBitmap(mBitmap);
 
 
         } catch (Exception e) {
@@ -151,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public static void showCards(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_cards,550,500,false);
+        /*
         LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_cards, null);
 
@@ -159,10 +162,10 @@ public class MainActivity extends AppCompatActivity {
         int width = (int) px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // true lets tap outside the popup and dismiss it
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);*/
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
-        Button btnBack = popUp.findViewById(R.id.btn_Close);
+        Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,7 +177,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void diceRollPopUp(int[] values) {
-
+        PopupWindow popupWindow= createPopUp(R.layout.popup_diceroll,300,350,false);
+/*
         LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_diceroll, null);
 
@@ -183,11 +187,11 @@ public class MainActivity extends AppCompatActivity {
         int width = (int) px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // true lets tap outside the popup and dismiss it
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);*/
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
 
-        Button btnBack = popUp.findViewById(R.id.btn_Back);
+        Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,11 +201,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        NumberPicker n1 = popUp.findViewById(R.id.dice1);
-        NumberPicker n2 = popUp.findViewById(R.id.dice2);
-        NumberPicker n3 = popUp.findViewById(R.id.dice3);
-        NumberPicker n4 = popUp.findViewById(R.id.dice4);
-        NumberPicker n5 = popUp.findViewById(R.id.dice5);
+        NumberPicker n1 = popupWindow.getContentView().findViewById(R.id.dice1);
+        NumberPicker n2 = popupWindow.getContentView().findViewById(R.id.dice2);
+        NumberPicker n3 = popupWindow.getContentView().findViewById(R.id.dice3);
+        NumberPicker n4 = popupWindow.getContentView().findViewById(R.id.dice4);
+        NumberPicker n5 = popupWindow.getContentView().findViewById(R.id.dice5);
 
         NumberPicker[] dice = {n1,n2,n3,n4,n5};
         setDice(dice,values);
@@ -307,5 +311,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static int dpToPx(int dp){
         return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
+    }
+
+    public static PopupWindow createPopUp(int popupId,int width,int height,boolean focusable){
+
+        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(popupId, null);
+        PopupWindow popupWindow = new PopupWindow(popUp, dpToPx(width), dpToPx(height), focusable);
+        return popupWindow;
     }
 }

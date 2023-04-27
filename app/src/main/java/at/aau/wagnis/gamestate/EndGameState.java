@@ -1,5 +1,9 @@
 package at.aau.wagnis.gamestate;
 
-public class EndGameState {
+public class EndGameState extends GameLogicState{
     //Todo
+    @Override
+    public void end(){
+
+    }
 }

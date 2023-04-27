@@ -10,8 +10,8 @@ android {
 
     defaultConfig {
         applicationId "at.aau.wagnis"
-        minSdk 27
-        targetSdk 33
+        minSdk 30
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -59,6 +59,10 @@ sonarqube {
     property "sonar.host.url", "https://sonarcloud.io"
     property "sonar.java.coveragePlugin", "jacoco"
     property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+    def exclusionList = [
+            "${projectPath}/**/*Activity.*"
+    ].join(', ')
+    property "sonar.coverage.exclusions", exclusionList
   }
 }
 
@@ -67,7 +71,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.junit.platform:junit-platform-engine:1.8.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

@@ -1,10 +1,14 @@
 package at.aau.wagnis.server.communication.command;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,7 +20,7 @@ public class ProcessChatMessageCommandTest {
 
     private ProcessChatMessageCommand command;
 
-    @Before
+    @BeforeEach
     public void setup() {
         command = new ProcessChatMessageCommand("Hello, World!");
     }

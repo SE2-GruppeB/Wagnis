@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Timeout;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class ActiveSerializingWriterTest {
 
     @BeforeEach
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         when(threadFactory.apply(any())).thenReturn(thread);
 
         subject = new ActiveSerializingWriter<>(writer, threadFactory);

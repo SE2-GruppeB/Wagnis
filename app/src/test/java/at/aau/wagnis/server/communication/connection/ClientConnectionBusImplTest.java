@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 
 import at.aau.wagnis.server.communication.command.ClientCommand;
@@ -34,6 +35,8 @@ public class ClientConnectionBusImplTest {
 
     @BeforeEach
     public void setup() {
+
+        MockitoAnnotations.openMocks(this);
         subject = new ClientConnectionBusImpl();
     }
 

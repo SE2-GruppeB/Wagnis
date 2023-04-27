@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 
 import java.io.DataOutputStream;
@@ -28,6 +29,7 @@ public class SerializingWriterTest {
 
     @BeforeEach
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         subject = new SerializingWriter<>(outputStream, loader);
     }
 

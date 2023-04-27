@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +40,7 @@ public class NetworkServerConnectionTest {
 
     @BeforeEach
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         subject = new NetworkServerConnection(input, output, commandConsumer);
     }
 

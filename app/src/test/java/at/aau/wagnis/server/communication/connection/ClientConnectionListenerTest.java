@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -37,6 +38,7 @@ public class ClientConnectionListenerTest {
 
     @BeforeEach
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         when(threadFactory.apply(any())).thenReturn(thread);
 
         subject = new ClientConnectionListener(

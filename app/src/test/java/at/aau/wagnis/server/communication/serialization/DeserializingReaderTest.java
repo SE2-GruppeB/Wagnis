@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 
 import java.io.DataInputStream;
@@ -32,6 +33,7 @@ public class DeserializingReaderTest {
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.openMocks(this);
         subject = new DeserializingReader<>(EXPECTED_CLASS, dataInputStream, loader);
     }
 

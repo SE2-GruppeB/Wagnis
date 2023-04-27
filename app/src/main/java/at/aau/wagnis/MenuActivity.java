@@ -1,6 +1,7 @@
 package at.aau.wagnis;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +45,7 @@ public class MenuActivity extends AppCompatActivity {
     Button sourcesBtn;
     Button joinBtn;
 
+    MediaPlayer mediaPlayer;
     Thread demoThread = null;
 
     @Override
@@ -51,6 +53,9 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         hideNavigationBar();
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
+
+        mediaPlayer.start();
 
         sourcesBtn = findViewById(R.id.btn_sources);
         sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));

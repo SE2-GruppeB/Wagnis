@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
+
+    MediaPlayer mediaPlayer;
     ImageView adjacencyView;
     ArrayList<Hub> selectedHubs = new ArrayList<>();
 
@@ -67,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
         btnCards=findViewById(R.id.btn_Cards);
         btnSettings=findViewById(R.id.btn_Settings);
         btnChat=findViewById(R.id.btn_Chat);
+
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
+        mediaPlayer.start();
+        mediaPlayer.setLooping(true);
 
         setDisplayMetrics();
         if(!GlobalVariables.getIsClient()){

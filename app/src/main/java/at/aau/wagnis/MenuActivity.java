@@ -56,6 +56,7 @@ public class MenuActivity extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
 
         mediaPlayer.start();
+        mediaPlayer.setLooping(true);
 
         sourcesBtn = findViewById(R.id.btn_sources);
         sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));

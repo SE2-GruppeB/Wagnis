@@ -23,10 +23,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -50,7 +52,7 @@ import at.aau.wagnis.gamestate.StartGameState;
 public class MainActivity extends AppCompatActivity {
 
 
-    FloatingActionButton endTurn,btnCards,btnSettings;
+    FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
     ImageView adjacencyView;
     ArrayList<Hub> selectedHubs = new ArrayList<>();
 
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         endTurn = findViewById(R.id.btn_EndTurn);
         btnCards=findViewById(R.id.btn_Cards);
         btnSettings=findViewById(R.id.btn_Settings);
+        btnChat=findViewById(R.id.btn_Chat);
 
         setDisplayMetrics();
         if(!GlobalVariables.getIsClient()){
@@ -97,8 +100,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showChat();
+                return;
+            }
+        });
     }
     @Override
     public void onBackPressed() {
@@ -386,5 +394,31 @@ public class MainActivity extends AppCompatActivity {
         View popUp = inflater.inflate(popupId, null);
         PopupWindow popupWindow = new PopupWindow(popUp, dpToPx(width), dpToPx(height), focusable);
         return popupWindow;
+    }
+
+    public static void showChat(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_chat,450,400,true);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+        Button btnExit = popupWindow.getContentView().findViewById(R.id.btn_Exit);
+        Button btnSend = popupWindow.getContentView().findViewById(R.id.btn_Send);
+        TextView msg = popupWindow.getContentView().findViewById(R.id.chatMsg);
+        EditText sendMsg = popupWindow.getContentView().findViewById(R.id.sendMsg);
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                return;
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(sendMsg.getText());
+                return;
+            }
+        });
+        
     }
 }

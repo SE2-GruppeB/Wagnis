@@ -5,7 +5,9 @@ import android.content.Context;
 import java.util.ArrayList;
 
 public class GlobalVariables {
-    public static String agency ="" ;
+    public static String agency = "";
+    public static ArrayList<Player> players = new ArrayList<>();
+    public final static String troop = "troop";
     public static Context baseContext;
     public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";
     public static ArrayList<String> seeds = new ArrayList<>();
@@ -13,7 +15,6 @@ public class GlobalVariables {
     public static  ArrayList<Adjacency> adjacencies = new ArrayList<>();
     static int displayWidthPx,displayHeightPx;
     public static int hubsPerLine;
-
 
     public static Hub findHubById(int id){
         for(Hub h : hubs){
@@ -60,6 +61,7 @@ public class GlobalVariables {
         return hubs;
     }
 
+
     public static void setAdjacencies(){
         int lineHubCount=1;
         int chance = 0;
@@ -105,6 +107,5 @@ public class GlobalVariables {
 
         GlobalVariables.setSeed(seed);
     }
-    //Crash Seed:
-    //68179234930771929929724485086607546726839753241425246208531155890852076377819
+
 }

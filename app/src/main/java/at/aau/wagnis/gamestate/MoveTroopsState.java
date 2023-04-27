@@ -1,28 +1,41 @@
 package at.aau.wagnis.gamestate;
 
+import android.util.Log;
+
+import java.util.HashMap;
 import java.util.Map;
 
-import at.aau.wagnis.DefaultTroop;
+import at.aau.wagnis.GlobalVariables;
+import at.aau.wagnis.Hub;
 
 public class MoveTroopsState {
-    public void move(Map<Integer,Map<DefaultTroop, Integer>> hubTroops, Map<Integer, Integer> hubOwners, int fromHub, int toHub, int numTroops) {
-        int playerId = hubOwners.get(fromHub);
+    private Hub sourceHub, targetHub;
 
+    private int numTroops;
 
-        Map<DefaultTroop, Integer> fromTroops = hubTroops.get(fromHub);
+    public MoveTroopsState(Hub sourceHub, Hub targetHub) {
+        this.sourceHub = sourceHub;
+        this.targetHub = targetHub;
+    }
 
+    public void move(int numTroops) {
+        moveTroopsBetweenHubs(numTroops);
+    }
 
-        if (!hubOwners.containsKey(toHub)) {
-            throw new IllegalArgumentException("The destination hub does not exist.");
+    private void moveTroopsBetweenHubs(int numTroops) {
+
+        if (sourceHub.getOwner() != targetHub.getOwner()) {
+            throw new IllegalArgumentException("Cannot move troops between hubs owned by different players.");
         }
-        if (!hubOwners.get(toHub).equals(playerId)) {
-            throw new IllegalArgumentException("You can only move troops to a hub you own.");
+        if (this.sourceHub.getAmountTroops() <= 1 || sourceHub.getAmountTroops()<=numTroops) {
+            throw new IllegalArgumentException("Illegal move not enough troops at source hub");
         }
 
-        int availableTroops = fromTroops.getOrDefault(DefaultTroop.TROOP, 0);
-        if (numTroops <= 0 || numTroops > availableTroops) {
-            throw new IllegalArgumentException("Invalid number of troops to move.");
-        }
+        this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops()-numTroops);
+        this.targetHub.setAmountTroops(this.targetHub.getAmountTroops()+numTroops);
+
+        Log.d("TAG", "sourceHub");
+        Log.d("TAG", "targetHub");
     }
 }
 

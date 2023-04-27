@@ -10,8 +10,6 @@ on:
         - main
         - CI-implementation
 
-
-
 jobs:
   build:
 
@@ -32,4 +30,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info # we don't need to run jacocoTestReport on its own, because we finalize test goal with the jacoco report task

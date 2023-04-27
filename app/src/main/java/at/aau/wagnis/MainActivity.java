@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import static at.aau.wagnis.GlobalVariables.getAgency;
 import static at.aau.wagnis.GlobalVariables.hubs;
+import static at.aau.wagnis.GlobalVariables.players;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -53,38 +54,32 @@ public class MainActivity extends AppCompatActivity {
         endTurn = findViewById(R.id.btn_EndTurn);
 
         setDisplayMetrics();
-        drawHubs("100;100/200;200/150;100");
-
-        //Adjacency Test
-        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(82), GlobalVariables.findHubById(83)));
-        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81), GlobalVariables.findHubById(88)));
-        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(83), GlobalVariables.findHubById(91)));
-        GlobalVariables.adjacencies.add(new Adjacency(GlobalVariables.findHubById(81), GlobalVariables.findHubById(82)));
-        //
-        GlobalVariables.findHubById(81).setText(1, 4, 5);
-
+        GlobalVariables.seedGenerator();
+        drawHubs(GlobalVariables.getSeed());
+        GlobalVariables.setAdjacencies();
         drawAdjacencies();
-
-        List<Hub> unassignedCountries = new ArrayList<>(hubs);
-        List<Player> players = new ArrayList<>();
 
         players.add(new Player(1));
         players.add(new Player(2));
 
-        StartGameState startGameState = new StartGameState();
+        StartGameState startGameState = new StartGameState(hubs, players);
+        startGameState.start();
 
-        startGameState.start(unassignedCountries, players);
+        System.out.println(players);
 
-        Map<Integer, Integer> hubOwners = startGameState.getHubOwners();
+        Hub sourceHub = new Hub(new Button(this));
+        Hub targetHub = players.get(0).getOwnedHubs().get(0);
 
-        // for testing purposes
+        for(Hub hub : players.get(0).getOwnedHubs()){
+            if(hub.getAmountTroops() > 1){
+                sourceHub = hub;
+            }
+        }
 
-        MoveTroopsState moveTroops = new MoveTroopsState();
+        MoveTroopsState moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
+        moveTroopsState.move(14);
 
-        Map<Integer, Map<DefaultTroop, Integer>> hubTroops = startGameState.getHubTroops();;
-
-        moveTroops.move(hubTroops, hubOwners, 81, 83, 1);
-
+        System.out.println(players);
     }
     @Override
     public void onBackPressed() {
@@ -101,18 +96,18 @@ public class MainActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
-    public void diceRollPopUp(View view) {
+    public static void diceRollPopUp(int[] values) {
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(R.layout.popup_diceroll, null);
 
 
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, GlobalVariables.baseContext.getResources().getDisplayMetrics());
         int width = (int) px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // true lets tap outside the popup and dismiss it
         PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
 
         Button btnBack = popUp.findViewById(R.id.btn_Back);
@@ -132,8 +127,6 @@ public class MainActivity extends AppCompatActivity {
         NumberPicker n5 = popUp.findViewById(R.id.dice5);
 
         NumberPicker[] dice = {n1,n2,n3,n4,n5};
-
-        int[] values ={1,2,3,4,5};
         setDice(dice,values);
     }
 
@@ -145,81 +138,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void drawHubs(String seed){//seed: margin TOP; margin LEFT / distance to previous TOP;distance to previous LEFT;...
+    public void drawHubs(String seed){
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
         ConstraintSet cs = new ConstraintSet();
-       /*
-        int nextId = 80;
-        int lastTOP = 0;
-        int lastLEFT = 0;
 
+        for(int i=1;i<=seed.length();i++){
+            if(i%2==0){
+                GlobalVariables.seeds.add(seed.substring(i-2,i));
+            }
+        }
 
+        int hubs = 0;
+        GlobalVariables.hubsPerLine = (int)Math.ceil(GlobalVariables.seeds.size()/6f);
+        int lineHubCount = 0;
 
-        for(String s : seed.split("/")){
-            String[] coords = s.split(";");
-            lastTOP = lastTOP+Integer.parseInt(coords[0]);
-            lastLEFT = lastLEFT+Integer.parseInt(coords[1]);
+        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-180)/GlobalVariables.hubsPerLine;
+        int height = GlobalVariables.getDisplayHeightPx();
+        int heightSpace = height/6;
 
+        //System.out.println("HubsPerLine:" + hubsPerLine);
+        //System.out.println("HubWidthSpace"+hubWidthSpace);
+        //System.out.println("HeightSpace:"+heightSpace);
 
+        for(String s : GlobalVariables.seeds){
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            nextId++;
-            hub.setId(nextId);
+            hub.setId(100+hubs);
             hub.setText("Hub: "+hub.getId());
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    diceRollPopUp(hub);
+                    int[] v = {1,2,3,4,5};
+                    MainActivity.diceRollPopUp(v);
+                    GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
+                    System.out.println("Hub:" +hub.getId());
                 }
             });
             GlobalVariables.hubs.add(new Hub(hub));
             layout.addView(hub);
 
+            int top = (hubs/GlobalVariables.hubsPerLine)*heightSpace;
+            int pos = hubWidthSpace/100*Integer.parseInt(s);
+            int left = hubWidthSpace*lineHubCount+pos;
+            //System.out.println("Position:" + top+","+left);
 
             cs.clone(layout);
-            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,lastTOP);
-            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,lastLEFT);
+            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,top);
+            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,left);
             cs.applyTo(layout);
-        }*/
-
-        int hubs = 1;
-        int width = GlobalVariables.getDisplayWidthPx();
-        int height = GlobalVariables.getDisplayHeightPx();
-
-        int dpWidth = 63;
-        int pxWidth = dpToPx(dpWidth);
-
-        int widthSpace = ((width - (7 * pxWidth)) / 7);
-        int heightSpace = height / 6;
-
-        int lineCount = 0;
-        int hubCount = 0;
-        while (hubs <= 42) {
-
-            Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            hub.setId(80 + hubs);
-            hub.setText("Hub: " + hub.getId());
-            hub.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    diceRollPopUp(hub);
-                    System.out.println("Hub:" + hub.getId()); //Test Button Accuracy
-                }
-            });
-            GlobalVariables.hubs.add(new Hub(hub));
-            layout.addView(hub);
-
-            cs.clone(layout);
-            cs.connect(hub.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, lineCount * heightSpace);
-            cs.connect(hub.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, hubCount * widthSpace + hubCount * pxWidth);
-
-            cs.applyTo(layout);
-            hubCount++;
-            if (hubs % 7 == 0) {
-                lineCount++;
-                hubCount = 0;
-            }
-
             hubs++;
+            lineHubCount++;
+            if(lineHubCount==GlobalVariables.hubsPerLine){
+                lineHubCount=0;
+            }
         }
     }
 
@@ -236,8 +206,8 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
 
         for (Adjacency adjacency : GlobalVariables.adjacencies) {
-            int pxWidth = dpToPx(31);
-            int pxHeight = dpToPx(50);
+            int pxWidth = dpToPx(25);
+            int pxHeight = dpToPx(40);
 
             int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
             int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;

@@ -1,9 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import at.aau.wagnis.DefaultTroop;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.PLRNG;
 import at.aau.wagnis.Player;
@@ -12,8 +8,8 @@ import at.aau.wagnis.Player;
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
  */
 
-public class AttackGameState extends GameLogicState {
-private static final PLRNG RNG= new PLRNG();
+public class  AttackGameState extends GameLogicState {
+    private static final PLRNG RNG = new PLRNG();
     private Hub sourceHub, targetHub;
     private boolean attacker = false, defender = false;
 
@@ -31,36 +27,42 @@ private static final PLRNG RNG= new PLRNG();
         return targetHub;
     }
 
-    public void attack () {
+    public void attack() {
         int attackerDiceRolls = RNG.diceRoll();
         int defenderDiceRolls = RNG.diceRoll();
 
-        Map<DefaultTroop, Integer> attackerTroops = sourceHub.getTroops();
-        Map<DefaultTroop, Integer> defenderTroops = targetHub.getTroops();
-
-        if (attackerTroops.get(DefaultTroop.TROOP) == 1 || defenderTroops.get(DefaultTroop.TROOP) <= 0) {
+        if (this.sourceHub.getAmountTroops() == 1 || this.targetHub.getAmountTroops() <= 0) {
             throw new IllegalArgumentException("Illegal attack");
         }
 
         if (attackerDiceRolls > defenderDiceRolls) {
-            defenderTroops.put(DefaultTroop.TROOP, defenderTroops.get(DefaultTroop.TROOP) - 1);
+            this.targetHub.setAmountTroops(this.targetHub.getAmountTroops() - 1);
         } else if (attackerDiceRolls < defenderDiceRolls) {
-            attackerTroops.put(DefaultTroop.TROOP, attackerTroops.get(DefaultTroop.TROOP) - 1);
+            this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - 1);
         }
 
-        if (attackerTroops.get(DefaultTroop.TROOP) == 1 && defenderTroops.get(DefaultTroop.TROOP) >= 1) {
+        if (this.sourceHub.getAmountTroops() == 1 && this.targetHub.getAmountTroops() >= 1) {
             throw new IllegalArgumentException("Attack failed");
         }
 
-        if (defenderTroops.get(DefaultTroop.TROOP) <= 0) {
-            Player attacker = sourceHub.getOwner();
-            ArrayList<Hub> attackerHubs = attacker.getOwnedHubs();
-            attackerHubs.add(targetHub);
+        if (this.targetHub.getAmountTroops() <= 0) {
+            Player attacker = this.sourceHub.getOwner();
+            attacker.addHub(this.targetHub);
             Player defender = targetHub.getOwner();
-            ArrayList<Hub> defenderHubs = defender.getOwnedHubs();
-            defenderHubs.remove(targetHub);
+            defender.removeHub(this.targetHub);
+            if (gamewon(attacker)) {
+                throw new IllegalArgumentException("Attack and Game won!");
+            }
             throw new IllegalArgumentException("Attack won");
         }
+    }
+
+    public boolean gamewon(Player player) {
+        if (player.getOwnedHubs().size() == 42) {
+            return true;
+        }
+        return false;
+
     }
 }
 

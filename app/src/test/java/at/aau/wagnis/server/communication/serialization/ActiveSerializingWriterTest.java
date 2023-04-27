@@ -1,7 +1,8 @@
 package at.aau.wagnis.server.communication.serialization;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -9,21 +10,20 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.Timeout;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+
 
 import java.io.IOException;
 import java.util.function.Function;
 
-@RunWith(MockitoJUnitRunner.class)
+@Timeout(5)
 public class ActiveSerializingWriterTest {
 
     @Mock private SerializingWriter<Object> writer;
@@ -33,10 +33,7 @@ public class ActiveSerializingWriterTest {
 
     private ActiveSerializingWriter<Object> subject;
 
-    @Rule
-    public Timeout timeout = Timeout.millis(5000);
-
-    @Before
+    @BeforeEach
     public void setup() {
         when(threadFactory.apply(any())).thenReturn(thread);
 
@@ -125,7 +122,7 @@ public class ActiveSerializingWriterTest {
         try {
             subject.close();
         } catch (Exception ex) {
-            Assert.fail();
+            fail();
         }
     }
 

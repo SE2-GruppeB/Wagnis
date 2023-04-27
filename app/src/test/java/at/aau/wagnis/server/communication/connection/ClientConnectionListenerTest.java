@@ -1,26 +1,28 @@
 package at.aau.wagnis.server.communication.connection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.function.Function;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ClientConnectionListenerTest {
 
     @Mock private ServerSocket serverSocket;
@@ -31,9 +33,9 @@ public class ClientConnectionListenerTest {
     @Mock private Function<Runnable, Thread> threadFactory;
     @Mock private Thread thread;
 
-    private ClientConnectionListener subject;
+    @InjectMocks private ClientConnectionListener subject;
 
-    @Before
+    @BeforeEach
     public void setup() {
         when(threadFactory.apply(any())).thenReturn(thread);
 
@@ -123,7 +125,7 @@ public class ClientConnectionListenerTest {
         try {
             subject.close();
         } catch (Exception ex) {
-            Assert.fail();
+            fail();
         }
     }
 

@@ -1,7 +1,8 @@
 package at.aau.wagnis.server.communication.serialization;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doThrow;
@@ -10,18 +11,17 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+
 
 import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ActiveDeserializingReaderTest {
 
     @Mock private DeserializingReader<Object> reader;
@@ -32,7 +32,7 @@ public class ActiveDeserializingReaderTest {
 
     private ActiveDeserializingReader<Object> subject;
 
-    @Before
+    @BeforeEach
     public void setup() {
         when(threadFactory.apply(any())).thenReturn(thread);
 
@@ -126,7 +126,7 @@ public class ActiveDeserializingReaderTest {
         try {
             subject.close();
         } catch (Exception ex) {
-            Assert.fail();
+            fail();
         }
     }
 

@@ -1,22 +1,21 @@
 package at.aau.wagnis.server.communication.serialization;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-@RunWith(MockitoJUnitRunner.class)
 public class SerializingWriterTest {
 
     private static final String TAG = "some-tag";
@@ -27,7 +26,7 @@ public class SerializingWriterTest {
 
     private SerializingWriter<Object> subject;
 
-    @Before
+    @BeforeEach
     public void setup() {
         subject = new SerializingWriter<>(outputStream, loader);
     }

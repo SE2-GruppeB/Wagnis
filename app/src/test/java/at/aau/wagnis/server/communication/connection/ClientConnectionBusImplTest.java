@@ -1,27 +1,26 @@
 package at.aau.wagnis.server.communication.connection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.Timeout;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+
 
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 import at.aau.wagnis.server.communication.command.HandleConnectionClosedCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 
-@RunWith(MockitoJUnitRunner.class)
+@Timeout(5)
 public class ClientConnectionBusImplTest {
 
     @Mock private ClientConnection conn1;
@@ -33,10 +32,7 @@ public class ClientConnectionBusImplTest {
 
     private ClientConnectionBusImpl subject;
 
-    @Rule
-    public Timeout timeout = Timeout.millis(5000);
-
-    @Before
+    @BeforeEach
     public void setup() {
         subject = new ClientConnectionBusImpl();
     }

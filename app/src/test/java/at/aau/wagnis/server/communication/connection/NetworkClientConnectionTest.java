@@ -1,9 +1,10 @@
 package at.aau.wagnis.server.communication.connection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThrows;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -11,11 +12,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 import at.aau.wagnis.server.communication.serialization.ActiveDeserializingReader;
 import at.aau.wagnis.server.communication.serialization.ActiveSerializingWriter;
 
-@RunWith(MockitoJUnitRunner.class)
+
 public class NetworkClientConnectionTest {
 
     @Mock private ActiveDeserializingReader<ClientOriginatedServerCommand> input;
@@ -39,7 +40,7 @@ public class NetworkClientConnectionTest {
 
     private NetworkClientConnection subject;
 
-    @Before
+    @BeforeEach
     public void setup() {
         subject = new NetworkClientConnection(input, output);
     }

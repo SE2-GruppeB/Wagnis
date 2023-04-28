@@ -19,6 +19,5 @@ public class GameState {
     }
 
     public static void checkForVictory() {
-
     }
 }

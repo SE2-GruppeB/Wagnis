@@ -59,18 +59,27 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
 
-        List<Hub> unassignedCountries = new ArrayList<>(hubs);
-
         players.add(new Player(1));
         players.add(new Player(2));
 
-        StartGameState startGameState = new StartGameState(unassignedCountries, players);
-
+        StartGameState startGameState = new StartGameState(hubs, players);
         startGameState.start();
 
+        System.out.println(players);
 
+        Hub sourceHub = new Hub(new Button(this));
+        Hub targetHub = players.get(0).getOwnedHubs().get(0);
 
+        for(Hub hub : players.get(0).getOwnedHubs()){
+            if(hub.getAmountTroops() > 1){
+                sourceHub = hub;
+            }
+        }
 
+        MoveTroopsState moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
+        moveTroopsState.move(14);
+
+        System.out.println(players);
     }
     @Override
     public void onBackPressed() {

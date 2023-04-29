@@ -45,7 +45,6 @@ public class MenuActivity extends AppCompatActivity {
     Button sourcesBtn;
     Button joinBtn;
 
-    MediaPlayer mediaPlayer;
     Thread demoThread = null;
 
     @Override
@@ -55,8 +54,8 @@ public class MenuActivity extends AppCompatActivity {
         hideNavigationBar();
         GlobalVariables.mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
 
-        mediaPlayer.start();
-        mediaPlayer.setLooping(true);
+        GlobalVariables.mediaPlayer.start();
+        GlobalVariables.mediaPlayer.setLooping(true);
 
         sourcesBtn = findViewById(R.id.btn_sources);
         sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));

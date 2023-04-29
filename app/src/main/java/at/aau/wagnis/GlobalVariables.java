@@ -27,8 +27,16 @@ public class GlobalVariables {
     public static int hubsPerLine;
     public static MediaPlayer mediaPlayer = new MediaPlayer();
 
+<<<<<<< Updated upstream
     mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
 
+=======
+<<<<<<< HEAD
+=======
+    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
+
+>>>>>>> a8525eda010b4033241848b1bbbcf7c55f0b8751
+>>>>>>> Stashed changes
 
 
     public static Hub findHubById(int id){
@@ -151,5 +159,6 @@ public class GlobalVariables {
         WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
+
 
 }

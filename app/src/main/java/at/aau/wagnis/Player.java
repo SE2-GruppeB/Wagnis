@@ -27,6 +27,10 @@ public class Player implements Serializable {
         this.unassignedAvailableTroops = 60;
     }
 
+    public Player(){
+
+    }
+
     public ArrayList<Hub> getOwnedHubs() {
         return ownedHubs;
     }

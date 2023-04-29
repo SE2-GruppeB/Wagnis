@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
     Switch switchMusic;
-
-    static MediaPlayer mediaPlayer;
     ImageView adjacencyView;
     ArrayList<Hub> selectedHubs = new ArrayList<>();
 
@@ -74,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         btnChat=findViewById(R.id.btn_Chat);
 
         GlobalVariables.mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
-        mediaPlayer.start();
-        mediaPlayer.setLooping(true);
+        GlobalVariables.mediaPlayer.start();
+        GlobalVariables.mediaPlayer.setLooping(true);
 
         setDisplayMetrics();
         if(!GlobalVariables.getIsClient()){
@@ -177,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (switchStatus == "Off") {
-                    mediaPlayer.stop();
+                    GlobalVariables.mediaPlayer.stop();
                 }
             }
         });

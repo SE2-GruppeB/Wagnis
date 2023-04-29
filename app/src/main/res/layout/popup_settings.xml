@@ -29,4 +29,17 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="10dp" />
 
+    <Switch
+        android:id="@+id/switch_Music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="162dp"
+        android:checked="true"
+        android:text="Music on"
+        android:textOff="No"
+        android:textOn="Yes" />
+
 </RelativeLayout>

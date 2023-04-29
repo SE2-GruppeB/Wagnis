@@ -1,6 +1,7 @@
 package at.aau.wagnis;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 
@@ -24,6 +25,10 @@ public class GlobalVariables {
     public static  ArrayList<Adjacency> adjacencies = new ArrayList<>();
     static int displayWidthPx,displayHeightPx;
     public static int hubsPerLine;
+    public static MediaPlayer mediaPlayer = new MediaPlayer();
+
+    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
+
 
 
     public static Hub findHubById(int id){

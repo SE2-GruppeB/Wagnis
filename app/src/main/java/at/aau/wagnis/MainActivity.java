@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
+    Switch switchMusic;
 
-    MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer;
     ImageView adjacencyView;
     ArrayList<Hub> selectedHubs = new ArrayList<>();
 
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         btnSettings=findViewById(R.id.btn_Settings);
         btnChat=findViewById(R.id.btn_Chat);
 
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
+        GlobalVariables.mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
         mediaPlayer.start();
         mediaPlayer.setLooping(true);
 
@@ -166,6 +168,19 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Switch switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
+        switchMusic.setTextOn("On");
+        switchMusic.setTextOff("Off");
+        String switchStatus = switchMusic.getText().toString();
+        switchMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (switchStatus == "Off") {
+                    mediaPlayer.stop();
+                }
+            }
+        });
 
     }
     public static void showCards(){

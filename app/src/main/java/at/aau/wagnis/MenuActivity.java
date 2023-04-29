@@ -53,7 +53,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         hideNavigationBar();
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
+        GlobalVariables.mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
 
         mediaPlayer.start();
         mediaPlayer.setLooping(true);

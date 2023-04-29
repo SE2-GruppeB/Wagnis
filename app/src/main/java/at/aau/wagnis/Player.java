@@ -6,6 +6,7 @@ import android.graphics.Color;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player implements Serializable {
 
@@ -18,14 +19,16 @@ public class Player implements Serializable {
     private Cards[] hand;
     private ArrayList<Hub> ownedHubs;
 
-    public Player(){
-
-    }
-
     public Player(Color playerColor, ArrayList<Hub> HubsToOwn) {
         this.playerColor = playerColor;
         this.hand = new Cards[maxCardsInHand];
         this.ownedHubs = HubsToOwn;
+        allTroopsPerRound = baseTroopsPerRound;
+        this.unassignedAvailableTroops = 60;
+    }
+
+    public Player(){
+        this.hand = new Cards[maxCardsInHand];
         allTroopsPerRound = baseTroopsPerRound;
         this.unassignedAvailableTroops = 60;
     }
@@ -96,6 +99,7 @@ public class Player implements Serializable {
     }
 
     public void deleteCardById(int i){
+        hand[i].placeCardInDeck();
         hand[i] = null;
     }
 
@@ -134,7 +138,7 @@ public class Player implements Serializable {
     }
 
     public int calcTroopsToDeploy(){
-        //TODO implement Method waiting for Merge
+        //TODO implement Method waiting
 
         return allTroopsPerRound;
     }

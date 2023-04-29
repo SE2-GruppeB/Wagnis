@@ -22,13 +22,15 @@ public class Player implements Serializable {
     public Player(Color playerColor, ArrayList<Hub> HubsToOwn) {
         this.playerColor = playerColor;
         this.hand = new Cards[maxCardsInHand];
-        this.ownedHubs = ownedHubs;
+        this.ownedHubs = HubsToOwn;
         allTroopsPerRound = baseTroopsPerRound;
         this.unassignedAvailableTroops = 60;
     }
 
     public Player(){
-
+        this.hand = new Cards[maxCardsInHand];
+        allTroopsPerRound = baseTroopsPerRound;
+        this.unassignedAvailableTroops = 60;
     }
 
     public ArrayList<Hub> getOwnedHubs() {

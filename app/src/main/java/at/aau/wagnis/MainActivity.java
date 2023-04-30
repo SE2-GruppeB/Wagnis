@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        MoveTroopsState moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
-        moveTroopsState.move(14);
+        //MoveTroopsState moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
+        //moveTroopsState.move(14);
 
         System.out.println(players);
     }

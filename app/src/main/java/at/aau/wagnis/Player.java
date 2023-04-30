@@ -75,7 +75,7 @@ public class Player implements Serializable {
     public Player(int playerId) {
         this.ownedHubs = new ArrayList<>();
         this.playerId = playerId;
-        this.playerColor = Color.valueOf(Color.BLACK);
+        //this.playerColor = Color.valueOf(Color.BLACK);
         this.hand = new Cards[maxCardsInHand];
         allTroopsPerRound = baseTroopsPerRound;
         this.unassignedAvailableTroops = 60;

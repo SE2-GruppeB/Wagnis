@@ -26,18 +26,18 @@ public class StartGameState extends GameLogicState {
         assignTroopsToHubs();
     }
 
-    private void assignCountries() {
+    public void assignCountries() {
         for (int i = 0; i < this.hubs.size(); i++) {
             Hub hub = this.hubs.get(i);
             Player player = this.players.get(i % this.players.size());
             hub.setOwner(player);
             player.addHub(hub);
         }
-        Log.d("TAG", "Hub owner contents: " + hubs);
+        //Log.d("TAG", "Hub owner contents: " + hubs);
         //Log.d("TAG", "Players contents: " + this.players);
     }
 
-    private void assignTroopsToHubs() {
+    public void assignTroopsToHubs() {
 
         Random ran = new SecureRandom();
 
@@ -55,7 +55,7 @@ public class StartGameState extends GameLogicState {
                 }
                 hub.setTroops(hub.getAmountTroops() + troopsToPlace);
                 player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
-                Log.d("TAG", "" + player.getUnassignedAvailableTroops());
+                //Log.d("TAG", "" + player.getUnassignedAvailableTroops());
             }
         }
 
@@ -74,11 +74,6 @@ public class StartGameState extends GameLogicState {
 
     private boolean hasTroops(Player player) {
         return (player.getUnassignedAvailableTroops() > 0);
-    }
-
-    private void removeTroopAmount(Map<String, Integer> troops, String TROOP, int amount) {
-        int currentTroopAmount = troops.get(TROOP);
-        troops.put(TROOP, currentTroopAmount - amount);
     }
 
     public ArrayList<Hub> getHubs() {

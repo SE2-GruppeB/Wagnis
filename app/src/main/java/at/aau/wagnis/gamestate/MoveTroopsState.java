@@ -27,15 +27,15 @@ public class MoveTroopsState {
         if (sourceHub.getOwner() != targetHub.getOwner()) {
             throw new IllegalArgumentException("Cannot move troops between hubs owned by different players.");
         }
-        if (this.sourceHub.getAmountTroops() <= 1 || sourceHub.getAmountTroops()<=numTroops) {
+        if (this.sourceHub.getAmountTroops() <= 1 || sourceHub.getAmountTroops() <= numTroops) {
             throw new IllegalArgumentException("Illegal move not enough troops at source hub");
         }
 
         this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops()-numTroops);
         this.targetHub.setAmountTroops(this.targetHub.getAmountTroops()+numTroops);
 
-        Log.d("TAG", "sourceHub");
-        Log.d("TAG", "targetHub");
+        //Log.d("TAG", "sourceHub");
+        //Log.d("TAG", "targetHub");
     }
 }
 

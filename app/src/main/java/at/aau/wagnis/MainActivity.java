@@ -1,13 +1,5 @@
 package at.aau.wagnis;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import static at.aau.wagnis.GlobalVariables.getAgency;
-import static at.aau.wagnis.GlobalVariables.hubs;
-import static at.aau.wagnis.GlobalVariables.players;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,13 +23,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import at.aau.wagnis.gamestate.MoveTroopsState;
-import at.aau.wagnis.gamestate.StartGameState;
-
 public class MainActivity extends AppCompatActivity {
 
 
@@ -59,27 +44,6 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
 
-        players.add(new Player(1));
-        players.add(new Player(2));
-
-        StartGameState startGameState = new StartGameState(hubs, players);
-        startGameState.start();
-
-        System.out.println(players);
-
-        Hub sourceHub = new Hub(new Button(this));
-        Hub targetHub = players.get(0).getOwnedHubs().get(0);
-
-        for(Hub hub : players.get(0).getOwnedHubs()){
-            if(hub.getAmountTroops() > 1){
-                sourceHub = hub;
-            }
-        }
-
-        //MoveTroopsState moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
-        //moveTroopsState.move(14);
-
-        System.out.println(players);
     }
     @Override
     public void onBackPressed() {

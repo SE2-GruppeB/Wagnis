@@ -1,5 +1,7 @@
 package at.aau.wagnis.gamestate;
 
+import android.util.Log;
+
 import java.util.List;
 
 import at.aau.wagnis.Hub;
@@ -30,11 +32,12 @@ public class ReinforceGameState{
         this.troopsToDeploy = troopsToDeploy;
     }
 
-
-
     public void reinforce() {
-        //TODO implement this
-
-
+        if(hubs.size() != troopsToDeploy.size()) {throw new IllegalArgumentException("Hubs and troopsToDeploy must have the same size");}
+        if (hubs.isEmpty()) {throw new IllegalArgumentException("There must be at least one");}
+        for (int i = 0; i < hubs.size(); i++) {
+            Log.d("Info", "Added " + troopsToDeploy.get(i) + " troops to hub " + hubs.get(i).getId());
+            hubs.get(i).addTroops(troopsToDeploy.get(i));
+        }
     }
 }

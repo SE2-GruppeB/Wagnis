@@ -74,6 +74,10 @@ public class Hub {
         }
     }
 
+    public void addTroops(int troops){
+        this.amountTroops += troops;
+    }
+
     @Override
     public String toString() {
         return "Hub{" +
@@ -82,6 +86,8 @@ public class Hub {
                 ", amountTroops=" + amountTroops +
                 '}';
     }
+
+
 }
 
 

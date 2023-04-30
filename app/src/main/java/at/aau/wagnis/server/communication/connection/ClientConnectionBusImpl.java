@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
+import at.aau.wagnis.server.communication.command.HandleConnectionBusClosedCommand;
 import at.aau.wagnis.server.communication.command.HandleConnectionClosedCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 
@@ -45,7 +46,9 @@ public class ClientConnectionBusImpl implements ClientConnectionBus {
             isClosed = true;
 
             this.connectionsById.values().forEach(ClientConnection::close);
+            this.connectionsById.clear();
         }
+        serverCommandQueue.add(new HandleConnectionBusClosedCommand());
     }
 
     @Override

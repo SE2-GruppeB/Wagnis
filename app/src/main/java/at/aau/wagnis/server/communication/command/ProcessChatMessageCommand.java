@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
+import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
 public class ProcessChatMessageCommand implements ClientCommand, ClientOriginatedServerCommand {
@@ -17,6 +18,11 @@ public class ProcessChatMessageCommand implements ClientCommand, ClientOriginate
 
     public ProcessChatMessageCommand(@NonNull String message) {
         this.message = Objects.requireNonNull(message);
+    }
+
+    @Override
+    public void execute(@NonNull GameLogicState gameLogicState) {
+        // TODO
     }
 
     @Override

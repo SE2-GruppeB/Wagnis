@@ -11,14 +11,24 @@ public class Deck {
     private final boolean[] isinDeck;
 
     public Deck(int maxHubCount) {
+        if (maxHubCount == 0) { throw new IllegalArgumentException("maxHubCount cannot be 0"); }
         this.cards = new Cards[maxHubCount];
         this.isinDeck = new boolean[maxHubCount];
+        this.fillDeck();
     }
 
-    public void fillDeck(){
+    public Cards[] getCards() {
+        return cards;
+    }
+
+    public boolean[] getIsinDeck() {
+        return isinDeck;
+    }
+
+    private void fillDeck(){
         for (int i = 0; i < cards.length; i++) {
             Cards newCard;
-            int trooper = (100 + i) % 3;
+            int trooper =  i % 3;
             int hubId = 100 + i;
             if (trooper == 0){
                 createMessageForCardGen(hubId, Troops.INFANTRY);
@@ -58,8 +68,10 @@ public class Deck {
         for (int i = 0; i < cards.length; i++) {
             if (cards[i].equals(card)){
                 isinDeck[i] = true;
+                return;
             }
         }
+        throw new IllegalArgumentException("Card is not in deck");
     }
 
 

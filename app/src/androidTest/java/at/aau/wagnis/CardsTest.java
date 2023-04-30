@@ -117,7 +117,7 @@ public class CardsTest {
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.CAVALRY,new Deck(3));
 
-        assertTrue(Cards.checkIfEachCardDiffType(cards, cards2, cards3));
+        assertFalse(Cards.checkIfEachCardDiffType(cards, cards2, cards3));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class CardsTest {
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.ARTILLERY,new Deck(3));
 
-        assertTrue(Cards.checkIfEachCardDiffType(cards, cards2, cards3));
+        assertFalse(Cards.checkIfEachCardDiffType(cards, cards2, cards3));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class CardsTest {
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.ARTILLERY,new Deck(3));
 
-        assertTrue(Cards.checkIfEachCardDiffType(cards, cards2, cards3));
+        assertFalse(Cards.checkIfEachCardDiffType(cards, cards2, cards3));
     }
 
     @Test
@@ -164,7 +164,7 @@ public class CardsTest {
         Cards cards = new Cards(1, Troops.ARTILLERY, new Deck(3));
         Cards cards2 = new Cards(1, Troops.ARTILLERY, new Deck(3));
 
-        assertEquals(cards, cards2);
+        assertNotEquals(cards, cards2);
     }
 
     @Test

@@ -65,7 +65,8 @@ public class Cards {
         Cards cards = (Cards) o;
 
         if (id != cards.id) return false;
-        return type == cards.type;
+        if (type != cards.type) return false;
+        return deck.equals(cards.deck);
     }
 
     @Override

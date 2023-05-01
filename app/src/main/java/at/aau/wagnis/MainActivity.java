@@ -221,6 +221,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
+
+        switch(){
+            case("artillery"):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.artillery);
+                break;
+            case("cavalry"):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.cavalry);
+                break;
+            default:
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.infantry);
+                break;
+        }*/
     }
 
     public static void diceRollPopUp(int[] values) {

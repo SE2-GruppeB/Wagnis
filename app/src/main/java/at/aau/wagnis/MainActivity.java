@@ -9,7 +9,9 @@ import static at.aau.wagnis.GlobalVariables.getAgency;
 import static at.aau.wagnis.GlobalVariables.hubs;
 import static at.aau.wagnis.GlobalVariables.players;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         btnSettings=findViewById(R.id.btn_Settings);
         btnChat=findViewById(R.id.btn_Chat);
 
+
         GlobalVariables.mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
         GlobalVariables.mediaPlayer.start();
         GlobalVariables.mediaPlayer.setLooping(true);
@@ -115,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
@@ -129,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
-    public static void showSettings(){
+    public  void showSettings(){
 
        PopupWindow popupWindow= createPopUp(R.layout.popup_settings,300,450,false);
 
@@ -177,6 +182,18 @@ public class MainActivity extends AppCompatActivity {
                 if (switchStatus == "Off") {
                     GlobalVariables.mediaPlayer.stop();
                 }
+            }
+        });
+
+        FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
+        //Intent intent = new Intent(this, MenuActivity.class);
+        btnRestart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MenuActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
         });
 

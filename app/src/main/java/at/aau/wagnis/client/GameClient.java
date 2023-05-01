@@ -3,6 +3,7 @@ package at.aau.wagnis.client;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import at.aau.wagnis.gamestate.GameState;
@@ -29,7 +30,7 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
 
     @Override
     public synchronized void updateGameState(@NonNull GameState gameState) {
-        this.currentGameState = gameState;
+        this.currentGameState = Objects.requireNonNull(gameState);
 
         if (this.gameStateListener != null) {
             this.gameStateListener.accept(currentGameState);

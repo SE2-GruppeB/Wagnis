@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
                int troops = np.getValue();
                 //player.setUnassindeAvailableTroops(=-troops)      //delete now used troops
                 Hub selected = GlobalVariables.findHubById(hubButton.getId());
-                selected.setText(selected.getText()+troops);
+                //selected.setText(selected.getHubButton().getText().toString()+troops);
                 //selected.setAmountTroops(selected.getAmmountTroops+troops);   //set new troop count
                 popupWindow.dismiss();
                 return;

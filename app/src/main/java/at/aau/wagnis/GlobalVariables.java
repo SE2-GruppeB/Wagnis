@@ -1,20 +1,31 @@
 package at.aau.wagnis;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.wifi.WifiManager;
+import android.text.format.Formatter;
 
 import java.util.ArrayList;
 
+import static android.content.Context.WIFI_SERVICE;
+
 public class GlobalVariables {
-    public static String agency = "";
+
+    public static String agency ="";
     public static ArrayList<Player> players = new ArrayList<>();
+    public static ArrayList<String> unavailableAgencies = new ArrayList<>();
     public final static String troop = "troop";
+
     public static Context baseContext;
+    public static String hostIP;
+    public static Boolean isClient = false;
     public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";
     public static ArrayList<String> seeds = new ArrayList<>();
     public static ArrayList<Hub> hubs = new ArrayList<>();
     public static  ArrayList<Adjacency> adjacencies = new ArrayList<>();
     static int displayWidthPx,displayHeightPx;
     public static int hubsPerLine;
+    public static MediaPlayer mediaPlayer;
 
     public static Hub findHubById(int id){
         for(Hub h : hubs){
@@ -23,6 +34,30 @@ public class GlobalVariables {
             }
         }
         return null;
+    }
+
+    public static ArrayList<String> getUnavailableAgencies() {
+        return unavailableAgencies;
+    }
+
+    public static void addUnavailableAgencies(String unavailableAgency) {
+        GlobalVariables.unavailableAgencies.add(unavailableAgency);
+    }
+
+    public static String getHostIP() {
+        return hostIP;
+    }
+
+    public static void setHostIP(String hostIP) {
+        GlobalVariables.hostIP = hostIP;
+    }
+
+    public static Boolean getIsClient() {
+        return isClient;
+    }
+
+    public static void setIsClient(Boolean isClient) {
+        GlobalVariables.isClient = isClient;
     }
 
     public static String getAgency() {
@@ -107,5 +142,11 @@ public class GlobalVariables {
 
         GlobalVariables.setSeed(seed);
     }
+
+    public static String getIpAddress(){
+        WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+    }
+
 
 }

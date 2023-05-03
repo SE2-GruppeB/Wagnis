@@ -1,34 +1,19 @@
 package at.aau.wagnis;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-
-import static at.aau.wagnis.GlobalVariables.findHubById;
-import static at.aau.wagnis.GlobalVariables.getAgency;
-import static at.aau.wagnis.GlobalVariables.hubs;
-import static at.aau.wagnis.GlobalVariables.players;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.Switch;
@@ -41,25 +26,22 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import at.aau.wagnis.gamestate.AttackGameState;
-import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.StartGameState;
+
+import static at.aau.wagnis.GlobalVariables.hubs;
+import static at.aau.wagnis.GlobalVariables.players;
 
 public class MainActivity extends AppCompatActivity {
 
 
     FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
-    Switch switchMusic;
     ImageView adjacencyView;
-    ArrayList<Hub> selectedHubs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +54,6 @@ public class MainActivity extends AppCompatActivity {
         btnCards=findViewById(R.id.btn_Cards);
         btnSettings=findViewById(R.id.btn_Settings);
         btnChat=findViewById(R.id.btn_Chat);
-
-
-        GlobalVariables.mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.music1);
-        GlobalVariables.mediaPlayer.start();
-        GlobalVariables.mediaPlayer.setLooping(true);
 
         setDisplayMetrics();
         if(!GlobalVariables.getIsClient()){
@@ -138,17 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
        PopupWindow popupWindow= createPopUp(R.layout.popup_settings,300,450,false);
 
-        /*LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_settings, null);
-
-
-
-        int width = dpToPx(300);
-        int height = dpToPx(450);
-        boolean focusable = false;
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
-        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
-    */
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnClose.setOnClickListener(new View.OnClickListener() {
@@ -176,15 +142,17 @@ public class MainActivity extends AppCompatActivity {
         switchMusic.setTextOn("On");
         switchMusic.setTextOff("Off");
         String switchStatus = switchMusic.getText().toString();
-        switchMusic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (switchStatus == "Off") {
-                    GlobalVariables.mediaPlayer.stop();
+
+        switchMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    GlobalVariables.mediaPlayer.start();
+                }else{
+                    GlobalVariables.mediaPlayer.pause();
                 }
             }
         });
-
+/*
         FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
         //Intent intent = new Intent(this, MenuActivity.class);
         btnRestart.setOnClickListener(new View.OnClickListener() {
@@ -195,21 +163,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        });
+        });*/
 
     }
     public static void showCards(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_cards,550,500,false);
-        /*
-        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_cards, null);
-
-
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 420, GlobalVariables.baseContext.getResources().getDisplayMetrics());
-        int width = (int) px;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = false; // true lets tap outside the popup and dismiss it
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);*/
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
@@ -238,16 +196,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static void diceRollPopUp(int[] values) {
         PopupWindow popupWindow= createPopUp(R.layout.popup_diceroll,300,350,false);
-/*
-        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_diceroll, null);
-
-
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, GlobalVariables.baseContext.getResources().getDisplayMetrics());
-        int width = (int) px;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = false; // true lets tap outside the popup and dismiss it
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);*/
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
 

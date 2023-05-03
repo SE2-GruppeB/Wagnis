@@ -25,7 +25,7 @@ public class GlobalVariables {
     public static  ArrayList<Adjacency> adjacencies = new ArrayList<>();
     static int displayWidthPx,displayHeightPx;
     public static int hubsPerLine;
-    public static MediaPlayer mediaPlayer = new MediaPlayer();
+    public static MediaPlayer mediaPlayer;
 
 
     public static Hub findHubById(int id){

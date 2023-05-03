@@ -27,9 +27,6 @@ public class Hub {
     public void setText(int troops) {
         this.hubButton.setText(troops);
     }
-    public int getText() {
-        return this.getText();
-    }
 
     public int getAmountTroops() {
         return this.amountTroops;

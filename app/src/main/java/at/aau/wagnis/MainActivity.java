@@ -66,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
         drawAdjacencies();
 
 
-        List<Hub> unassignedCountries = new ArrayList<>(hubs);
+        //List<Hub> unassignedCountries = new ArrayList<>(hubs);
 
-        players.add(new Player(1));
-        players.add(new Player(2));
+        //players.add(new Player(1));
+        //players.add(new Player(2));
 
-        StartGameState startGameState = new StartGameState(unassignedCountries, players);
+        //StartGameState startGameState = new StartGameState(unassignedCountries, players);
 
-        startGameState.start();
+        //startGameState.start();
 
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -11,6 +11,13 @@ public abstract class GameLogicState {
     public void reinforce(){}
     public void attack(){}
     public void move(){}
+
+    public void handleConnectionBusClosed() {
+        Thread.currentThread().interrupt();
+    }
+
+    public void handleClosedConnection(int clientId) { }
+
     public void end(){}
     public void checkForVictory(){}
 

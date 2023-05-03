@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.hubsPerLine = (int)Math.ceil(GlobalVariables.seeds.size()/6f);
         int lineHubCount = 0;
 
-        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-180)/GlobalVariables.hubsPerLine;
+        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-dpToPx(100))/GlobalVariables.hubsPerLine;
         int height = GlobalVariables.getDisplayHeightPx();
         int heightSpace = height/6;
 

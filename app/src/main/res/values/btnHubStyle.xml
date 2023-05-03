@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="btn_hub_style" parent ="Theme.AppCompat">
-        <item name="android:layout_width">63dp</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">60dp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:drawableBottom">@drawable/dome_x42</item>
         <item name="android:gravity">center</item>

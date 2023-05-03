@@ -24,8 +24,8 @@ public class Hub {
         return this.id;
     }
 
-    public void setText(int infantry, int cavalary, int artillery) {
-        this.hubButton.setText(infantry + "/" + cavalary + "/" + artillery);
+    public void setText(int troops) {
+        this.hubButton.setText(troops);
     }
 
     public int getAmountTroops() {

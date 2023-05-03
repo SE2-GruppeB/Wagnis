@@ -1,6 +1,7 @@
 package at.aau.wagnis;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +10,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -27,6 +30,9 @@ import at.aau.wagnis.server.communication.connection.ClientConnectionBusImpl;
 import at.aau.wagnis.server.communication.connection.ClientConnectionListener;
 import at.aau.wagnis.server.communication.connection.NetworkClientConnection;
 import at.aau.wagnis.server.communication.connection.NetworkServerConnection;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -47,6 +53,10 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         hideNavigationBar();
 
+        GlobalVariables.mediaPlayer = MediaPlayer.create(this.getApplicationContext(), R.raw.music1);
+        GlobalVariables.mediaPlayer.start();
+        GlobalVariables.mediaPlayer.setLooping(true);
+
         sourcesBtn = findViewById(R.id.btn_sources);
         sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));
 
@@ -66,6 +76,8 @@ public class MenuActivity extends AppCompatActivity {
                 demoThread = new Thread(this::createNetworkingDemoClient);
                 demoThread.start();
             }
+
+            joinGame(joinBtn);
         });
     }
 
@@ -130,6 +142,8 @@ public class MenuActivity extends AppCompatActivity {
 
         Button btnAccept = popUp.findViewById(R.id.btn_Accept);
         RadioGroup rg = popUp.findViewById(R.id.radio);
+        setUnavailableAgencis(rg);
+
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +156,77 @@ public class MenuActivity extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+    public static void setUnavailableAgencis(RadioGroup rg){
+        for(int i = 0;i<rg.getChildCount();i++){
+            RadioButton rb = (RadioButton) rg.getChildAt(i);
+            for(String s : GlobalVariables.getUnavailableAgencies()){
+                if(rb.getText().toString().equals(s)){
+                    rb.setEnabled(false);
+                }
+            }
+        }
+    }
+    public void joinGame(View view) {
+        try {
+            readQrCode();
+
+        } catch (Exception e) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(R.layout.popup_connect, null);
+
+
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
+        int width = (int) px;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        Button btnConnect = popUp.findViewById(R.id.btn_connect);
+        EditText hostIP = popUp.findViewById(R.id.txtIP);
+
+
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalVariables.setHostIP(hostIP.getText().toString());
+                GlobalVariables.setIsClient(true);
+                popupWindow.dismiss();
+                chooseFighterPopUp(joinBtn);
+                return;
+            }
+        });
+    }
+
+        //TODO: Initiate Server Connection
+
+    }
+
+    private void readQrCode(){
+        IntentIntegrator ig11 = new IntentIntegrator(this);
+        ig11.setOrientationLocked(true);
+        ig11.setPrompt("Scan a QR Code");
+        ig11.initiateScan();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if (intentResult != null) {
+            if (intentResult.getContents() == null) {
+                Toast.makeText(getBaseContext(), "Invalid Code", Toast.LENGTH_SHORT).show();
+            } else {
+                GlobalVariables.setHostIP(intentResult.getContents());
+                GlobalVariables.setIsClient(true);
+                chooseFighterPopUp(joinBtn);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void createNetworkingDemoClient() {

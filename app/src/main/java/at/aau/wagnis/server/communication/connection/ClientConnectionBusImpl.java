@@ -80,6 +80,7 @@ public class ClientConnectionBusImpl implements ClientConnectionBus {
         this.serverCommandQueue.add(Objects.requireNonNull(command));
     }
 
+    @NonNull
     @Override
     public ServerCommand getNextCommand() throws InterruptedException {
         return serverCommandQueue.take();

@@ -29,6 +29,7 @@ public class NetworkServerConnection implements ServerConnection {
         this.output = Objects.requireNonNull(output);
     }
 
+    @NonNull
     public static NetworkServerConnection fromSocket(
             @NonNull Socket socket,
             @NonNull Function<Runnable, Thread> threadFactory

@@ -3,26 +3,34 @@ package at.aau.wagnis;
 
 import android.graphics.Color;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Player {
+public class Player implements Serializable {
 
     private static int maxCardsInHand = 5;
     private static int baseTroopsPerRound = 3;
-
-    private static int playerId;
-
+    private int playerId;
     private int allTroopsPerRound;
+    private int unassignedAvailableTroops;
     private Color playerColor;
     private Cards[] hand;
     private ArrayList<Hub> ownedHubs;
 
-    public Player(Color playerColor,ArrayList<Hub> HubsToOwn) {
+    public Player(Color playerColor, ArrayList<Hub> HubsToOwn) {
         this.playerColor = playerColor;
         this.hand = new Cards[maxCardsInHand];
         this.ownedHubs = HubsToOwn;
         allTroopsPerRound = baseTroopsPerRound;
+        this.unassignedAvailableTroops = 60;
+    }
+
+    public Player(){
+        this.hand = new Cards[maxCardsInHand];
+        allTroopsPerRound = baseTroopsPerRound;
+        this.unassignedAvailableTroops = 60;
     }
 
     public ArrayList<Hub> getOwnedHubs() {
@@ -45,15 +53,35 @@ public class Player {
         return hand;
     }
 
+    public void addHub(Hub hub){
+        this.ownedHubs.add(hub);
+    }
+
+    public void removeHub(Hub hub){
+        this.ownedHubs.remove(hub);
+    }
     public void setHand(Cards[] hand) {
         this.hand = hand;
     }
 
-    public Player(int playerId) {
-        this.playerId = playerId;
+    public int getUnassignedAvailableTroops() {
+        return this.unassignedAvailableTroops;
     }
 
-    public static int getPlayerId() {
+    public void setUnassignedAvailableTroops(int unassignedAvailableTroops) {
+        this.unassignedAvailableTroops = unassignedAvailableTroops;
+    }
+
+    public Player(int playerId) {
+        this.ownedHubs = new ArrayList<>();
+        this.playerId = playerId;
+        //this.playerColor = Color.valueOf(Color.BLACK);
+        this.hand = new Cards[maxCardsInHand];
+        allTroopsPerRound = baseTroopsPerRound;
+        this.unassignedAvailableTroops = 60;
+    }
+
+    public int getPlayerId() {
         return playerId;
     }
 
@@ -71,6 +99,7 @@ public class Player {
     }
 
     public void deleteCardById(int i){
+        hand[i].placeCardInDeck();
         hand[i] = null;
     }
 
@@ -109,7 +138,7 @@ public class Player {
     }
 
     public int calcTroopsToDeploy(){
-        //TODO implement Method waiting for Merge
+        //TODO implement Method waiting
 
         return allTroopsPerRound;
     }
@@ -118,7 +147,21 @@ public class Player {
        allTroopsPerRound = baseTroopsPerRound;
     }
 
+    public int countAmountTroops(){
+        int amountTroops = 0;
+        for(Hub hub : this.ownedHubs){
+            amountTroops+=hub.getAmountTroops();
+        }
+        return amountTroops;
+    }
 
-    public void removeHub(Hub targetHub) {
+    @Override
+    public String toString() {
+        return "Player{" +
+                "playerId=" + playerId +
+                ", unassignedAvailableTroops=" + unassignedAvailableTroops +
+                ", amountOfTroopsTotal=" + countAmountTroops() +
+                ", ownedHubs=" + ownedHubs +
+                '}';
     }
 }

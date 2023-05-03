@@ -6,16 +6,16 @@ import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static android.content.Context.WIFI_SERVICE;
 
 public class GlobalVariables {
+
     public static String agency ="";
     public static List<Player> players = new ArrayList<>();
     public static ArrayList<String> unavailableAgencies = new ArrayList<>();
     public final static String troop = "troop";
+
     public static Context baseContext;
     public static String hostIP;
     public static Boolean isClient = false;
@@ -26,7 +26,6 @@ public class GlobalVariables {
     static int displayWidthPx,displayHeightPx;
     public static int hubsPerLine;
     public static MediaPlayer mediaPlayer;
-
 
     public static Hub findHubById(int id){
         for(Hub h : hubs){

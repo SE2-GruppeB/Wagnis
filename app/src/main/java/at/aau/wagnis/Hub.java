@@ -2,25 +2,26 @@ package at.aau.wagnis;
 
 import android.widget.Button;
 
-import java.util.Map;
-
 public class Hub {
 
-    int id;
-    Button hubButton;
-    Player owner;
+    private final int id;
+    private final Button hubButton;
+    private Player owner;
+    private int amountTroops;
 
     public Hub(Button hubButton) {
         this.hubButton = hubButton;
         this.id = hubButton.getId();
+        this.amountTroops = 0;
+        this.owner = new Player();
     }
 
     public Button getHubButton() {
-        return hubButton;
+        return this.hubButton;
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setText(int troops) {
@@ -30,23 +31,22 @@ public class Hub {
         return this.getText();
     }
 
-    public Map<String, Integer> getTroops() {
-        return null;
+    public int getAmountTroops() {
+        return this.amountTroops;
+    }
+
+    public void setAmountTroops(int amountTroops){
+        this.amountTroops = amountTroops;
     }
 
     //to do:
     public void setOwner(Player hubOwner) {
-        /*
-
-         */
-    }
-
-    public void addHub(Hub targetHub) {
+        this.owner = hubOwner;
     }
 
     //Todo
-    public void setTroops(Map<String, Integer> attackerTroops) {
-
+    public void setTroops(int amountTroops) {
+        this.amountTroops = amountTroops;
     }
 
     public Player getOwner() {
@@ -75,6 +75,15 @@ public class Hub {
             default:
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome_x42);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Hub{" +
+                "id=" + id +
+
+                ", amountTroops=" + amountTroops +
+                '}';
     }
 }
 

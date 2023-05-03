@@ -29,6 +29,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import at.aau.wagnis.gamestate.StartGameState;
 
 import static at.aau.wagnis.GlobalVariables.hubs;
 import static at.aau.wagnis.GlobalVariables.players;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
+
 
         List<Hub> unassignedCountries = new ArrayList<>(hubs);
 
@@ -95,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     public void onBackPressed() {

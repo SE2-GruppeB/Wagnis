@@ -12,7 +12,7 @@ import static android.content.Context.WIFI_SERVICE;
 public class GlobalVariables {
 
     public static String agency ="";
-    public static List<Player> players = new ArrayList<>();
+    public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<String> unavailableAgencies = new ArrayList<>();
     public final static String troop = "troop";
 

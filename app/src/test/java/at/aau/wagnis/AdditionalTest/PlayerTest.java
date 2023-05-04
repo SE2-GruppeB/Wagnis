@@ -31,15 +31,17 @@ import at.aau.wagnis.Troops;
 
 class PlayerTest {
 
-    @Mock ArrayList<Hub> ownedHubs;
-    @Mock Color color;
+    @Mock
+    ArrayList<Hub> ownedHubs;
+    @Mock
+    Color color;
     Cards card1;
     Cards card2;
     Cards card3;
     Player player;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
 
         player = new Player(color, ownedHubs);
@@ -52,12 +54,12 @@ class PlayerTest {
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         player = null;
     }
 
     @Test
-    void testOwnedHubsGetterSetter(){
+    void testGetSetOwnedHubs() {
         assertSame(ownedHubs, player.getOwnedHubs());
 
         player.setOwnedHubs(null);
@@ -65,7 +67,7 @@ class PlayerTest {
     }
 
     @Test
-    void testColorGetterSetter(){
+    void testGetSetColor() {
         assertSame(color, player.getPlayerColor());
 
         player.setPlayerColor(null);
@@ -74,7 +76,7 @@ class PlayerTest {
 
 
     @Test
-    void testHandGetterSetter(){
+    void testGetSetHand() {
         Cards[] cards = new Cards[5];
         assertDoesNotThrow(() -> player.setHand(cards));
 
@@ -85,7 +87,7 @@ class PlayerTest {
     }
 
     @Test
-    void testAddRemoveHub(){
+    void testAddRemoveHub() {
         Button button = mock(Button.class);
         when(ownedHubs.add(any())).thenReturn(true);
         when(ownedHubs.remove(any())).thenReturn(true);
@@ -100,14 +102,14 @@ class PlayerTest {
     }
 
     @Test
-    void testGetSetUnassignedTroops(){
+    void testGetSetUnassignedTroops() {
         assertEquals(60, player.getUnassignedAvailableTroops());
         player.setUnassignedAvailableTroops(10);
         assertEquals(10, player.getUnassignedAvailableTroops());
     }
 
     @Test
-    void testSetGetPlayerId(){
+    void testSetGetPlayerId() {
         player = new Player(7);
 
         assertEquals(7, player.getPlayerId());
@@ -118,17 +120,14 @@ class PlayerTest {
 
 
     @Test
-    void addCardToHand(){
-
+    void addCardToHand() {
         Cards card = mock(Cards.class);
 
         assertTrue(player.addCardToHand(card));
     }
 
     @Test
-    void deleteCardById(){
-
-
+    void deleteCardById() {
         setUpCardMocks();
 
         doNothing().when(card1).placeCardInDeck();
@@ -155,10 +154,10 @@ class PlayerTest {
         verify(card3).placeCardInDeck();
     }
 
-    private int countCardsInHand(Cards[] hand){
+    private int countCardsInHand(Cards[] hand) {
         int n = 0;
-        for(Cards card: hand){
-            if(card != null){
+        for (Cards card : hand) {
+            if (card != null) {
                 n++;
             }
         }
@@ -166,7 +165,7 @@ class PlayerTest {
     }
 
     @Test
-    void sortHand(){
+    void sortHand() {
         setUpCardMocks();
 
         Cards[] expectedHand = new Cards[]{null, null, card1, null, card2};
@@ -180,13 +179,13 @@ class PlayerTest {
         assertTrue(checkEqualCardDeck(expectedHand, actualHand));
     }
 
-    private boolean checkEqualCardDeck(Cards[] expectedHand, Cards[] actualHand){
-        if(expectedHand.length != actualHand.length){
+    private boolean checkEqualCardDeck(Cards[] expectedHand, Cards[] actualHand) {
+        if (expectedHand.length != actualHand.length) {
             return false;
         }
 
-        for(int i = 0; i< expectedHand.length; i++){
-            if(expectedHand[i] != actualHand[i]){
+        for (int i = 0; i < expectedHand.length; i++) {
+            if (expectedHand[i] != actualHand[i]) {
                 return false;
             }
         }
@@ -194,9 +193,7 @@ class PlayerTest {
     }
 
     @Test
-    void deleteGroupOfCardPerId(){
-
-
+    void deleteGroupOfCardPerId() {
         setUpCardMocks();
 
         Cards[] expectedHand = new Cards[]{null, card1, card2, null, card3};
@@ -208,16 +205,16 @@ class PlayerTest {
 
         assertTrue(checkEqualCardDeck(expectedHand, actualHand));
 
-        assertThrows(IllegalArgumentException.class, () -> player.deleteGroupOfCardPerId(1,3,4));
+        assertThrows(IllegalArgumentException.class, () -> player.deleteGroupOfCardPerId(1, 3, 4));
     }
 
     @Test
-    void calcTroopsToDeploy(){
+    void calcTroopsToDeploy() {
         assertEquals(3, player.calcTroopsToDeploy());
     }
 
     @Test
-    void useCardsSameType(){
+    void useCardsSameType() {
         setUpCardMocks();
 
         when(card1.getType()).thenReturn(Troops.CAVALRY);
@@ -243,7 +240,7 @@ class PlayerTest {
     }
 
     @Test
-    void useCardsDifferentType(){
+    void useCardsDifferentType() {
         setUpCardMocks();
 
         when(card1.getType()).thenReturn(Troops.CAVALRY);
@@ -272,7 +269,7 @@ class PlayerTest {
     }
 
     @Test
-    void countAmountTroops(){
+    void countAmountTroops() {
         Hub hub = mock(Hub.class);
         ownedHubs = new ArrayList<>();
         ownedHubs.add(hub);

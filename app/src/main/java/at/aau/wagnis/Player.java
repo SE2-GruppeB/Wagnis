@@ -147,6 +147,10 @@ public class Player implements Serializable {
         return this.unassignedAvailableTroops;
     }
 
+    public int getAllTroopsPerRound() {
+        return this.allTroopsPerRound;
+    }
+
     public int calcTroopsToDeploy(){
         //TODO implement Method waiting
 

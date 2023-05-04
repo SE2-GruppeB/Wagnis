@@ -36,11 +36,11 @@ public class Cards {
     }
 
     public static boolean checkIfCardSameType(Cards first, Cards second, Cards third){
-        return first.type.equals(second.type) && first.type.equals(third.type);
+        return first.getType().equals(second.getType()) && first.getType().equals(third.getType());
     }
 
     public static boolean checkIfEachCardDiffType(Cards first, Cards second, Cards third){
-        return !first.type.equals(second.type) && !first.type.equals(third.type) && !second.type.equals(third.type);
+        return !first.getType().equals(second.getType()) && !first.getType().equals(third.getType()) && !second.getType().equals(third.getType());
     }
 
     public void placeCardInDeck(){

@@ -61,6 +61,9 @@ public class Player implements Serializable {
         this.ownedHubs.remove(hub);
     }
     public void setHand(Cards[] hand) {
+        if(hand.length != maxCardsInHand){
+            throw new IllegalArgumentException("Unsupported length of Cards Array");
+        }
         this.hand = hand;
     }
 

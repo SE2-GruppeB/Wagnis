@@ -41,7 +41,9 @@ public class AttackGameStateTest {
         sourceHub.setAmountTroops(3);
         targetHub.setAmountTroops(2);
 
-        gameState = new AttackGameState(sourceHub, targetHub);
+        int sourceHubId = sourceHub.getId();
+        int targetHubId = targetHub.getId();
+        gameState = new AttackGameState(sourceHubId, targetHubId);
     }
 
     @Test

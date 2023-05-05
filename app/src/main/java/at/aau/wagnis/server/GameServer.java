@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.Objects;
 
 import at.aau.wagnis.gamestate.GameLogicState;
+import at.aau.wagnis.gamestate.GameState;
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 import at.aau.wagnis.server.communication.connection.ClientConnectionBus;
@@ -14,6 +15,13 @@ public class GameServer implements Runnable {
 
     private final ClientConnectionBus connectionBus;
     private final ClientConnectionListener clientConnectionListener;
+    private GameState gameState = null;
+    public GameState getGameState() {
+        return gameState;
+    }
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
 
     private GameLogicState gameLogicState;
 

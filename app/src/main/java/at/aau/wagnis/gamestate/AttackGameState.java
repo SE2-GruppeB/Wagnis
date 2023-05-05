@@ -13,9 +13,11 @@ public class  AttackGameState extends GameLogicState {
     private Hub sourceHub, targetHub;
     private boolean attacker = false, defender = false;
 
-    public AttackGameState(Hub sourceHub, Hub targetHub) {
-        this.sourceHub = sourceHub;
-        this.targetHub = targetHub;
+    int sourceHubId= sourceHub.getId();
+    int targetHubId= targetHub.getId();
+    public AttackGameState(int sourceHubId, int targetHubId) {
+        this.sourceHubId = sourceHubId;
+        this.targetHubId = targetHubId;
     }
 
 
@@ -51,9 +53,10 @@ public class  AttackGameState extends GameLogicState {
             Player defender = targetHub.getOwner();
             defender.removeHub(this.targetHub);
             if (gamewon(attacker)) {
-                throw new IllegalArgumentException("Attack and Game won!");
+                this.gameServer.setGameLogicState(new VictoryState(attacker));
+            }else {
+                this.gameServer.setGameLogicState(new ChooseAttackGameState());
             }
-            throw new IllegalArgumentException("Attack won");
         }
     }
 

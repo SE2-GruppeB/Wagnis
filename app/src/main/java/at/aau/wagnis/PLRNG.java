@@ -11,7 +11,7 @@ public class PLRNG {
     public int diceRoll(){
         Random randomGen = new SecureRandom();
         int diceValue = randomGen.nextInt(6) + 1;
-        Log.d("Info :","" + diceValue);
+        //Log.d("Info :","" + diceValue);
         return diceValue;
     }
 

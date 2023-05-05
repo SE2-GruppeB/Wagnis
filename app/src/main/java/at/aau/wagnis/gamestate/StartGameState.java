@@ -12,6 +12,8 @@ import at.aau.wagnis.Player;
 
 public class StartGameState extends GameLogicState {
 
+
+
     private final ArrayList<Hub> hubs;
     private final ArrayList<Player> players;
 

@@ -3,9 +3,12 @@ package at.aau.wagnis.server.communication.connection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -15,14 +18,14 @@ import org.junit.jupiter.api.Timeout;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
+import at.aau.wagnis.server.communication.command.HandleConnectionBusClosedCommand;
 import at.aau.wagnis.server.communication.command.HandleConnectionClosedCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 
 @Timeout(5)
-public class ClientConnectionBusImplTest {
+class ClientConnectionBusImplTest {
 
     @Mock private ClientConnection conn1;
     @Mock private ClientConnection conn2;
@@ -34,14 +37,14 @@ public class ClientConnectionBusImplTest {
     private ClientConnectionBusImpl subject;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         MockitoAnnotations.openMocks(this);
         subject = new ClientConnectionBusImpl();
     }
 
     @Test
-    public void registerConnectionSetsIdsInOrder() {
+    void registerConnectionSetsIdsInOrder() {
         // when
         subject.registerConnection(conn1);
         subject.registerConnection(conn2);
@@ -55,7 +58,7 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void broadcastCommandNotifiesAllConnections() {
+    void broadcastCommandNotifiesAllConnections() {
         // given
         subject.registerConnection(conn1);
         subject.registerConnection(conn2);
@@ -71,7 +74,7 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void receivedCommandsAreReturnedInGetNextCommand() throws InterruptedException {
+    void receivedCommandsAreReturnedInGetNextCommand() throws InterruptedException {
         // given
         subject.reportReceivedCommand(serverCommand1);
         subject.reportReceivedCommand(serverCommand2);
@@ -86,7 +89,7 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void handleClosedConnectionCreatesNotification() throws InterruptedException {
+    void handleClosedConnectionCreatesNotification() throws InterruptedException {
         // given
         subject.registerConnection(conn1);
 
@@ -101,7 +104,7 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void handleClosedConnectionForUnknownIdCausesIllegalStateException() {
+    void handleClosedConnectionForUnknownIdCausesIllegalStateException() {
         // given
         subject.registerConnection(conn1);
 
@@ -115,7 +118,7 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void closeClosesAllKnownConnections() {
+    void closeClosesAllKnownConnections() {
         // given
         subject.registerConnection(conn1);
         subject.registerConnection(conn2);
@@ -131,7 +134,20 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void callingCloseTwiceDoesNotCloseConnectionsTwice() {
+    void broadcastCommandDoesNotCallConnectionsAfterClose() {
+        // given
+        subject.registerConnection(conn1);
+
+        // when
+        subject.close();
+        subject.broadcastCommand(clientCommand1);
+
+        // then
+        verify(conn1, never()).send(any());
+    }
+
+    @Test
+    void callingCloseTwiceDoesNotCloseConnectionsTwice() {
         // given
         subject.registerConnection(conn1);
 
@@ -144,7 +160,7 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void registerConnectionFailsAfterClose() {
+    void registerConnectionFailsAfterClose() {
         // given
         subject.close();
 
@@ -158,7 +174,7 @@ public class ClientConnectionBusImplTest {
     }
 
     @Test
-    public void handleClosedConnectionDoesNotCreateNotificationAfterClose() {
+    void handleClosedConnectionDoesNotCreateFurtherNotificationsAfterClose() throws InterruptedException {
         // given
         subject.close();
 
@@ -166,6 +182,8 @@ public class ClientConnectionBusImplTest {
         subject.handleClosedConnection(0);
 
         // then
+        assertTrue(subject.hasNextCommand());
+        assertInstanceOf(HandleConnectionBusClosedCommand.class, subject.getNextCommand());
         assertFalse(subject.hasNextCommand());
     }
 }

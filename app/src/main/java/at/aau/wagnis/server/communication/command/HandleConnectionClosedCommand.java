@@ -2,6 +2,8 @@ package at.aau.wagnis.server.communication.command;
 
 import androidx.annotation.NonNull;
 
+import at.aau.wagnis.gamestate.GameLogicState;
+
 public class HandleConnectionClosedCommand implements ServerCommand {
 
     private final int clientId;
@@ -23,7 +25,7 @@ public class HandleConnectionClosedCommand implements ServerCommand {
     }
 
     @Override
-    public void execute() {
-        // TODO logic for closed connections
+    public void execute(@NonNull GameLogicState gameLogicState) {
+        gameLogicState.handleClosedConnection(clientId);
     }
 }

@@ -52,7 +52,6 @@ public class StartGameState extends GameLogicState {
                 player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
             }
         }
-
     }
 
     private void assignOneTroopEach(Player player) {
@@ -62,8 +61,6 @@ public class StartGameState extends GameLogicState {
                 player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - 1);
             }
         }
-
-
     }
 
     private boolean hasTroops(Player player) {

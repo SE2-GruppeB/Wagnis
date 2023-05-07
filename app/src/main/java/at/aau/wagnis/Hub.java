@@ -52,7 +52,7 @@ public class Hub {
     public void setHubImage(String agency){
         switch(agency){
             case("ESA"):
-               this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome_x42);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome_x42);
                 break;
             case("NASA"):
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome6_x42);
@@ -66,11 +66,8 @@ public class Hub {
             case("Roskosmos"):
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome3_x42);
                 break;
-            case("China Manned Space Agency"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome2_x42);
-                break;
             default:
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome_x42);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome2_x42);
         }
     }
 

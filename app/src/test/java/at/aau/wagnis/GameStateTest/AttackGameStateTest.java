@@ -3,6 +3,7 @@ package at.aau.wagnis.GameStateTest;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.AttackGameState;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,9 +15,12 @@ import android.widget.Button;
 
 public class AttackGameStateTest {
 
-    @Mock private Hub sourceHub;
-    @Mock private Hub targetHub;
-    @Mock private AttackGameState gameState;
+    @Mock
+    private Hub sourceHub;
+    @Mock
+    private Hub targetHub;
+    @Mock
+    private AttackGameState gameState;
 
     private Player attacker;
     private Player defender;
@@ -68,6 +72,19 @@ public class AttackGameStateTest {
 
     @Test
     public void testGameWon() {
-        // add test case for game won scenario
+        Player player = new Player(1);
+        for (int i = 0; i < 42; i++) {
+            player.addHub(new Hub(Mockito.mock(Button.class)));
+        }
+        assertTrue(gameState.gamewon(player));
+    }
+
+    @Test
+    void testGameWonFalse() {
+        Player player = new Player(1);
+        for (int i = 0; i < 20; i++) {
+            player.addHub(new Hub(Mockito.mock(Button.class)));
+        }
+        assertFalse(gameState.gamewon(player));
     }
 }

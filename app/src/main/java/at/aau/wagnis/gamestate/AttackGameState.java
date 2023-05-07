@@ -10,8 +10,10 @@ import at.aau.wagnis.Player;
 
 public class  AttackGameState extends GameLogicState {
     private static final PLRNG RNG = new PLRNG();
-    private Hub sourceHub, targetHub;
-    private boolean attacker = false, defender = false;
+    private Hub sourceHub;
+    private Hub targetHub;
+    private boolean attacker = false;
+    private boolean defender = false;
 
     private int sourceHubId;
     private int targetHubId;
@@ -36,6 +38,7 @@ public class  AttackGameState extends GameLogicState {
         return targetHub;
     }
 
+    @Override
     public void attack() {
         int attackerDiceRolls = RNG.diceRoll();
         int defenderDiceRolls = RNG.diceRoll();
@@ -55,12 +58,12 @@ public class  AttackGameState extends GameLogicState {
         }
 
         if (this.targetHub.getAmountTroops() <= 0) {
-            Player attacker = this.sourceHub.getOwner();
-            attacker.addHub(this.targetHub);
-            Player defender = targetHub.getOwner();
-            defender.removeHub(this.targetHub);
-            if (gamewon(attacker)) {
-                this.gameServer.setGameLogicState(new VictoryState(attacker));
+            Player attackingPlayer = this.sourceHub.getOwner();
+            attackingPlayer.addHub(this.targetHub);
+            Player defendingPlayer = targetHub.getOwner();
+            defendingPlayer.removeHub(this.targetHub);
+            if (gamewon(attackingPlayer)) {
+                this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
             }else {
                 this.gameServer.setGameLogicState(new ChooseAttackGameState());
             }
@@ -68,11 +71,7 @@ public class  AttackGameState extends GameLogicState {
     }
 
     public boolean gamewon(Player player) {
-        if (player.getOwnedHubs().size() == 42) {
-            return true;
-        }
-        return false;
-
+        return player.getOwnedHubs().size() == 42;
     }
 }
 

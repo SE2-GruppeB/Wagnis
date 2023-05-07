@@ -1,4 +1,4 @@
-package at.aau.wagnis.AdditionalTest;
+package at.aau.wagnis.ObjectTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;

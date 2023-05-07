@@ -1,4 +1,4 @@
-package at.aau.wagnis;
+package at.aau.wagnis.ObjectTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,6 +17,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import at.aau.wagnis.Hub;
+import at.aau.wagnis.Player;
 
 class HubTest {
 

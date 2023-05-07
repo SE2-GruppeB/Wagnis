@@ -1,18 +1,21 @@
-package at.aau.wagnis;
+package at.aau.wagnis.ObjectTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import at.aau.wagnis.Adjacency;
+import at.aau.wagnis.Hub;
+
 class AdjacencyTest {
 
-    @Mock Hub hub1;
+    @Mock
+    Hub hub1;
     @Mock Hub hub2;
 
     Adjacency adjacency;

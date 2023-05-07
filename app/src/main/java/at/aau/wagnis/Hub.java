@@ -42,10 +42,6 @@ public class Hub {
     }
 
     //Todo
-    public void setTroops(int amountTroops) {
-        this.amountTroops = amountTroops;
-    }
-
     public Player getOwner() {
         return this.owner;
     }

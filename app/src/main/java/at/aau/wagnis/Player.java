@@ -4,40 +4,39 @@ package at.aau.wagnis;
 import android.graphics.Color;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player implements Serializable {
 
-    private static int maxCardsInHand = 5;
-    private static int baseTroopsPerRound = 3;
+    private static final int MAX_CARDS_IN_HAND = 5;
+    private static final int BASE_TROOPS_PER_ROUND = 3;
     private int playerId;
     private int allTroopsPerRound;
     private int unassignedAvailableTroops;
     private Color playerColor;
     private Cards[] hand;
-    private ArrayList<Hub> ownedHubs;
+    private List<Hub> ownedHubs;
 
-    public Player(Color playerColor, ArrayList<Hub> HubsToOwn) {
+    public Player(Color playerColor, List<Hub> hubsToOwn) {
         this.playerColor = playerColor;
-        this.hand = new Cards[maxCardsInHand];
-        this.ownedHubs = HubsToOwn;
-        allTroopsPerRound = baseTroopsPerRound;
+        this.hand = new Cards[MAX_CARDS_IN_HAND];
+        this.ownedHubs = hubsToOwn;
+        allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;
     }
 
     public Player(){
-        this.hand = new Cards[maxCardsInHand];
-        allTroopsPerRound = baseTroopsPerRound;
+        this.hand = new Cards[MAX_CARDS_IN_HAND];
+        allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;
     }
 
-    public ArrayList<Hub> getOwnedHubs() {
+    public List<Hub> getOwnedHubs() {
         return ownedHubs;
     }
 
-    public void setOwnedHubs(ArrayList<Hub> ownedHubs) {
+    public void setOwnedHubs(List<Hub> ownedHubs) {
         this.ownedHubs = ownedHubs;
     }
 
@@ -61,6 +60,9 @@ public class Player implements Serializable {
         this.ownedHubs.remove(hub);
     }
     public void setHand(Cards[] hand) {
+        if(hand.length != MAX_CARDS_IN_HAND){
+            throw new IllegalArgumentException("Unsupported length of Cards Array");
+        }
         this.hand = hand;
     }
 
@@ -76,8 +78,8 @@ public class Player implements Serializable {
         this.ownedHubs = new ArrayList<>();
         this.playerId = playerId;
         //this.playerColor = Color.valueOf(Color.BLACK);
-        this.hand = new Cards[maxCardsInHand];
-        allTroopsPerRound = baseTroopsPerRound;
+        this.hand = new Cards[MAX_CARDS_IN_HAND];
+        allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;
     }
 
@@ -90,23 +92,27 @@ public class Player implements Serializable {
     }
 
     public boolean addCardToHand(Cards card){
-        for (int i = 0; i < maxCardsInHand ; i++){
+        for (int i = 0; i < MAX_CARDS_IN_HAND; i++){
             if (hand[i] == null){
                 hand[i] = card;
+                return true;
             }
         }
         return false;
     }
 
     public void deleteCardById(int i){
+        if(hand[i] == null){
+            throw new IllegalArgumentException("Card not in players' hand");
+        }
         hand[i].placeCardInDeck();
         hand[i] = null;
     }
 
     public void sortHand(){
-        Cards[] sortedHand = new Cards[maxCardsInHand];
+        Cards[] sortedHand = new Cards[MAX_CARDS_IN_HAND];
         int y = 0;
-        for (int i = 0; i < maxCardsInHand ; i++){
+        for (int i = 0; i < MAX_CARDS_IN_HAND; i++){
             if (hand[i] != null){
                 sortedHand[y] = hand[i];
                 y++;
@@ -137,6 +143,14 @@ public class Player implements Serializable {
          }
     }
 
+    public int getUnassignedTroops() {
+        return this.unassignedAvailableTroops;
+    }
+
+    public int getAllTroopsPerRound() {
+        return this.allTroopsPerRound;
+    }
+
     public int calcTroopsToDeploy(){
         //TODO implement Method waiting
 
@@ -144,7 +158,7 @@ public class Player implements Serializable {
     }
 
     public void resetTroopsPerRound() {
-       allTroopsPerRound = baseTroopsPerRound;
+       allTroopsPerRound = BASE_TROOPS_PER_ROUND;
     }
 
     public int countAmountTroops(){

@@ -1,10 +1,7 @@
 package at.aau.wagnis.gamestate;
 
-import android.util.Log;
-
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 import java.util.Random;
 
 import at.aau.wagnis.Hub;
@@ -12,12 +9,10 @@ import at.aau.wagnis.Player;
 
 public class StartGameState extends GameLogicState {
 
+    private final List<Hub> hubs;
+    private final List<Player> players;
 
-
-    private final ArrayList<Hub> hubs;
-    private final ArrayList<Player> players;
-
-    public StartGameState(ArrayList<Hub> unassignedCountries, ArrayList<Player> players) {
+    public StartGameState(List<Hub> unassignedCountries, List<Player> players) {
         this.hubs = unassignedCountries;
         this.players = players;
         assignCountries();
@@ -35,8 +30,6 @@ public class StartGameState extends GameLogicState {
             hub.setOwner(player);
             player.addHub(hub);
         }
-        //Log.d("TAG", "Hub owner contents: " + hubs);
-        //Log.d("TAG", "Players contents: " + this.players);
     }
 
     public void assignTroopsToHubs() {
@@ -55,12 +48,10 @@ public class StartGameState extends GameLogicState {
                 if(troopsToPlace > player.getUnassignedAvailableTroops()){
                     troopsToPlace = player.getUnassignedAvailableTroops();
                 }
-                hub.setTroops(hub.getAmountTroops() + troopsToPlace);
+                hub.setAmountTroops(hub.getAmountTroops() + troopsToPlace);
                 player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
-                //Log.d("TAG", "" + player.getUnassignedAvailableTroops());
             }
         }
-
     }
 
     private void assignOneTroopEach(Player player) {
@@ -70,19 +61,17 @@ public class StartGameState extends GameLogicState {
                 player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - 1);
             }
         }
-
-
     }
 
     private boolean hasTroops(Player player) {
         return (player.getUnassignedAvailableTroops() > 0);
     }
 
-    public ArrayList<Hub> getHubs() {
+    public List<Hub> getHubs() {
         return this.hubs;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return this.players;
     }
 }

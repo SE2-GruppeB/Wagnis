@@ -13,11 +13,18 @@ public class  AttackGameState extends GameLogicState {
     private Hub sourceHub, targetHub;
     private boolean attacker = false, defender = false;
 
-    int sourceHubId= sourceHub.getId();
-    int targetHubId= targetHub.getId();
+    private int sourceHubId;
+    private int targetHubId;
+    //int sourceHubId= sourceHub.getId();
+    //int targetHubId= targetHub.getId();
     public AttackGameState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
+    }
+
+    public AttackGameState(Hub sourceHub, Hub targetHub) {
+        this.sourceHub = sourceHub;
+        this.targetHub = targetHub;
     }
 
 

@@ -5,7 +5,9 @@ import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static android.content.Context.WIFI_SERVICE;
 
@@ -129,19 +131,19 @@ public class GlobalVariables {
         }
     }
 
-    public static void seedGenerator(){
-        String seed="";
-        for(int i=0;i<42;i++){
+    public static void seedGenerator() {
+        SecureRandom secureRandom = new SecureRandom();
+        String seed = "";
+        for (int i = 0; i < 42; i++) {
             int s = 0;
-            while(s <=10){
-                s =(int)(Math.random()*100);
+            while (s <= 10) {
+                s = secureRandom.nextInt(100);
             }
-            // System.out.println("Sprawl:"+s+" ,Hub:"+i);
-            seed=seed+s;
+            seed = seed + s;
         }
-
         GlobalVariables.setSeed(seed);
     }
+
 
     public static String getIpAddress(){
         WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);

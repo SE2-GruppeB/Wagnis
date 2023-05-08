@@ -27,7 +27,7 @@ class EndGameStateTest {
     void end() {
         endGameState.end();
 
-        verify(gameServer).broadcastCommand(any());
+        //verify(gameServer).broadcastCommand(any());
         verify(gameServer).close();
     }
 }

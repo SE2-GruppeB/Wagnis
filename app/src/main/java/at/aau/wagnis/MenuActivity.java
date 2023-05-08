@@ -50,8 +50,23 @@ public class MenuActivity extends AppCompatActivity {
         joinBtn = findViewById(R.id.btn_join);
         joinBtn.setOnClickListener(view -> joinGame(joinBtn));
 
-
+        ((WagnisApplication)getApplication()).getGameManager().setConnectionStateListener(newConnectionState -> runOnUiThread(() -> {
+            if(newConnectionState== GameManager.ConnectionState.CONNECTING){
+                Toast.makeText(MenuActivity.this, "Connecting", Toast.LENGTH_SHORT).show();
+            }
+            if(newConnectionState== GameManager.ConnectionState.CONNECTED){
+               //TODO: GlobalVariables.unavailableAgencies.add("");
+                chooseFighterPopUp(joinBtn);
+            }
+            if(newConnectionState== GameManager.ConnectionState.ERROR){
+                Toast.makeText(MenuActivity.this, "Connection failed", Toast.LENGTH_SHORT).show();
+            }
+            if(newConnectionState== GameManager.ConnectionState.NO_CONNECTION){
+                Toast.makeText(MenuActivity.this, "Connection not possible", Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
+
 
     public void hideNavigationBar() {
         View decorView = getWindow().getDecorView();
@@ -61,6 +76,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private void changeActivity() {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
+        ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(null);  //unsubscribe  listener
         startActivity(switchActivityIntent);
     }
 
@@ -134,6 +150,7 @@ public class MenuActivity extends AppCompatActivity {
     public void joinGame(View view) {
         try {
             readQrCode();
+            handleNetwork(false);
 
         } catch (Exception e) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -156,8 +173,8 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 GlobalVariables.setHostIP(hostIP.getText().toString());
                 GlobalVariables.setIsClient(true);
+                handleNetwork(false);
                 popupWindow.dismiss();
-                chooseFighterPopUp(joinBtn);
                 return;
             }
         });
@@ -183,7 +200,7 @@ public class MenuActivity extends AppCompatActivity {
             } else {
                 GlobalVariables.setHostIP(intentResult.getContents());
                 //GlobalVariables.setIsClient(true);
-                handleNetwork(false);
+               // handleNetwork(false);
 
             }
         } else {
@@ -213,7 +230,7 @@ public class MenuActivity extends AppCompatActivity {
         }else{
             GlobalVariables.setIsClient(true);
             ((WagnisApplication)getApplication()).getGameManager().joinGameByServerAddress(GlobalVariables.getHostIP());
-            chooseFighterPopUp(joinBtn);
+
         }
     }
 }

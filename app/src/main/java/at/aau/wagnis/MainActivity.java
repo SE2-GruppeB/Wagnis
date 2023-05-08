@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         GlobalVariables.baseContext = this;
         hideNavigationBar();
+
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
         btnCards=findViewById(R.id.btn_Cards);
@@ -98,8 +99,11 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         });
-    }
-    private void updateUI(){
+
+
+        ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
+            // code to be executed on the UI thread
+        }));
 
     }
 

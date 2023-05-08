@@ -12,7 +12,7 @@ public class EndGameState extends GameLogicState{
     //Todo
     @Override
     public void end(){
-        gameServer.broadcastCommand(null);  // send a command to all players to close the connection
+        //gameServer.broadcastCommand(null);  // send a command to all players to close the connection
 
         gameServer.close(); // close the gameserver
     }

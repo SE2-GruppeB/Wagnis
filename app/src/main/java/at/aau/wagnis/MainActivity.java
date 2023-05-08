@@ -181,19 +181,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
+        Cards c1 = new Cards(4000,Troops.INFANTRY,null);
+        Cards c2 = new Cards(4001,Troops.ARTILLERY,null);
+        Cards c3 = new Cards(4002,Troops.CAVALRY,null);
+        Cards[] cards = {c1,c2,c3};
 
-        switch(){
-            case("artillery"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.artillery);
-                break;
-            case("cavalry"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.cavalry);
-                break;
-            default:
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.infantry);
-                break;
-        }*/
+        Button btn0 = popupWindow.getContentView().findViewById(R.id.btn_Card0);
+        Button btn1 = popupWindow.getContentView().findViewById(R.id.btn_Card1);
+        Button btn2 = popupWindow.getContentView().findViewById(R.id.btn_Card2);
+        Button btn3 = popupWindow.getContentView().findViewById(R.id.btn_Card3);
+        Button btn4 = popupWindow.getContentView().findViewById(R.id.btn_Card4);
+        Button[] btns = {btn0,btn1,btn2,btn3,btn4};
+
+        for(int i = 0;i<btns.length;i++){
+
+            try {
+                switch (cards[i].getType()) {
+                    case INFANTRY:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.infantry, 0, 0);
+                        break;
+                    case CAVALRY:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.cavalry, 0, 0);
+                        break;
+                    case ARTILLERY:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.artillery, 0, 0);
+                        break;
+                    default:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
+                        break;
+                }
+            }catch(Exception e ){
+                btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
+            }
+
+        }
+
     }
 
     public static void diceRollPopUp(int[] values) {

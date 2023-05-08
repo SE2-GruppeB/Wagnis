@@ -154,16 +154,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-/*
-        FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
-        //Intent intent = new Intent(this, MenuActivity.class);
+
+        /*FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
         btnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
                 finish();
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
             }
         });*/
 

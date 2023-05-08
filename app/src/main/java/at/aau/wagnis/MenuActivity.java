@@ -22,6 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import at.aau.wagnis.application.GameManager;
+import at.aau.wagnis.application.WagnisApplication;
+
 public class MenuActivity extends AppCompatActivity {
 
     Button hostBtn;
@@ -46,6 +49,8 @@ public class MenuActivity extends AppCompatActivity {
 
         joinBtn = findViewById(R.id.btn_join);
         joinBtn.setOnClickListener(view -> joinGame(joinBtn));
+
+
     }
 
     public void hideNavigationBar() {
@@ -158,8 +163,6 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-        //TODO: Initiate Server Connection
-
     }
 
     private void readQrCode(){
@@ -179,8 +182,9 @@ public class MenuActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Invalid Code", Toast.LENGTH_SHORT).show();
             } else {
                 GlobalVariables.setHostIP(intentResult.getContents());
-                GlobalVariables.setIsClient(true);
-                chooseFighterPopUp(joinBtn);
+                //GlobalVariables.setIsClient(true);
+                handleNetwork(false);
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -200,6 +204,18 @@ public class MenuActivity extends AppCompatActivity {
     }
     public void goToSurface (View view) {
         goToUrl ( "https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
+    }
+
+    private void handleNetwork(boolean host){
+        GlobalVariables.gm = new WagnisApplication().getGameManager();
+        if(host){
+            GlobalVariables.setIsClient(false);
+            GlobalVariables.gm.startNewGame();
+        }else{
+            GlobalVariables.setIsClient(true);
+            GlobalVariables.gm.joinGameByServerAddress(GlobalVariables.getHostIP());
+            chooseFighterPopUp(joinBtn);
+        }
     }
 }
 

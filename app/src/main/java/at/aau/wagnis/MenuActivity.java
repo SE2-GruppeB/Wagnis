@@ -56,6 +56,7 @@ public class MenuActivity extends AppCompatActivity {
             }
             if(newConnectionState== GameManager.ConnectionState.CONNECTED){
                //TODO: GlobalVariables.unavailableAgencies.add("");
+                //TODO: GlobalVariables.seed ="";
                 chooseFighterPopUp(joinBtn);
             }
             if(newConnectionState== GameManager.ConnectionState.ERROR){

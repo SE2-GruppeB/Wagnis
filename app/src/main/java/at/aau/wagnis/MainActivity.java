@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.wagnis.application.WagnisApplication;
+import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.ReinforceGameState;
 import at.aau.wagnis.gamestate.StartGameState;
 
 import static at.aau.wagnis.GlobalVariables.hubs;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
     ImageView adjacencyView;
+    GameState currentState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
             // code to be executed on the UI thread
+            currentState = newGameState;
         }));
 
     }
@@ -286,18 +290,15 @@ public class MainActivity extends AppCompatActivity {
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                 /*Pseudo Logic Integration
-
-                    if(gamesate == reinforceGamestate)
-                        reinforceTroops(hub);
-                    else if(gamestate == moveTroopsState|| gamestate == attackgamestate)
-                        if(selectedHubs.size()<=2){
-                            selectedHubs.add(GlobalVariables.findHubById(hub.getId()));
-                        }else{
+                    /*switch(currentState){
+                        case ReinforceGameState:
+                            reinforceTroops(hub);
+                            break;
+                        case AttackGameState:
                             moveTroops();
-                            selectedHubs.removeAll(selectedHubs);
-                        }
+                            break;
+                    }
+
                  -------------*/
 
 

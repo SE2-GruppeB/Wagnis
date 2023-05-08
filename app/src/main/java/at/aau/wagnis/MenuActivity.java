@@ -207,13 +207,12 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void handleNetwork(boolean host){
-        GlobalVariables.gm = new WagnisApplication().getGameManager();
         if(host){
             GlobalVariables.setIsClient(false);
-            GlobalVariables.gm.startNewGame();
+            ((WagnisApplication)getApplication()).getGameManager().startNewGame();
         }else{
             GlobalVariables.setIsClient(true);
-            GlobalVariables.gm.joinGameByServerAddress(GlobalVariables.getHostIP());
+            ((WagnisApplication)getApplication()).getGameManager().joinGameByServerAddress(GlobalVariables.getHostIP());
             chooseFighterPopUp(joinBtn);
         }
     }

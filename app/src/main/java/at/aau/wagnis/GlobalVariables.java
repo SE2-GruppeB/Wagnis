@@ -15,8 +15,6 @@ import at.aau.wagnis.application.WagnisApplication;
 import static android.content.Context.WIFI_SERVICE;
 
 public class GlobalVariables {
-
-    public static GameManager gm;
     public static String agency ="";
     public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<String> unavailableAgencies = new ArrayList<>();

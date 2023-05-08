@@ -33,6 +33,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.StartGameState;
 
 import static at.aau.wagnis.GlobalVariables.hubs;
@@ -97,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         });
+    }
+    private void updateUI(){
+
     }
 
     @Override
@@ -439,6 +443,5 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         });
-
     }
 }

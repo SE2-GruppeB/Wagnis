@@ -8,11 +8,11 @@
     android:background="@drawable/background"
     tools:context=".MenuActivity">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/btn_start"
         android:layout_width="218dp"
         android:layout_height="90dp"
-        android:background="@color/teal_700"
+        android:background="@color/buttonColor"
         android:foregroundTint="#4B5A61"
         android:text="Host"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,11 +22,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.592" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/btn_join"
         android:layout_width="218dp"
         android:layout_height="90dp"
-        android:background="@color/teal_700"
+        android:background="@color/buttonColor"
         android:foregroundTint="#4B5A61"
         android:text="Join"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -35,7 +36,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        hideNavigationBar();
+        //hideNavigationBar();
 
         GlobalVariables.mediaPlayer = MediaPlayer.create(this.getApplicationContext(), R.raw.music1);
         GlobalVariables.mediaPlayer.start();
@@ -68,6 +69,19 @@ public class MenuActivity extends AppCompatActivity {
         }));
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+           getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
 
     public void hideNavigationBar() {
         View decorView = getWindow().getDecorView();
@@ -77,7 +91,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private void changeActivity() {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
-        ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(null);  //unsubscribe  listener
+        //((WagnisApplication)getApplication()).getGameManager().setGameStateListener(null);  //unsubscribe  listener
         startActivity(switchActivityIntent);
     }
 
@@ -88,22 +102,9 @@ public class MenuActivity extends AppCompatActivity {
 
 
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        int width = (int) px;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = false;
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        boolean focusable = true;
+        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, focusable);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-
-        Button btnClose = popUp.findViewById(R.id.btn_Close);
-
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-                return;
-            }
-        });
     }
 
 
@@ -117,7 +118,7 @@ public class MenuActivity extends AppCompatActivity {
         int width = (int) px;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = false; // lets taps outside the popup also dismiss it
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, focusable);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
         Button btnAccept = popUp.findViewById(R.id.btn_Accept);
@@ -222,6 +223,9 @@ public class MenuActivity extends AppCompatActivity {
     }
     public void goToSurface (View view) {
         goToUrl ( "https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
+    }
+    public void goToUI (View view) {
+        goToUrl ( "https://www.vecteezy.com/vector-art/21604946-futuristic-vector-hud-interface-screen-design-digital-callouts-titles-hud-ui-gui-futuristic-user");
     }
 
     private void handleNetwork(boolean host){

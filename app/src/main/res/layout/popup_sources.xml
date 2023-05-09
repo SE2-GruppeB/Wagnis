@@ -4,16 +4,6 @@
     android:layout_height="wrap_content"
     android:background="#92A4A8">
 
-    <Button
-        android:id="@+id/btn_Close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="320dp"
-        android:text="Close" />
 
     <TextView
         android:id="@+id/textView2"
@@ -85,4 +75,19 @@
         android:autoLink="web"
         android:cursorVisible="true"
         android:linksClickable="true" />
+
+    <Button
+        android:id="@+id/btn_surfaceBackground2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="250dp"
+        android:autoLink="web"
+        android:clickable="true"
+        android:cursorVisible="true"
+        android:linksClickable="true"
+        android:onClick="goToUI"
+        android:text="UI-Background - Vecteezy.com" />
 </RelativeLayout>

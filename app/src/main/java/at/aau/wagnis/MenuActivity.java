@@ -1,5 +1,6 @@
 package at.aau.wagnis;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -32,11 +33,11 @@ public class MenuActivity extends AppCompatActivity {
     Button sourcesBtn;
     Button joinBtn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        //hideNavigationBar();
 
         GlobalVariables.mediaPlayer = MediaPlayer.create(this.getApplicationContext(), R.raw.music1);
         GlobalVariables.mediaPlayer.start();
@@ -46,27 +47,11 @@ public class MenuActivity extends AppCompatActivity {
         sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));
 
         hostBtn = findViewById(R.id.btn_start);
-        hostBtn.setOnClickListener(view -> chooseFighterPopUp(hostBtn));
+        hostBtn.setOnClickListener(view -> handleNetwork(true));
 
         joinBtn = findViewById(R.id.btn_join);
-        joinBtn.setOnClickListener(view -> joinGame(joinBtn));
+        joinBtn.setOnClickListener(view -> handleNetwork(false));
 
-        ((WagnisApplication)getApplication()).getGameManager().setConnectionStateListener(newConnectionState -> runOnUiThread(() -> {
-            if(newConnectionState== GameManager.ConnectionState.CONNECTING){
-                Toast.makeText(MenuActivity.this, "Connecting", Toast.LENGTH_SHORT).show();
-            }
-            if(newConnectionState== GameManager.ConnectionState.CONNECTED){
-               //TODO: GlobalVariables.unavailableAgencies.add("");
-                //TODO: GlobalVariables.seed ="";
-                chooseFighterPopUp(joinBtn);
-            }
-            if(newConnectionState== GameManager.ConnectionState.ERROR){
-                Toast.makeText(MenuActivity.this, "Connection failed", Toast.LENGTH_SHORT).show();
-            }
-            if(newConnectionState== GameManager.ConnectionState.NO_CONNECTION){
-                Toast.makeText(MenuActivity.this, "Connection not possible", Toast.LENGTH_SHORT).show();
-            }
-        }));
     }
 
     @Override
@@ -83,53 +68,57 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    public void hideNavigationBar() {
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-    }
-
     private void changeActivity() {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
         //((WagnisApplication)getApplication()).getGameManager().setGameStateListener(null);  //unsubscribe  listener
         startActivity(switchActivityIntent);
     }
 
-    public void showSources(View view) {
+    private void handleNetwork(boolean host){
+        if(host){
+            GlobalVariables.setIsClient(false);
+           // ((WagnisApplication)getApplication()).getGameManager().startNewGame();
+            chooseFighterPopUp();
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_sources, null);
+        }else{
+            GlobalVariables.setIsClient(true);
+            getHostIp();
+            ((WagnisApplication)getApplication()).getGameManager().joinGameByServerAddress(GlobalVariables.getHostIP());
 
+            ((WagnisApplication)getApplication()).getGameManager().setConnectionStateListener(newConnectionState -> runOnUiThread(() -> {
+                if(newConnectionState== GameManager.ConnectionState.CONNECTING){
+                    Toast.makeText(MenuActivity.this, "Connecting", Toast.LENGTH_SHORT).show();
+                }
+                if(newConnectionState== GameManager.ConnectionState.CONNECTED){
+                    //TODO: GlobalVariables.unavailableAgencies.add("");
+                    //TODO: GlobalVariables.seed ="";
 
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        boolean focusable = true;
-        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, focusable);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                    chooseFighterPopUp();
+                }
+                if(newConnectionState== GameManager.ConnectionState.ERROR){
+                    Toast.makeText(MenuActivity.this, "Connection failed", Toast.LENGTH_SHORT).show();
+                }
+                if(newConnectionState== GameManager.ConnectionState.NO_CONNECTION){
+                    Toast.makeText(MenuActivity.this, "Connection not possible", Toast.LENGTH_SHORT).show();
+                }
+            }));
+
+        }
     }
+    public void chooseFighterPopUp() {
 
+        PopupWindow popupWindow= createPopUp(R.layout.popup_fighter);
+        popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
 
-    public void chooseFighterPopUp(View view) {
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_fighter, null);
-
-
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        int width = (int) px;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = false; // lets taps outside the popup also dismiss it
-        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, focusable);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-        Button btnAccept = popUp.findViewById(R.id.btn_Accept);
-        RadioGroup rg = popUp.findViewById(R.id.radio);
+        Button btnAccept = popupWindow.getContentView().findViewById(R.id.btn_Accept);
+        RadioGroup rg = popupWindow.getContentView().findViewById(R.id.radio);
         setUnavailableAgencis(rg);
 
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RadioButton selectedTeam=popUp.findViewById(rg.getCheckedRadioButtonId());
+                RadioButton selectedTeam=popupWindow.getContentView().findViewById(rg.getCheckedRadioButtonId());
                 GlobalVariables.setAgency(selectedTeam.getText().toString());
                 Toast.makeText(MenuActivity.this, "Agency: "+GlobalVariables.getAgency(), Toast.LENGTH_SHORT).show();
                 popupWindow.dismiss();
@@ -138,7 +127,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
-
     public static void setUnavailableAgencis(RadioGroup rg){
         for(int i = 0;i<rg.getChildCount();i++){
             RadioButton rb = (RadioButton) rg.getChildAt(i);
@@ -149,48 +137,35 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
     }
-    public void joinGame(View view) {
+    public void getHostIp() {
         try {
             readQrCode();
-            handleNetwork(false);
 
         } catch (Exception e) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_connect, null);
 
+            PopupWindow popupWindow= createPopUp(R.layout.popup_connect);
+            popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
 
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        int width = (int) px;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true;
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-        Button btnConnect = popUp.findViewById(R.id.btn_connect);
-        EditText hostIP = popUp.findViewById(R.id.txtIP);
-
-
-        btnConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GlobalVariables.setHostIP(hostIP.getText().toString());
-                GlobalVariables.setIsClient(true);
-                handleNetwork(false);
-                popupWindow.dismiss();
-                return;
-            }
-        });
+            Button btnConnect = popupWindow.getContentView().findViewById(R.id.btn_connect);
+            EditText hostIP = popupWindow.getContentView().findViewById(R.id.txtIP);
+            btnConnect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GlobalVariables.setHostIP(hostIP.getText().toString());
+                    GlobalVariables.setIsClient(true);
+                    handleNetwork(false);
+                    popupWindow.dismiss();
+                    return;
+                }
+            });
+        }
     }
-
-    }
-
     private void readQrCode(){
         IntentIntegrator ig11 = new IntentIntegrator(this);
         ig11.setOrientationLocked(true);
         ig11.setPrompt("Scan a QR Code");
         ig11.initiateScan();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -201,13 +176,18 @@ public class MenuActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Invalid Code", Toast.LENGTH_SHORT).show();
             } else {
                 GlobalVariables.setHostIP(intentResult.getContents());
-                //GlobalVariables.setIsClient(true);
-               // handleNetwork(false);
-
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+
+
+    public void showSources(View view) {
+
+        PopupWindow popupWindow= createPopUp(R.layout.popup_sources);
+        popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
     }
 
     private void goToUrl (String url) {
@@ -228,15 +208,14 @@ public class MenuActivity extends AppCompatActivity {
         goToUrl ( "https://www.vecteezy.com/vector-art/21604946-futuristic-vector-hud-interface-screen-design-digital-callouts-titles-hud-ui-gui-futuristic-user");
     }
 
-    private void handleNetwork(boolean host){
-        if(host){
-            GlobalVariables.setIsClient(false);
-            ((WagnisApplication)getApplication()).getGameManager().startNewGame();
-        }else{
-            GlobalVariables.setIsClient(true);
-            ((WagnisApplication)getApplication()).getGameManager().joinGameByServerAddress(GlobalVariables.getHostIP());
+    public PopupWindow createPopUp(int popupId){
 
-        }
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(popupId, null);
+        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
+        return popupWindow;
     }
+
+
 }
 

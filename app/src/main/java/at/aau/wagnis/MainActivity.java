@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity {
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCards();
+                popupCards();
                 return;
             }
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSettings();
+                popupSettings();
                 return;
             }
         });
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showChat();
+                popupChat();
                 return;
             }
         });
@@ -133,9 +133,126 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
     }
-    public  void showSettings(){
+    public void setDisplayMetrics(){
+        DisplayMetrics displayMetrics= new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        GlobalVariables.setDisplayWidthPx(displayMetrics.widthPixels);
+        GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
+    }
 
-       PopupWindow popupWindow= createPopUp(R.layout.popup_settings);
+    public static int dpToPx(int dp){
+        return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
+    }
+    public static PopupWindow createPopUp(int popupId){
+
+        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(popupId, null);
+        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
+        return popupWindow;
+    }
+
+
+    public void drawHubs(String seed){
+        ConstraintLayout layout = findViewById(R.id.layout_activity_main);
+        ConstraintSet cs = new ConstraintSet();
+
+        for(int i=1;i<=seed.length();i++){
+            if(i%2==0){
+                GlobalVariables.seeds.add(seed.substring(i-2,i));
+            }
+        }
+
+        int hubs = 0;
+        GlobalVariables.hubsPerLine = (int)Math.ceil(GlobalVariables.seeds.size()/6f);
+        int lineHubCount = 0;
+
+        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-dpToPx(100))/GlobalVariables.hubsPerLine;
+        int height = GlobalVariables.getDisplayHeightPx();
+        int heightSpace = height/6;
+
+        //System.out.println("HubsPerLine:" + hubsPerLine);
+        //System.out.println("HubWidthSpace"+hubWidthSpace);
+        //System.out.println("HeightSpace:"+heightSpace);
+
+        for(String s : GlobalVariables.seeds){
+            Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
+            hub.setId(100+hubs);
+            hub.setText("Hub: "+hub.getId());
+            hub.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    /*switch(currentState){
+                        case ReinforceGameState:
+                            reinforceTroops(hub);
+                            break;
+                        case AttackGameState:
+                            moveTroops();
+                            break;
+                    }
+
+                 -------------*/
+
+
+                    /* Testing Grounds;*/
+                    int[] v = {1,2,3,4,5};
+                    MainActivity.popupDiceRoll(v);
+                    GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
+                    System.out.println("Hub:" +hub.getId());
+                }
+            });
+            GlobalVariables.hubs.add(new Hub(hub));
+            layout.addView(hub);
+
+            int top = (hubs/GlobalVariables.hubsPerLine)*heightSpace;
+            int pos = hubWidthSpace/100*Integer.parseInt(s);
+            int left = hubWidthSpace*lineHubCount+pos;
+            //System.out.println("Position:" + top+","+left);
+
+            cs.clone(layout);
+            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,top);
+            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,left);
+            cs.applyTo(layout);
+            hubs++;
+            lineHubCount++;
+            if(lineHubCount==GlobalVariables.hubsPerLine){
+                lineHubCount=0;
+            }
+        }
+    }
+
+    public void drawAdjacencies(){
+        int height = GlobalVariables.getDisplayHeightPx();
+        int width = GlobalVariables.getDisplayWidthPx();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(8);
+        paint.setAntiAlias(true);
+
+        for (Adjacency adjacency : GlobalVariables.adjacencies) {
+            int pxWidth = dpToPx(21);
+            int pxHeight = dpToPx(60);
+
+            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin+pxWidth;
+            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin+pxHeight;
+            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin+pxWidth;
+            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+pxHeight;
+            // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
+            canvas.drawLine(startX, startY, endX, endY, paint);
+
+        }
+
+        adjacencyView.setImageBitmap(bitmap);
+    }
+
+    public void popupSettings(){
+
+        PopupWindow popupWindow= createPopUp(R.layout.popup_settings);
 
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
@@ -186,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
     }
-    public static void showCards(){
+    public static void popupCards(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_cards);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
@@ -242,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static void diceRollPopUp(int[] values) {
+    public static void popupDiceRoll(int[] values) {
         PopupWindow popupWindow= createPopUp(R.layout.popup_diceroll);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
@@ -275,105 +392,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void drawHubs(String seed){
-        ConstraintLayout layout = findViewById(R.id.layout_activity_main);
-        ConstraintSet cs = new ConstraintSet();
-
-        for(int i=1;i<=seed.length();i++){
-            if(i%2==0){
-                GlobalVariables.seeds.add(seed.substring(i-2,i));
-            }
-        }
-
-        int hubs = 0;
-        GlobalVariables.hubsPerLine = (int)Math.ceil(GlobalVariables.seeds.size()/6f);
-        int lineHubCount = 0;
-
-        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-dpToPx(100))/GlobalVariables.hubsPerLine;
-        int height = GlobalVariables.getDisplayHeightPx();
-        int heightSpace = height/6;
-
-        //System.out.println("HubsPerLine:" + hubsPerLine);
-        //System.out.println("HubWidthSpace"+hubWidthSpace);
-        //System.out.println("HeightSpace:"+heightSpace);
-
-        for(String s : GlobalVariables.seeds){
-            Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            hub.setId(100+hubs);
-            hub.setText("Hub: "+hub.getId());
-            hub.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-
-                    /*switch(currentState){
-                        case ReinforceGameState:
-                            reinforceTroops(hub);
-                            break;
-                        case AttackGameState:
-                            moveTroops();
-                            break;
-                    }
-
-                 -------------*/
-
-
-                    /* Testing Grounds;*/
-                    int[] v = {1,2,3,4,5};
-                    MainActivity.diceRollPopUp(v);
-                    GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
-                    System.out.println("Hub:" +hub.getId());
-                }
-            });
-            GlobalVariables.hubs.add(new Hub(hub));
-            layout.addView(hub);
-
-            int top = (hubs/GlobalVariables.hubsPerLine)*heightSpace;
-            int pos = hubWidthSpace/100*Integer.parseInt(s);
-            int left = hubWidthSpace*lineHubCount+pos;
-            //System.out.println("Position:" + top+","+left);
-
-            cs.clone(layout);
-            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,top);
-            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,left);
-            cs.applyTo(layout);
-            hubs++;
-            lineHubCount++;
-            if(lineHubCount==GlobalVariables.hubsPerLine){
-                lineHubCount=0;
-            }
-        }
-    }
-
-    public void drawAdjacencies(){
-        int height = GlobalVariables.getDisplayHeightPx();
-        int width = GlobalVariables.getDisplayWidthPx();
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(8);
-        paint.setAntiAlias(true);
-
-        for (Adjacency adjacency : GlobalVariables.adjacencies) {
-            int pxWidth = dpToPx(21);
-            int pxHeight = dpToPx(60);
-
-            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin+pxWidth;
-            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin+pxHeight;
-            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin+pxWidth;
-            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+pxHeight;
-            // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
-            canvas.drawLine(startX, startY, endX, endY, paint);
-
-        }
-
-        adjacencyView.setImageBitmap(bitmap);
-    }
-
-    public void reinforceTroops(Button hubButton){
+    public void popupReinforceTroops(Button hubButton){
         PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
@@ -395,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void moveTroops(){
+    public void popupMovetroops(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
@@ -422,26 +441,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setDisplayMetrics(){
-        DisplayMetrics displayMetrics= new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        GlobalVariables.setDisplayWidthPx(displayMetrics.widthPixels);
-        GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
-    }
-
-    public static int dpToPx(int dp){
-        return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
-    }
-
-    public static PopupWindow createPopUp(int popupId){
-
-        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(popupId, null);
-        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
-        return popupWindow;
-    }
-
-    public static void showChat(){
+    public static void popupChat(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_chat);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
         Button btnExit = popupWindow.getContentView().findViewById(R.id.btn_Exit);
@@ -464,4 +464,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

@@ -32,6 +32,7 @@ public class ActiveDeserializingReader<T> {
         this.threadFactory = Objects.requireNonNull(threadFactory);
     }
 
+    @NonNull
     public static <T> ActiveDeserializingReader<T> fromStream(
             @NonNull Class<T> targetClass,
             @NonNull InputStream inputStream,

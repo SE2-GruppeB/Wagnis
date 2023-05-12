@@ -1,47 +1,48 @@
 package at.aau.wagnis;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import static at.aau.wagnis.GlobalVariables.getAgency;
-import static at.aau.wagnis.GlobalVariables.hubs;
-import static at.aau.wagnis.GlobalVariables.players;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.StartGameState;
+
+import static at.aau.wagnis.GlobalVariables.hubs;
+import static at.aau.wagnis.GlobalVariables.players;
+
 
 public class MainActivity extends AppCompatActivity {
 
 
-    FloatingActionButton endTurn;
+    FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
     ImageView adjacencyView;
 
     @Override
@@ -52,35 +53,52 @@ public class MainActivity extends AppCompatActivity {
         hideNavigationBar();
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
+        btnCards=findViewById(R.id.btn_Cards);
+        btnSettings=findViewById(R.id.btn_Settings);
+        btnChat=findViewById(R.id.btn_Chat);
 
         setDisplayMetrics();
-        GlobalVariables.seedGenerator();
+        if(!GlobalVariables.getIsClient()){
+            GlobalVariables.seedGenerator();
+        }
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
 
-        players.add(new Player(1));
-        players.add(new Player(2));
 
-        StartGameState startGameState = new StartGameState(hubs, players);
-        startGameState.start();
+        //List<Hub> unassignedCountries = new ArrayList<>(hubs);
 
-        System.out.println(players);
+        //players.add(new Player(1));
+        //players.add(new Player(2));
 
-        Hub sourceHub = new Hub(new Button(this));
-        Hub targetHub = players.get(0).getOwnedHubs().get(0);
+        //StartGameState startGameState = new StartGameState(unassignedCountries, players);
 
-        for(Hub hub : players.get(0).getOwnedHubs()){
-            if(hub.getAmountTroops() > 1){
-                sourceHub = hub;
+        //startGameState.start();
+
+        btnCards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCards();
+                return;
             }
-        }
+        });
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSettings();
+                return;
+            }
+        });
 
-        MoveTroopsState moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
-        moveTroopsState.move(14);
-
-        System.out.println(players);
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showChat();
+                return;
+            }
+        });
     }
+
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
@@ -95,22 +113,117 @@ public class MainActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
+    public  void showSettings(){
+
+       PopupWindow popupWindow= createPopUp(R.layout.popup_settings,300,450,false);
+
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                return;
+            }
+        });
+
+        ImageView qrCode = popupWindow.getContentView().findViewById(R.id.qrCode);
+        MultiFormatWriter mWriter = new MultiFormatWriter();
+        try {
+            BitMatrix mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            BarcodeEncoder mEncoder = new BarcodeEncoder();
+            Bitmap mBitmap = mEncoder.createBitmap(mMatrix);
+            qrCode.setImageBitmap(mBitmap);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Switch switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
+        switchMusic.setTextOn("On");
+        switchMusic.setTextOff("Off");
+        String switchStatus = switchMusic.getText().toString();
+
+        switchMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    GlobalVariables.mediaPlayer.start();
+                }else{
+                    GlobalVariables.mediaPlayer.pause();
+                }
+            }
+        });
+/*
+        FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
+        //Intent intent = new Intent(this, MenuActivity.class);
+        btnRestart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MenuActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+        });*/
+
+    }
+    public static void showCards(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_cards,550,500,false);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+        Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                return;
+            }
+        });
+
+        Cards c1 = new Cards(4000,Troops.INFANTRY,null);
+        Cards c2 = new Cards(4001,Troops.ARTILLERY,null);
+        Cards c3 = new Cards(4002,Troops.CAVALRY,null);
+        Cards[] cards = {c1,c2,c3};
+
+        Button btn0 = popupWindow.getContentView().findViewById(R.id.btn_Card0);
+        Button btn1 = popupWindow.getContentView().findViewById(R.id.btn_Card1);
+        Button btn2 = popupWindow.getContentView().findViewById(R.id.btn_Card2);
+        Button btn3 = popupWindow.getContentView().findViewById(R.id.btn_Card3);
+        Button btn4 = popupWindow.getContentView().findViewById(R.id.btn_Card4);
+        Button[] btns = {btn0,btn1,btn2,btn3,btn4};
+
+        for(int i = 0;i<btns.length;i++){
+
+            try {
+                switch (cards[i].getType()) {
+                    case INFANTRY:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.infantry, 0, 0);
+                        break;
+                    case CAVALRY:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.cavalry, 0, 0);
+                        break;
+                    case ARTILLERY:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.artillery, 0, 0);
+                        break;
+                    default:
+                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
+                        break;
+                }
+            }catch(Exception e ){
+                btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
+            }
+
+        }
+
+    }
 
     public static void diceRollPopUp(int[] values) {
-
-        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_diceroll, null);
-
-
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, GlobalVariables.baseContext.getResources().getDisplayMetrics());
-        int width = (int) px;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = false; // true lets tap outside the popup and dismiss it
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+        PopupWindow popupWindow= createPopUp(R.layout.popup_diceroll,300,350,false);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
 
-        Button btnBack = popUp.findViewById(R.id.btn_Back);
+        Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,11 +233,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        NumberPicker n1 = popUp.findViewById(R.id.dice1);
-        NumberPicker n2 = popUp.findViewById(R.id.dice2);
-        NumberPicker n3 = popUp.findViewById(R.id.dice3);
-        NumberPicker n4 = popUp.findViewById(R.id.dice4);
-        NumberPicker n5 = popUp.findViewById(R.id.dice5);
+        NumberPicker n1 = popupWindow.getContentView().findViewById(R.id.dice1);
+        NumberPicker n2 = popupWindow.getContentView().findViewById(R.id.dice2);
+        NumberPicker n3 = popupWindow.getContentView().findViewById(R.id.dice3);
+        NumberPicker n4 = popupWindow.getContentView().findViewById(R.id.dice4);
+        NumberPicker n5 = popupWindow.getContentView().findViewById(R.id.dice5);
 
         NumberPicker[] dice = {n1,n2,n3,n4,n5};
         setDice(dice,values);
@@ -152,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.hubsPerLine = (int)Math.ceil(GlobalVariables.seeds.size()/6f);
         int lineHubCount = 0;
 
-        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-180)/GlobalVariables.hubsPerLine;
+        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-dpToPx(100))/GlobalVariables.hubsPerLine;
         int height = GlobalVariables.getDisplayHeightPx();
         int heightSpace = height/6;
 
@@ -167,10 +280,26 @@ public class MainActivity extends AppCompatActivity {
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                 /*Pseudo Logic Integration
+
+                    if(gamesate == reinforceGamestate)
+                        reinforceTroops(hub);
+                    else if(gamestate == moveTroopsState|| gamestate == attackgamestate)
+                        if(selectedHubs.size()<=2){
+                            selectedHubs.add(GlobalVariables.findHubById(hub.getId()));
+                        }else{
+                            moveTroops();
+                            selectedHubs.removeAll(selectedHubs);
+                        }
+                 -------------*/
+
+
+                    /* Testing Grounds
                     int[] v = {1,2,3,4,5};
                     MainActivity.diceRollPopUp(v);
                     GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
-                    System.out.println("Hub:" +hub.getId());
+                    System.out.println("Hub:" +hub.getId());*/
                 }
             });
             GlobalVariables.hubs.add(new Hub(hub));
@@ -206,19 +335,68 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
 
         for (Adjacency adjacency : GlobalVariables.adjacencies) {
-            int pxWidth = dpToPx(25);
-            int pxHeight = dpToPx(40);
+            int pxWidth = dpToPx(21);
+            int pxHeight = dpToPx(60);
 
-            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
-            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;
-            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin + pxWidth;
-            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin + pxHeight;
+            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin+pxWidth;
+            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin+pxHeight;
+            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin+pxWidth;
+            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+pxHeight;
             // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
             canvas.drawLine(startX, startY, endX, endY, paint);
 
         }
 
         adjacencyView.setImageBitmap(bitmap);
+    }
+
+    public void reinforceTroops(Button hubButton){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops,300,350,false);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
+        NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
+        np.setMaxValue(10);     //setMaxValue(Player.getUnassignedAvailableTroops)
+        np.setMinValue(0);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               int troops = np.getValue();
+                //player.setUnassindeAvailableTroops(=-troops)      //delete now used troops
+                Hub selected = GlobalVariables.findHubById(hubButton.getId());
+                //selected.setText(selected.getHubButton().getText().toString()+troops);
+                //selected.setAmountTroops(selected.getAmmountTroops+troops);   //set new troop count
+                popupWindow.dismiss();
+                return;
+            }
+        });
+    }
+
+    public void moveTroops(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops,300,350,false);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
+        NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
+        np.setMaxValue(10);     //setMaxValue(Hub.getAmountTroops)
+        np.setMinValue(1);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int troops = np.getValue();
+
+               // if(gamestate == AttackGameState){
+                    //calc battle
+               // }else{
+                //selectedHubs.get(0).setAmountTroops(selectedHubs.get(0).getAmountTroops()-troops);
+                //selectedHubs.get(1).setAmountTroops(selectedHubs.get(1).getAmountTroops()+troops);
+                //selectedHubs.get(0).setText(selectedHubs.get(0).getAmountTroops());
+                //selectedHubs.get(1).setText(selectedHubs.get(1).getAmountTroops());
+                //}
+                popupWindow.dismiss();
+                return;
+            }
+        });
     }
 
     public void setDisplayMetrics(){
@@ -228,7 +406,41 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
     }
 
-    public int dpToPx(int dp){
-        return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    public static int dpToPx(int dp){
+        return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
+    }
+
+    public static PopupWindow createPopUp(int popupId,int width,int height,boolean focusable){
+
+        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp = inflater.inflate(popupId, null);
+        PopupWindow popupWindow = new PopupWindow(popUp, dpToPx(width), dpToPx(height), focusable);
+        return popupWindow;
+    }
+
+    public static void showChat(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_chat,450,400,true);
+        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+        Button btnExit = popupWindow.getContentView().findViewById(R.id.btn_Exit);
+        Button btnSend = popupWindow.getContentView().findViewById(R.id.btn_Send);
+        TextView msg = popupWindow.getContentView().findViewById(R.id.chatMsg);
+        EditText sendMsg = popupWindow.getContentView().findViewById(R.id.sendMsg);
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                return;
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(sendMsg.getText());
+                return;
+            }
+        });
+
     }
 }

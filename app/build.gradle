@@ -60,7 +60,7 @@ sonarqube {
     property "sonar.java.coveragePlugin", "jacoco"
     property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
     def exclusionList = [
-            "${projectPath}/**/*Activity.*"
+            "**/*Activity.*"
     ].join(', ')
     property "sonar.coverage.exclusions", exclusionList
   }
@@ -72,10 +72,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.testng:testng:6.9.6'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.junit.platform:junit-platform-engine:1.8.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
 }

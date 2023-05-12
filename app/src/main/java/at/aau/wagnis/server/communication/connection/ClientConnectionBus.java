@@ -22,13 +22,14 @@ public interface ClientConnectionBus {
     /**
      * Send a command to all connected clients
      */
-    void broadcastCommand(ClientCommand command);
+    void broadcastCommand(@NonNull ClientCommand command);
 
     /**
      * Read the next command on the bus, blocks until a command is available
      *
      * @throws InterruptedException -
      */
+    @NonNull
     ServerCommand getNextCommand() throws InterruptedException;
 
     /**

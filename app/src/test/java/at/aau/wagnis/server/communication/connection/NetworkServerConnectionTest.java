@@ -1,6 +1,7 @@
 package at.aau.wagnis.server.communication.connection;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,13 +9,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -30,7 +28,7 @@ import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 import at.aau.wagnis.server.communication.serialization.ActiveDeserializingReader;
 import at.aau.wagnis.server.communication.serialization.ActiveSerializingWriter;
 
-public class NetworkServerConnectionTest {
+class NetworkServerConnectionTest {
 
     @Mock private ActiveDeserializingReader<ClientCommand> input;
     @Mock private ActiveSerializingWriter<ClientOriginatedServerCommand> output;
@@ -41,11 +39,24 @@ public class NetworkServerConnectionTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        subject = new NetworkServerConnection(input, output, commandConsumer);
+        subject = new NetworkServerConnection(input, output);
     }
 
     @Test
-    public void startStartsReaderAndWriter() {
+    void startFailsWhenNoCommandConsumerHasBeenSet() {
+        IllegalStateException ex = assertThrows(
+                IllegalStateException.class,
+                subject::start
+        );
+
+        assertEquals("Command consumer has not been set", ex.getMessage());
+    }
+
+    @Test
+    void startStartsReaderAndWriter() {
+        // given
+        subject.setCommandConsumer(commandConsumer);
+
         // when
         subject.start();
 
@@ -55,8 +66,9 @@ public class NetworkServerConnectionTest {
     }
 
     @Test
-    public void startPassesOnIllegalStateExceptionFromReader() {
+    void startPassesOnIllegalStateExceptionFromReader() {
         // given
+        subject.setCommandConsumer(commandConsumer);
         IllegalStateException thrownFromReader = new IllegalStateException();
         doThrow(thrownFromReader).when(input).start(any(), any());
 
@@ -70,8 +82,9 @@ public class NetworkServerConnectionTest {
     }
 
     @Test
-    public void startPassesOnIllegalStateExceptionFromWriter() {
+    void startPassesOnIllegalStateExceptionFromWriter() {
         // given
+        subject.setCommandConsumer(commandConsumer);
         IllegalStateException thrownFromWriter = new IllegalStateException();
         doThrow(thrownFromWriter).when(output).start(any());
 
@@ -85,7 +98,7 @@ public class NetworkServerConnectionTest {
     }
 
     @Test
-    public void closeClosesReaderAndWriter() {
+    void closeClosesReaderAndWriter() {
         // when
         subject.close();
 
@@ -95,7 +108,7 @@ public class NetworkServerConnectionTest {
     }
 
     @Test
-    public void onErrorClosesReaderAndWriter() {
+    void onErrorClosesReaderAndWriter() {
         // when
         subject.onError();
 
@@ -105,7 +118,7 @@ public class NetworkServerConnectionTest {
     }
 
     @Test
-    public void sendCallsWriter() {
+    void sendCallsWriter() {
         // given
         ClientOriginatedServerCommand input = mock(ClientOriginatedServerCommand.class);
 
@@ -117,7 +130,20 @@ public class NetworkServerConnectionTest {
     }
 
     @Test
-    public void fromSocketSanityCheck() throws IOException {
+    void onReceiveNotifiesConsumer() {
+        // given
+        subject.setCommandConsumer(commandConsumer);
+        ClientCommand clientCommand = mock(ClientCommand.class);
+
+        // when
+        subject.onReceive(clientCommand);
+
+        // then
+        verify(commandConsumer).accept(clientCommand);
+    }
+
+    @Test
+    void fromSocketSanityCheck() throws IOException {
         // given
         InputStream inputStream = mock(InputStream.class);
         OutputStream outputStream = mock(OutputStream.class);
@@ -131,8 +157,7 @@ public class NetworkServerConnectionTest {
         // when
         NetworkServerConnection result = NetworkServerConnection.fromSocket(
                 socket,
-                threadFactory,
-                commandConsumer
+                threadFactory
         );
 
         // then
@@ -140,7 +165,6 @@ public class NetworkServerConnectionTest {
 
         verify(socket).getInputStream();
         verify(socket).getOutputStream();
-        verifyNoInteractions(commandConsumer);
     }
 
     @SuppressWarnings("unchecked")

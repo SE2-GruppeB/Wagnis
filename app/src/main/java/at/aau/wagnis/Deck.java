@@ -1,7 +1,5 @@
 package at.aau.wagnis;
 
-import android.util.Log;
-
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -11,14 +9,24 @@ public class Deck {
     private final boolean[] isinDeck;
 
     public Deck(int maxHubCount) {
+        if (maxHubCount == 0) { throw new IllegalArgumentException("maxHubCount cannot be 0"); }
         this.cards = new Cards[maxHubCount];
         this.isinDeck = new boolean[maxHubCount];
+        this.fillDeck();
     }
 
-    public void fillDeck(){
+    public Cards[] getCards() {
+        return cards;
+    }
+
+    public boolean[] getIsInDeck() {
+        return isinDeck;
+    }
+
+    private void fillDeck(){
         for (int i = 0; i < cards.length; i++) {
             Cards newCard;
-            int trooper = (100 + i) % 3;
+            int trooper =  i % 3;
             int hubId = 100 + i;
             if (trooper == 0){
                 createMessageForCardGen(hubId, Troops.INFANTRY);
@@ -39,7 +47,7 @@ public class Deck {
         String info ="Info";
         String message = " Created new Card ID :";
         String type = "Type";
-        Log.d(info,message + hubId + type + trooper);
+        //Log.d(info,message + hubId + type + trooper);
 
     }
 
@@ -50,7 +58,9 @@ public class Deck {
                 count++;
             }
         }
-        if (count == 0) {Log.d("Deck", "Deck is empty");}
+        if (count == 0) {
+            //Log.d("Deck", "Deck is empty");
+        }
         return count;
     }
 
@@ -58,8 +68,10 @@ public class Deck {
         for (int i = 0; i < cards.length; i++) {
             if (cards[i].equals(card)){
                 isinDeck[i] = true;
+                return;
             }
         }
+        throw new IllegalArgumentException("Card is not in deck");
     }
 
 
@@ -67,17 +79,17 @@ public class Deck {
         Random randomGen = new SecureRandom();
         if (numberOfCardsInDeck() == 0) {return null;}
         int placeInDeck = randomGen.nextInt(numberOfCardsInDeck());
-        return drawCardFromDeckperID(placeInDeck);
+        return drawCardFromDeckPerID(placeInDeck);
     }
 
-    public  Cards drawCardFromDeckperID(int placeInDeck) {
+    public  Cards drawCardFromDeckPerID(int placeInDeck) {
         if (numberOfCardsInDeck() == 0) {return null;}
         placeInDeck = placeInDeck % cards.length;
         if (isinDeck[placeInDeck]) {
             isinDeck[placeInDeck] = false;
             return cards[placeInDeck];
         } else {
-           return drawCardFromDeckperID(placeInDeck + 1);
+           return drawCardFromDeckPerID(placeInDeck + 1);
         }
     }
 }

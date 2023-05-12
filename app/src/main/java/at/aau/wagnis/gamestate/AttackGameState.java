@@ -1,7 +1,11 @@
 package at.aau.wagnis.gamestate;
 
+import android.util.Log;
+
+import java.security.SecureRandom;
+import java.util.Random;
+
 import at.aau.wagnis.Hub;
-import at.aau.wagnis.PLRNG;
 import at.aau.wagnis.Player;
 
 /**
@@ -9,7 +13,6 @@ import at.aau.wagnis.Player;
  */
 
 public class  AttackGameState extends GameLogicState {
-    private static final PLRNG RNG = new PLRNG();
     private Hub sourceHub;
     private Hub targetHub;
     private boolean attacker = false;
@@ -29,7 +32,6 @@ public class  AttackGameState extends GameLogicState {
         this.targetHub = targetHub;
     }
 
-
     public Hub getSourceHub() {
         return sourceHub;
     }
@@ -40,8 +42,8 @@ public class  AttackGameState extends GameLogicState {
 
     @Override
     public void attack() {
-        int attackerDiceRolls = RNG.diceRoll();
-        int defenderDiceRolls = RNG.diceRoll();
+        int attackerDiceRolls = diceRoll();
+        int defenderDiceRolls = diceRoll();
 
         if (this.sourceHub.getAmountTroops() == 1 || this.targetHub.getAmountTroops() <= 0) {
             throw new IllegalArgumentException("Illegal attack");
@@ -72,6 +74,13 @@ public class  AttackGameState extends GameLogicState {
 
     public boolean gamewon(Player player) {
         return player.getOwnedHubs().size() == 42;
+    }
+
+    private int diceRoll(){
+        Random randomGen = new SecureRandom();
+        int diceValue = randomGen.nextInt(6) + 1;
+        //Log.d("Info :","" + diceValue);
+        return diceValue;
     }
 }
 

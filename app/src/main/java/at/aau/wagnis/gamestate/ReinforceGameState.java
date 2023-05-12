@@ -5,13 +5,14 @@ import android.util.Log;
 import java.util.List;
 
 import at.aau.wagnis.Hub;
-import at.aau.wagnis.Player;
 
 public class ReinforceGameState{
     private List<Hub> hubs;
     private List<Integer> troopsToDeploy;
 
     public ReinforceGameState(List<Hub> hubs, List<Integer> troopsToDeploy) {
+        if(hubs == null) {throw new IllegalArgumentException("Hubs cannot be null");}
+        if (troopsToDeploy == null) {throw new IllegalArgumentException("TroopstoDeploy cannot be null");}
         this.hubs = hubs;
         this.troopsToDeploy = troopsToDeploy;
     }
@@ -21,6 +22,7 @@ public class ReinforceGameState{
     }
 
     public void setHubs(List<Hub> hubs) {
+        if(hubs == null) {throw new IllegalArgumentException("Hubs cannot be null");}
         this.hubs = hubs;
     }
 
@@ -29,6 +31,7 @@ public class ReinforceGameState{
     }
 
     public void setTroopsToDeploy(List<Integer> troopsToDeploy) {
+        if (troopsToDeploy == null) {throw new IllegalArgumentException("TroopstoDeploy cannot be null");}
         this.troopsToDeploy = troopsToDeploy;
     }
 

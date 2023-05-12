@@ -1,21 +1,16 @@
 package at.aau.wagnis;
 
-import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -51,7 +46,32 @@ public class MenuActivity extends AppCompatActivity {
 
         joinBtn = findViewById(R.id.btn_join);
         joinBtn.setOnClickListener(view -> handleNetwork(false));
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getGameManager().setConnectionStateListener(newConnectionState -> runOnUiThread(() -> {
+            switch (newConnectionState) {
+                case CONNECTING:
+                    Toast.makeText(this, R.string.connecting, Toast.LENGTH_SHORT).show();
+                    break;
+                case ERROR:
+                    Toast.makeText(this, R.string.connection_failed, Toast.LENGTH_SHORT).show();
+                    break;
+                case CONNECTED:
+                    changeActivity();
+                    break;
+                default:
+                    break;
+            }
+        }));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getGameManager().setConnectionStateListener(null);
     }
 
     @Override
@@ -70,71 +90,16 @@ public class MenuActivity extends AppCompatActivity {
 
     private void changeActivity() {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
-        //((WagnisApplication)getApplication()).getGameManager().setGameStateListener(null);  //unsubscribe  listener
         startActivity(switchActivityIntent);
     }
 
     private void handleNetwork(boolean host){
         if(host){
             GlobalVariables.setIsClient(false);
-           // ((WagnisApplication)getApplication()).getGameManager().startNewGame();
-            chooseFighterPopUp();
-
+            new Thread(getGameManager()::startNewGame).start();
         }else{
             GlobalVariables.setIsClient(true);
             getHostIp();
-            ((WagnisApplication)getApplication()).getGameManager().joinGameByServerAddress(GlobalVariables.getHostIP());
-
-            ((WagnisApplication)getApplication()).getGameManager().setConnectionStateListener(newConnectionState -> runOnUiThread(() -> {
-                if(newConnectionState== GameManager.ConnectionState.CONNECTING){
-                    Toast.makeText(MenuActivity.this, "Connecting", Toast.LENGTH_SHORT).show();
-                }
-                if(newConnectionState== GameManager.ConnectionState.CONNECTED){
-                    //TODO: GlobalVariables.unavailableAgencies.add("");
-                    //TODO: GlobalVariables.seed ="";
-
-                    chooseFighterPopUp();
-                }
-                if(newConnectionState== GameManager.ConnectionState.ERROR){
-                    Toast.makeText(MenuActivity.this, "Connection failed", Toast.LENGTH_SHORT).show();
-                }
-                if(newConnectionState== GameManager.ConnectionState.NO_CONNECTION){
-                    Toast.makeText(MenuActivity.this, "Connection not possible", Toast.LENGTH_SHORT).show();
-                }
-            }));
-
-        }
-    }
-    public void chooseFighterPopUp() {
-
-        PopupWindow popupWindow= createPopUp(R.layout.popup_fighter);
-        popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
-
-        Button btnAccept = popupWindow.getContentView().findViewById(R.id.btn_Accept);
-        RadioGroup rg = popupWindow.getContentView().findViewById(R.id.radio);
-        setUnavailableAgencis(rg);
-
-
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RadioButton selectedTeam=popupWindow.getContentView().findViewById(rg.getCheckedRadioButtonId());
-                GlobalVariables.setAgency(selectedTeam.getText().toString());
-                Toast.makeText(MenuActivity.this, "Agency: "+GlobalVariables.getAgency(), Toast.LENGTH_SHORT).show();
-                popupWindow.dismiss();
-                changeActivity();
-                return;
-            }
-        });
-    }
-    public static void setUnavailableAgencis(RadioGroup rg){
-        for(int i = 0;i<rg.getChildCount();i++){
-            RadioButton rb = (RadioButton) rg.getChildAt(i);
-            for(String s : GlobalVariables.getUnavailableAgencies()){
-                if(rb.getText().toString().equals(s)){
-                    rb.setEnabled(false);
-                }
-            }
         }
     }
     public void getHostIp() {
@@ -148,15 +113,9 @@ public class MenuActivity extends AppCompatActivity {
 
             Button btnConnect = popupWindow.getContentView().findViewById(R.id.btn_connect);
             EditText hostIP = popupWindow.getContentView().findViewById(R.id.txtIP);
-            btnConnect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    GlobalVariables.setHostIP(hostIP.getText().toString());
-                    GlobalVariables.setIsClient(true);
-                    handleNetwork(false);
-                    popupWindow.dismiss();
-                    return;
-                }
+            btnConnect.setOnClickListener(view -> {
+                popupWindow.dismiss();
+                new Thread(() -> getGameManager().joinGameByServerAddress(hostIP.getText().toString())).start();
             });
         }
     }
@@ -175,7 +134,7 @@ public class MenuActivity extends AppCompatActivity {
             if (intentResult.getContents() == null) {
                 Toast.makeText(getBaseContext(), "Invalid Code", Toast.LENGTH_SHORT).show();
             } else {
-                GlobalVariables.setHostIP(intentResult.getContents());
+                new Thread(() -> getGameManager().joinGameByServerAddress(intentResult.getContents())).start();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -195,6 +154,11 @@ public class MenuActivity extends AppCompatActivity {
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
         startActivity(launchBrowser);
     }
+
+    private GameManager getGameManager() {
+        return ((WagnisApplication) getApplication()).getGameManager();
+    }
+
     public void goToAppIcon (View view) {
         goToUrl ( "https://icons8.de");
     }

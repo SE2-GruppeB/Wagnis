@@ -1,4 +1,4 @@
-package at.aau.wagnis.gamestate;
+package at.aau.wagnis.GameStateTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import at.aau.wagnis.gamestate.EndGameState;
 import at.aau.wagnis.server.GameServer;
 
 class EndGameStateTest {

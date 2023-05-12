@@ -1,7 +1,5 @@
 package at.aau.wagnis;
 
-import android.util.Log;
-
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -21,7 +19,7 @@ public class Deck {
         return cards;
     }
 
-    public boolean[] getIsinDeck() {
+    public boolean[] getIsInDeck() {
         return isinDeck;
     }
 
@@ -49,7 +47,7 @@ public class Deck {
         String info ="Info";
         String message = " Created new Card ID :";
         String type = "Type";
-        Log.d(info,message + hubId + type + trooper);
+        //Log.d(info,message + hubId + type + trooper);
 
     }
 
@@ -60,7 +58,9 @@ public class Deck {
                 count++;
             }
         }
-        if (count == 0) {Log.d("Deck", "Deck is empty");}
+        if (count == 0) {
+            //Log.d("Deck", "Deck is empty");
+        }
         return count;
     }
 
@@ -79,17 +79,17 @@ public class Deck {
         Random randomGen = new SecureRandom();
         if (numberOfCardsInDeck() == 0) {return null;}
         int placeInDeck = randomGen.nextInt(numberOfCardsInDeck());
-        return drawCardFromDeckperID(placeInDeck);
+        return drawCardFromDeckPerID(placeInDeck);
     }
 
-    public  Cards drawCardFromDeckperID(int placeInDeck) {
+    public  Cards drawCardFromDeckPerID(int placeInDeck) {
         if (numberOfCardsInDeck() == 0) {return null;}
         placeInDeck = placeInDeck % cards.length;
         if (isinDeck[placeInDeck]) {
             isinDeck[placeInDeck] = false;
             return cards[placeInDeck];
         } else {
-           return drawCardFromDeckperID(placeInDeck + 1);
+           return drawCardFromDeckPerID(placeInDeck + 1);
         }
     }
 }

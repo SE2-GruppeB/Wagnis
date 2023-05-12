@@ -1,31 +1,30 @@
-package at.aau.wagnis;
+package at.aau.wagnis.ObjectTest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThrows;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DeckTest {
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import at.aau.wagnis.Cards;
+import at.aau.wagnis.Deck;
+import at.aau.wagnis.Troops;
+
+class DeckTest {
 
     Deck deck;
     int cardCount = 9;
 
-    @Before
-    public void setUp() {
-        deck = new Deck(cardCount);
-    }
-
-    @After
-    public void tearDown() {
+    @BeforeEach
+    void setUp() {
         deck = new Deck(cardCount);
     }
 
     @Test
-    public void constructorTest() {
+    void constructorTest() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {new Deck(0);});
         String expectedMessage = "maxHubCount cannot be 0";
         String actualMessage = exception.getMessage();
@@ -36,16 +35,16 @@ public class DeckTest {
     // fillDeckTests and numberOfCardsInDeck test
 
     @Test
-    public void fillDeckTest() {
+    void fillDeckTest() {
         assertEquals(deck.numberOfCardsInDeck(), cardCount);
     }
 
     @Test
-    public void fillDeckTest2() {
+    void fillDeckTest2() {
         for (int i = 0; i < deck.getCards().length; i++) {
             Cards cards;
             if(i % 3 == 0){
-                 cards = new Cards(100 + i,Troops.INFANTRY,deck);
+                 cards = new Cards(100 + i, Troops.INFANTRY,deck);
             } else if (i % 3 == 1){
                  cards = new Cards(100 + i,Troops.CAVALRY,deck);
             } else {
@@ -57,7 +56,7 @@ public class DeckTest {
     }
 
     @Test
-    public void numberOfCardsInDeckTest() {
+    void numberOfCardsInDeckTest() {
         int i = 0;
         for (int y = 0; y < deck.getCards().length; y++) {
             i++;
@@ -68,19 +67,19 @@ public class DeckTest {
     //DrawCardFromDeckTests
 
     @Test
-    public void drawCardFromDeckTest() {
+    void drawCardFromDeckTest() {
         Cards cards = deck.drawCardFromDeck();
         while (cards != null) {
             cards = deck.drawCardFromDeck();
         }
 
-        for (int i = 0; i < deck.getIsinDeck().length; i++) {
-           assertFalse(deck.getIsinDeck()[i]);
+        for (int i = 0; i < deck.getIsInDeck().length; i++) {
+           assertFalse(deck.getIsInDeck()[i]);
         }
     }
 
     @Test
-    public void drawCardFromDeckTest2() {
+    void drawCardFromDeckTest2() {
         for (int i = 0; i < cardCount; i++) {
            deck.drawCardFromDeck();
         }
@@ -89,10 +88,10 @@ public class DeckTest {
     }
 
     @Test
-    public void drawCardFromDeckPerIdTest() {
+    void drawCardFromDeckPerIdTest() {
         for (int i = 0; i < cardCount; i++) {
-            assertEquals(deck.getCards()[i],deck.drawCardFromDeckperID(i));
-            assertFalse(deck.getIsinDeck()[i]);
+            assertEquals(deck.getCards()[i],deck.drawCardFromDeckPerID(i));
+            assertFalse(deck.getIsInDeck()[i]);
 
         }
 

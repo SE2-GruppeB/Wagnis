@@ -13,7 +13,6 @@ import at.aau.wagnis.Player;
  */
 
 public class  AttackGameState extends GameLogicState {
-    private static final PLRNG RNG = new PLRNG();
     private Hub sourceHub;
     private Hub targetHub;
     private boolean attacker = false;
@@ -50,9 +49,6 @@ public class  AttackGameState extends GameLogicState {
             throw new IllegalArgumentException("Illegal attack");
         }
 
-
-
-
         if (attackerDiceRolls > defenderDiceRolls) {
             this.targetHub.setAmountTroops(this.targetHub.getAmountTroops() - 1);
         } else if (attackerDiceRolls < defenderDiceRolls) {
@@ -83,7 +79,7 @@ public class  AttackGameState extends GameLogicState {
     private int diceRoll(){
         Random randomGen = new SecureRandom();
         int diceValue = randomGen.nextInt(6) + 1;
-        Log.d("Info :","" + diceValue);
+        //Log.d("Info :","" + diceValue);
         return diceValue;
     }
 }

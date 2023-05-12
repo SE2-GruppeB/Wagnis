@@ -1,29 +1,33 @@
-package at.aau.wagnis;
+package at.aau.wagnis.ObjectTest;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CardsTest {
+import at.aau.wagnis.Cards;
+import at.aau.wagnis.Deck;
+import at.aau.wagnis.Troops;
+
+class CardsTest {
 
     //getterSetterTests
     @Test
-    public void getSetDecktest() {
+    void getSetDecktest() {
         Deck deck = new Deck(1);
         Deck deck2 = new Deck(1);
-        Cards cards = new Cards(1,Troops.ARTILLERY,deck);
+        Cards cards = new Cards(1, Troops.ARTILLERY,deck);
         assertEquals(deck,cards.getDeck());
         cards.setDeck(deck2);
         assertEquals(deck2,cards.getDeck());
     }
 
     @Test
-    public void SetDeckNulltest() {
+    void SetDeckNulltest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(1));
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {cards.setDeck(null);});
         String expectedMessage = "Deck can not be null";
@@ -33,7 +37,7 @@ public class CardsTest {
     }
 
     @Test
-    public void getSetIdtest() {
+    void getSetIdtest() {
         int id = 1;
         int id2 = 2;
         Cards cards = new Cards(id,Troops.ARTILLERY,new Deck(1));
@@ -43,7 +47,7 @@ public class CardsTest {
     }
 
     @Test
-    public void SetIdNegativetest() {
+    void SetIdNegativetest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(1));
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {cards.setId(-1);});
         String expectedMessage = "Id can not be negative";
@@ -53,7 +57,7 @@ public class CardsTest {
     }
 
     @Test
-    public void getSetTroopstest() {
+    void getSetTroopstest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(1));
         assertEquals(Troops.ARTILLERY,cards.getType());
         cards.setType(Troops.INFANTRY);
@@ -61,7 +65,7 @@ public class CardsTest {
     }
 
     @Test
-    public void SetTroopNulltest() {
+    void SetTroopNulltest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(1));
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {cards.setType(null);});
         String expectedMessage = "Type can not be null";
@@ -73,7 +77,7 @@ public class CardsTest {
     //checkIfCardSameType(Cards first, Cards second, Cards third) Tests
 
     @Test
-    public void checkIfCardHaveTheSameTypeTest() {
+    void checkIfCardHaveTheSameTypeTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards2 = new Cards(2,Troops.ARTILLERY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.ARTILLERY,new Deck(3));
@@ -82,7 +86,7 @@ public class CardsTest {
     }
 
     @Test
-    public void checkIfCardHaveNotTheSameTypeTest() {
+    void checkIfCardHaveNotTheSameTypeTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.ARTILLERY,new Deck(3));
@@ -91,7 +95,7 @@ public class CardsTest {
     }
 
     @Test
-    public void checkIfCardSameTypeExceptionTest() {
+    void checkIfCardSameTypeExceptionTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {Cards.checkIfCardSameType(cards,cards,cards);});
         String expectedMessage = "you cant use the same card thrice";
@@ -103,7 +107,8 @@ public class CardsTest {
     //checkIfEachCardDiffType(Cards first, Cards second, Cards third)
 
     @Test
-    public void checkIfEachCardNotDiffTest() {
+
+    void checkIfEachCardNotDiffTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards2 = new Cards(2,Troops.ARTILLERY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.ARTILLERY,new Deck(3));
@@ -112,7 +117,8 @@ public class CardsTest {
     }
 
     @Test
-    public void checkIfEachCardNot2DiffTest() {
+
+    void checkIfEachCardNot2DiffTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.CAVALRY,new Deck(3));
@@ -121,7 +127,8 @@ public class CardsTest {
     }
 
     @Test
-    public void checkIfEachCardNot3DiffTest() {
+
+    void checkIfEachCardNot3DiffTest() {
         Cards cards = new Cards(1,Troops.CAVALRY,new Deck(3));
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.ARTILLERY,new Deck(3));
@@ -130,7 +137,8 @@ public class CardsTest {
     }
 
     @Test
-    public void checkIfEachCardNot4DiffTest() {
+
+    void checkIfEachCardNot4DiffTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.ARTILLERY,new Deck(3));
@@ -139,7 +147,8 @@ public class CardsTest {
     }
 
     @Test
-    public void checkIfEachCardDiffTest() {
+
+    void checkIfEachCardDiffTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards2 = new Cards(2,Troops.CAVALRY,new Deck(3));
         Cards cards3 = new Cards(3,Troops.INFANTRY,new Deck(3));
@@ -148,7 +157,8 @@ public class CardsTest {
     }
 
     @Test
-    public void checkIfEachCardDiffExceptionTest() {
+
+    void checkIfEachCardDiffExceptionTest() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {Cards.checkIfEachCardDiffType(cards,cards,cards);});
         String expectedMessage = "you cant use the same card thrice";
@@ -160,7 +170,8 @@ public class CardsTest {
     // equals Test
 
     @Test
-    public void equalsTest() {
+
+    void equalsTest() {
         Cards cards = new Cards(1, Troops.ARTILLERY, new Deck(3));
         Cards cards2 = new Cards(1, Troops.ARTILLERY, new Deck(3));
 
@@ -168,7 +179,8 @@ public class CardsTest {
     }
 
     @Test
-    public void equalsTest2() {
+
+    void equalsTest2() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards3 = new Cards(2,Troops.ARTILLERY,new Deck(3));
 
@@ -176,7 +188,8 @@ public class CardsTest {
     }
 
     @Test
-    public void equalsTest3() {
+
+    void equalsTest3() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards4 = new Cards(1,Troops.ARTILLERY,new Deck(4));
 
@@ -184,7 +197,8 @@ public class CardsTest {
     }
 
     @Test
-    public void equalsTest4() {
+
+    void equalsTest4() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards5 = new Cards(1,Troops.ARTILLERY,new Deck(5));
 
@@ -192,7 +206,8 @@ public class CardsTest {
     }
 
     @Test
-    public void equalsTest5() {
+
+    void equalsTest5() {
         Cards cards = new Cards(1,Troops.ARTILLERY,new Deck(3));
         Cards cards6 = new Cards(1,Troops.ARTILLERY,new Deck(6));
 
@@ -202,7 +217,8 @@ public class CardsTest {
     //HaschCode Test
 
     @Test
-    public void hashCodeTest() {
+
+    void hashCodeTest() {
         Cards cards = new Cards(1, Troops.ARTILLERY, new Deck(3));
         Cards cards2 = new Cards(1, Troops.ARTILLERY, new Deck(3));
 
@@ -210,7 +226,8 @@ public class CardsTest {
     }
 
     @Test
-    public void hashCodeTest2() {
+
+    void hashCodeTest2() {
         Cards cards = new Cards(1, Troops.ARTILLERY, new Deck(3));
         Cards cards2 = new Cards(12, Troops.ARTILLERY, new Deck(3));
 

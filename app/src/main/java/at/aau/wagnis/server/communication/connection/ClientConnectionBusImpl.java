@@ -12,6 +12,7 @@ import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 import at.aau.wagnis.server.communication.command.HandleConnectionBusClosedCommand;
 import at.aau.wagnis.server.communication.command.HandleConnectionClosedCommand;
+import at.aau.wagnis.server.communication.command.HandleNewConnectionCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 
 public class ClientConnectionBusImpl implements ClientConnectionBus {
@@ -34,6 +35,7 @@ public class ClientConnectionBusImpl implements ClientConnectionBus {
             int clientId = nextClientId++;
             connection.setClientConnectionBus(this, clientId);
             this.connectionsById.put(clientId, connection);
+            serverCommandQueue.add(new HandleNewConnectionCommand(clientId));
         }
     }
 

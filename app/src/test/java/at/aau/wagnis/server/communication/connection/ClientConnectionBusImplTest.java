@@ -22,6 +22,7 @@ import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 import at.aau.wagnis.server.communication.command.HandleConnectionBusClosedCommand;
 import at.aau.wagnis.server.communication.command.HandleConnectionClosedCommand;
+import at.aau.wagnis.server.communication.command.HandleNewConnectionCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 
 @Timeout(5)
@@ -89,17 +90,22 @@ class ClientConnectionBusImplTest {
     }
 
     @Test
-    void handleClosedConnectionCreatesNotification() throws InterruptedException {
-        // given
-        subject.registerConnection(conn1);
+    void createsConnectionLifecycleNotifications() throws InterruptedException {
+        int firstConnectionId = 0;
 
         // when
-        subject.handleClosedConnection(0);
-        ServerCommand resultCommand = subject.getNextCommand();
+        subject.registerConnection(conn1);
+        subject.handleClosedConnection(firstConnectionId);
 
         // then
-        assertTrue(resultCommand instanceof HandleConnectionClosedCommand);
-        assertEquals(0, ((HandleConnectionClosedCommand) resultCommand).getClientId());
+        ServerCommand firstCommand = subject.getNextCommand();
+        assertInstanceOf(HandleNewConnectionCommand.class, firstCommand);
+        assertEquals(firstConnectionId, ((HandleNewConnectionCommand) firstCommand).getClientId());
+
+        ServerCommand secondCommand = subject.getNextCommand();
+        assertInstanceOf(HandleConnectionClosedCommand.class, secondCommand);
+        assertEquals(firstConnectionId, ((HandleConnectionClosedCommand) secondCommand).getClientId());
+
         assertFalse(subject.hasNextCommand());
     }
 

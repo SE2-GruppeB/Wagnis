@@ -1,10 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-import java.util.List;
-import java.util.Map;
-
-import at.aau.wagnis.Hub;
-import at.aau.wagnis.Player;
 import at.aau.wagnis.server.GameServer;
 
 public abstract class GameLogicState {
@@ -23,6 +18,8 @@ public abstract class GameLogicState {
     public void handleConnectionBusClosed() {
         Thread.currentThread().interrupt();
     }
+
+    public void handleNewConnection(int clientId) { }
 
     public void handleClosedConnection(int clientId) { }
 

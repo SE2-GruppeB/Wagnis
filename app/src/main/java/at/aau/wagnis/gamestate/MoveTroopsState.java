@@ -1,15 +1,10 @@
 package at.aau.wagnis.gamestate;
 
-import android.util.Log;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 
 public class MoveTroopsState {
-    private Hub sourceHub, targetHub;
+    private Hub sourceHub;
+    private Hub targetHub;
 
     private int numTroops;
 

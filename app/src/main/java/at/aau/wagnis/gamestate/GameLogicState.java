@@ -15,10 +15,12 @@ public abstract class GameLogicState {
 
     protected GameServer gameServer;
     public void start(){}
+    public void chooseStart(List<Hub> unassignedCountries, List<Player> players){}
     public void reinforce(){}
     public void attack(){}
     public void chooseAttack(int playerId, int sourceHubId, int targetHubId){}
     public void move(){}
+    public void chooseMove(){}
 
     public void handleConnectionBusClosed() {
         Thread.currentThread().interrupt();

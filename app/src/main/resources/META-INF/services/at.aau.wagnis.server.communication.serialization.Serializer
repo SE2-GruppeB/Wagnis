@@ -1,2 +1,3 @@
 at.aau.wagnis.server.communication.command.ProcessChatMessageCommand$CommandSerializer
 at.aau.wagnis.server.communication.command.ChooseAttackCommand$CommandSerializer
+at.aau.wagnis.server.communication.command.SendGameStateCommand$CommandSerializer

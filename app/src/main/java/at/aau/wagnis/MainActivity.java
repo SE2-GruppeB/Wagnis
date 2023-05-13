@@ -1,5 +1,8 @@
 package at.aau.wagnis;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -32,9 +35,12 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.GameState;
 import at.aau.wagnis.gamestate.ReinforceGameState;
@@ -110,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
             currentState = newGameState;
         }));*/
 
+    popupStart(btnCards);
+
     }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -143,13 +151,17 @@ public class MainActivity extends AppCompatActivity {
     public static int dpToPx(int dp){
         return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
     }
-    public static PopupWindow createPopUp(int popupId){
+    public  PopupWindow createPopUp(int popupId){
 
-        LayoutInflater inflater = (LayoutInflater) GlobalVariables.baseContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
         PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
         return popupWindow;
     }
+    private GameManager getGameManager() {
+        return ((WagnisApplication) getApplication()).getGameManager();
+    }
+
 
 
     public void drawHubs(String seed){
@@ -197,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
                     /* Testing Grounds;*/
                     int[] v = {1,2,3,4,5};
-                    MainActivity.popupDiceRoll(v);
+                    popupDiceRoll(v);
                     GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
                     System.out.println("Hub:" +hub.getId());
                 }
@@ -249,7 +261,43 @@ public class MainActivity extends AppCompatActivity {
 
         adjacencyView.setImageBitmap(bitmap);
     }
+    public void popupStart(View view){
+        System.out.println("CALLED POPUP");
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.popup_start, null);
 
+        final PopupWindow popupWindow = new PopupWindow(layout ,  FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,false);
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_start);
+        TextView playerCount = popupWindow.getContentView().findViewById(R.id.txtPlayerCount);
+        ImageView qrCode = popupWindow.getContentView().findViewById(R.id.qrCode);
+
+       view.post(() -> popupWindow.showAtLocation(view,Gravity.CENTER, 0, 0));//Call popUp after setup has finished
+
+        if(GlobalVariables.isClient){
+            btnClose.setEnabled(false);
+        }
+       //TODO: update playerCount
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO:startNewGame
+                popupWindow.dismiss();
+                return;
+            }
+        });
+
+        MultiFormatWriter mWriter = new MultiFormatWriter();
+        try {
+            BitMatrix mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            BarcodeEncoder mEncoder = new BarcodeEncoder();
+            Bitmap mBitmap = mEncoder.createBitmap(mMatrix);
+            qrCode.setImageBitmap(mBitmap);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void popupSettings(){
 
         PopupWindow popupWindow= createPopUp(R.layout.popup_settings);
@@ -263,19 +311,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         });
-
-        ImageView qrCode = popupWindow.getContentView().findViewById(R.id.qrCode);
-        MultiFormatWriter mWriter = new MultiFormatWriter();
-        try {
-            BitMatrix mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
-            BarcodeEncoder mEncoder = new BarcodeEncoder();
-            Bitmap mBitmap = mEncoder.createBitmap(mMatrix);
-            qrCode.setImageBitmap(mBitmap);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         Switch switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
         switchMusic.setTextOn("On");
@@ -292,18 +327,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
+        FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
         btnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
+                Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
+                int pendingIntent = 123456;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager manager = (AlarmManager)getApplicationContext().getSystemService(getApplicationContext().ALARM_SERVICE);
+                manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                System.exit(0);
             }
-        });*/
+        });
 
     }
-    public static void popupCards(){
+    public  void popupCards(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_cards);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
@@ -359,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static void popupDiceRoll(int[] values) {
+    public  void popupDiceRoll(int[] values) {
         PopupWindow popupWindow= createPopUp(R.layout.popup_diceroll);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
@@ -441,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public static void popupChat(){
+    public  void popupChat(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_chat);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
         Button btnExit = popupWindow.getContentView().findViewById(R.id.btn_Exit);

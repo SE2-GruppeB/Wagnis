@@ -41,7 +41,6 @@ public class Hub {
         this.owner = hubOwner;
     }
 
-    //Todo
     public Player getOwner() {
         return this.owner;
     }

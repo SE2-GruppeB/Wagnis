@@ -3,13 +3,12 @@ package at.aau.wagnis;
 
 import android.graphics.Color;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player implements Serializable {
+public class Player {
 
-    private static final int MAX_CARDS_IN_HAND = 5;
+    public static final int MAX_CARDS_IN_HAND = 5;
     private static final int BASE_TROOPS_PER_ROUND = 3;
     private int playerId;
     private int allTroopsPerRound;

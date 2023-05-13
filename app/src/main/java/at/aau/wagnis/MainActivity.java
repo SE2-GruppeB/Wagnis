@@ -262,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
         adjacencyView.setImageBitmap(bitmap);
     }
     public void popupStart(View view){
-        System.out.println("CALLED POPUP");
         LayoutInflater inflater = this.getLayoutInflater();
         final View layout = inflater.inflate(R.layout.popup_start, null);
 

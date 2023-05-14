@@ -33,15 +33,24 @@ import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 
 class GameManagerTest {
 
-    @Mock private GameServerFactory gameServerFactory;
-    @Mock private GameServer gameServer1;
-    @Mock private GameServer gameServer2;
-    @Mock private NetworkGameClientFactory gameClientFactory;
-    @Mock private GameClient gameClient1;
-    @Mock private GameClient gameClient2;
-    @Mock private Consumer<GameManager.ConnectionState> connectionStateConsumer;
-    @Mock private Consumer<GameState> gameStateConsumer;
-    @Mock private ClientOriginatedServerCommand serverCommand;
+    @Mock
+    private GameServerFactory gameServerFactory;
+    @Mock
+    private GameServer gameServer1;
+    @Mock
+    private GameServer gameServer2;
+    @Mock
+    private NetworkGameClientFactory gameClientFactory;
+    @Mock
+    private GameClient gameClient1;
+    @Mock
+    private GameClient gameClient2;
+    @Mock
+    private Consumer<GameManager.ConnectionState> connectionStateConsumer;
+    @Mock
+    private Consumer<GameState> gameStateConsumer;
+    @Mock
+    private ClientOriginatedServerCommand serverCommand;
 
     private GameManager subject;
 

@@ -31,12 +31,14 @@ class ReinforceGameStateTest {
     }
 
     @Test
-    void constructorHubsTest(){
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {new ReinforceGameState(hubsNull, troops);});
+    void constructorHubsTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new ReinforceGameState(hubsNull, troops);
+        });
         String expectedMessage = "Hubs cannot be null";
         String actualMessage = exception.getMessage();
 
-        assertEquals(expectedMessage,actualMessage);
+        assertEquals(expectedMessage, actualMessage);
 
     }
 

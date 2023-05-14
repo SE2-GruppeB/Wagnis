@@ -9,7 +9,7 @@ import java.io.IOException;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
-public class ChooseAttackCommand implements ClientOriginatedServerCommand{
+public class ChooseAttackCommand implements ClientOriginatedServerCommand {
 
     private final int sourceHubId;
     private final int targetHubId;
@@ -20,18 +20,18 @@ public class ChooseAttackCommand implements ClientOriginatedServerCommand{
     }
 
     @Override
-    public void setClientId(int clientId) {
-
-    }
-
-    @Override
     public int getClientId() {
         return 0;
     }
 
     @Override
+    public void setClientId(int clientId) {
+
+    }
+
+    @Override
     public void execute(@NonNull GameLogicState gameLogicState) {
-        gameLogicState.chooseAttack(getClientId(),sourceHubId, targetHubId);
+        gameLogicState.chooseAttack(getClientId(), sourceHubId, targetHubId);
     }
 
     public static class CommandSerializer implements Serializer<ChooseAttackCommand> {

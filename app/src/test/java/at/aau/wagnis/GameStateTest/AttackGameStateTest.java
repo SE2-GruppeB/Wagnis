@@ -1,17 +1,19 @@
 package at.aau.wagnis.GameStateTest;
 
-import at.aau.wagnis.Hub;
-import at.aau.wagnis.Player;
-import at.aau.wagnis.gamestate.AttackGameState;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import android.widget.Button;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import android.widget.Button;
+import at.aau.wagnis.Hub;
+import at.aau.wagnis.Player;
+import at.aau.wagnis.gamestate.AttackGameState;
 
 public class AttackGameStateTest {
 

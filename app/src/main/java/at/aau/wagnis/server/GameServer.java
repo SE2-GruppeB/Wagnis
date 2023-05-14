@@ -16,13 +16,6 @@ public class GameServer implements Runnable {
     private final ClientConnectionBus connectionBus;
     private final ClientConnectionListener clientConnectionListener;
     private GameState gameState = null;
-    public GameState getGameState() {
-        return gameState;
-    }
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     private GameLogicState gameLogicState;
 
     public GameServer(
@@ -34,12 +27,20 @@ public class GameServer implements Runnable {
         this.gameLogicState = Objects.requireNonNull(initialState);
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
     /**
      * Process commands from the ClientConnectionBus until the thread is interrupted.
      */
     public void run() {
         try {
-            while(!Thread.currentThread().isInterrupted()) {
+            while (!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
             }

@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
             hub.setId(100 + hubs);
 
-            hub.setText("Hub: " + hub.getId());
+            //hub.setText("Hub: " + hub.getId());
 
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -348,8 +348,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
             GlobalVariables.hubs.add(new Hub(hub));
-
-
 
 
             layout.addView(hub);

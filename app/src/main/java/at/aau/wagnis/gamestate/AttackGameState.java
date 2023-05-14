@@ -1,26 +1,23 @@
 package at.aau.wagnis.gamestate;
 
-import android.util.Log;
-
 import java.security.SecureRandom;
 import java.util.Random;
 
 import at.aau.wagnis.Hub;
-import at.aau.wagnis.MainActivity;
 import at.aau.wagnis.Player;
 
 /**
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
  */
 
-public class  AttackGameState extends GameLogicState {
+public class AttackGameState extends GameLogicState {
+    private final boolean attacker = false;
+    private final boolean defender = false;
     private Hub sourceHub;
     private Hub targetHub;
-    private boolean attacker = false;
-    private boolean defender = false;
-
     private int sourceHubId;
     private int targetHubId;
+
     //int sourceHubId= sourceHub.getId();
     //int targetHubId= targetHub.getId();
     public AttackGameState(int sourceHubId, int targetHubId) {
@@ -67,7 +64,7 @@ public class  AttackGameState extends GameLogicState {
             defendingPlayer.removeHub(this.targetHub);
             if (gamewon(attackingPlayer)) {
                 this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
-            }else {
+            } else {
                 this.gameServer.setGameLogicState(new ChooseAttackGameState());
             }
         }
@@ -77,7 +74,7 @@ public class  AttackGameState extends GameLogicState {
         return player.getOwnedHubs().size() == 42;
     }
 
-    private int diceRoll(){
+    private int diceRoll() {
         Random randomGen = new SecureRandom();
         int diceValue = randomGen.nextInt(6) + 1;
         //Log.d("Info :","" + diceValue);

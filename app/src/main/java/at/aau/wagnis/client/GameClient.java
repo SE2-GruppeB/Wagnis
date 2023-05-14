@@ -40,7 +40,7 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
     /**
      * Set a listener that should be notified when the game state changes.
      * The listener will immediately receive an initial update with the current state.
-     *
+     * <p>
      * If no state has been received yet, the value of the notification will be null.
      */
     public synchronized void setGameStateListener(@Nullable Consumer<GameState> listener) {

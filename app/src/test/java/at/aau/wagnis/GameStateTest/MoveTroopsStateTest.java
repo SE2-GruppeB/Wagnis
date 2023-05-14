@@ -1,16 +1,13 @@
 package at.aau.wagnis.GameStateTest;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import android.widget.Button;
 
-import org.junit.Before;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
@@ -57,7 +54,7 @@ public class MoveTroopsStateTest {
 
 
     @Test
-    public void testDifferentPlayersMove(){
+    public void testDifferentPlayersMove() {
 
         sourceHub.setOwner(new Player(1));
         targetHub.setOwner(new Player(2));

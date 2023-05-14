@@ -12,7 +12,8 @@ import at.aau.wagnis.gamestate.GameLogicState;
 
 class HandleConnectionClosedCommandTest {
 
-    @Mock private GameLogicState gameLogicState;
+    @Mock
+    private GameLogicState gameLogicState;
 
     @BeforeEach
     void setup() {

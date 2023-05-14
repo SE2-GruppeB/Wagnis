@@ -27,12 +27,18 @@ import at.aau.wagnis.server.communication.command.ServerCommand;
 @Timeout(5)
 class ClientConnectionBusImplTest {
 
-    @Mock private ClientConnection conn1;
-    @Mock private ClientConnection conn2;
-    @Mock private ClientConnection conn3;
-    @Mock private ClientCommand clientCommand1;
-    @Mock private ClientOriginatedServerCommand serverCommand1;
-    @Mock private ClientOriginatedServerCommand serverCommand2;
+    @Mock
+    private ClientConnection conn1;
+    @Mock
+    private ClientConnection conn2;
+    @Mock
+    private ClientConnection conn3;
+    @Mock
+    private ClientCommand clientCommand1;
+    @Mock
+    private ClientOriginatedServerCommand serverCommand1;
+    @Mock
+    private ClientOriginatedServerCommand serverCommand2;
 
     private ClientConnectionBusImpl subject;
 

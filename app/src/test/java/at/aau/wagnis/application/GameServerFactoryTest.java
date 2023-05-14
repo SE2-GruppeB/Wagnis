@@ -24,13 +24,20 @@ import at.aau.wagnis.server.GameServer;
 
 class GameServerFactoryTest {
 
-    @Mock private Function<Runnable, Thread> threadFactory;
-    @Mock private Thread thread1;
-    @Mock private Thread thread2;
-    @Mock private GameServerFactory.ServerSocketFactory serverSocketFactory;
-    @Mock private Supplier<GameLogicState> initialGameLogicStateSupplier;
-    @Mock private GameLogicState gameLogicState;
-    @Mock private ServerSocket serverSocket;
+    @Mock
+    private Function<Runnable, Thread> threadFactory;
+    @Mock
+    private Thread thread1;
+    @Mock
+    private Thread thread2;
+    @Mock
+    private GameServerFactory.ServerSocketFactory serverSocketFactory;
+    @Mock
+    private Supplier<GameLogicState> initialGameLogicStateSupplier;
+    @Mock
+    private GameLogicState gameLogicState;
+    @Mock
+    private ServerSocket serverSocket;
 
     private GameServerFactory subject;
 

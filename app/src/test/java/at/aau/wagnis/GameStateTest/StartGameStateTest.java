@@ -1,30 +1,28 @@
 package at.aau.wagnis.GameStateTest;
 
-import at.aau.wagnis.Hub;
-import at.aau.wagnis.Player;
-import at.aau.wagnis.gamestate.StartGameState;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+
+import android.widget.Button;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-
-import android.widget.Button;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
+import at.aau.wagnis.Hub;
+import at.aau.wagnis.Player;
+import at.aau.wagnis.gamestate.StartGameState;
 
 public class StartGameStateTest {
 
+    final int num_players = 6;
+    final int num_hubs = 6;
     private StartGameState startGameState;
     private ArrayList<Player> players;
     private ArrayList<Hub> hubs;
-    final int num_players = 6;
-    final int num_hubs = 6;
 
     @BeforeEach
     public void setUp() {

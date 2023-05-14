@@ -21,31 +21,31 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="false"
+        android:layout_marginStart="0dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Your Cards"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginStart="0dp"/>
+        android:textStyle="bold" />
+
     <Button
         android:id="@+id/btn_Card0"
-        android:text="Placeholder"
         android:layout_width="80dp"
         android:layout_height="200dp"
-        android:layout_marginStart="0dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="50dp"
         android:clickable="true"
-      />
+        android:text="Placeholder" />
 
     <Button
         android:id="@+id/btn_Card1"
         android:layout_width="80dp"
         android:layout_height="200dp"
-        android:layout_marginStart="85dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
+        android:layout_marginStart="85dp"
         android:layout_marginTop="50dp"
 
         android:autoLink="web"
@@ -55,16 +55,16 @@
 
     <Button
         android:id="@+id/btn_Card2"
-        android:text="Placeholder"
         android:layout_width="80dp"
         android:layout_height="200dp"
-        android:layout_marginStart="170dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
+        android:layout_marginStart="170dp"
         android:layout_marginTop="50dp"
         android:clickable="true"
+        android:text="Placeholder"
 
-     />
+        />
 
     <Button
         android:id="@+id/btn_Card3"
@@ -77,8 +77,8 @@
         android:clickable="true"
 
 
-
         android:text="Placeholder" />
+
     <Button
         android:id="@+id/btn_Card4"
         android:layout_width="80dp"

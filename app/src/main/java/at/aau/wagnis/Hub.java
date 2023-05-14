@@ -24,7 +24,7 @@ public class Hub {
         return this.id;
     }
 
-    public void setText(int troops) {
+    public void setText(String troops) {
         this.hubButton.setText(troops);
     }
 
@@ -32,8 +32,13 @@ public class Hub {
         return this.amountTroops;
     }
 
-    public void setAmountTroops(int amountTroops){
+    public void setAmountTroops(int amountTroops) {
         this.amountTroops = amountTroops;
+    }
+
+    //Todo
+    public Player getOwner() {
+        return this.owner;
     }
 
     //to do:
@@ -41,33 +46,29 @@ public class Hub {
         this.owner = hubOwner;
     }
 
-    //Todo
-    public Player getOwner() {
-        return this.owner;
-    }
-    public void setHubImage(String agency){
-        switch(agency){
-            case("ESA"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome_x42);
+    public void setHubImage(String agency) {
+        switch (agency) {
+            case ("ESA"):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome_x42);
                 break;
-            case("NASA"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome6_x42);
+            case ("NASA"):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome6_x42);
                 break;
-            case("ISRO"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome5_x42);
+            case ("ISRO"):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome5_x42);
                 break;
-            case("JAXA"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome4_x42);
+            case ("JAXA"):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome4_x42);
                 break;
-            case("Roskosmos"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome3_x42);
+            case ("Roskosmos"):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome3_x42);
                 break;
             default:
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0,0,0, R.drawable.dome2_x42);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome2_x42);
         }
     }
 
-    public void addTroops(int troops){
+    public void addTroops(int troops) {
         this.amountTroops += troops;
     }
 

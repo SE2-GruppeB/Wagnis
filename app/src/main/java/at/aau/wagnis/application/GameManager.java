@@ -21,10 +21,9 @@ public class GameManager {
     private final GameServerFactory gameServerFactory;
 
     private final Object connectionLock = new Object();
+    private final Object connectionStateLock = new Object();
     private GameServer localGameServer = null;
     private GameClient gameClient = null;
-
-    private final Object connectionStateLock = new Object();
     private Consumer<ConnectionState> connectionStateListener = null;
     private ConnectionState connectionState = ConnectionState.NO_CONNECTION;
 
@@ -42,6 +41,7 @@ public class GameManager {
 
     /**
      * Connect to a game server at the provided address; any existing game will be closed.
+     *
      * @param serverAddress The address of the server to connect to.
      */
     public void joinGameByServerAddress(@NonNull String serverAddress) {
@@ -114,7 +114,7 @@ public class GameManager {
     /**
      * Set a listener that should be notified about changes of the currently running game's state.
      * The listener will immediately receive an initial update with the current state.
-     *
+     * <p>
      * If no state has been received yet, the value of the notification will be null.
      */
     public void setGameStateListener(@Nullable Consumer<GameState> listener) {

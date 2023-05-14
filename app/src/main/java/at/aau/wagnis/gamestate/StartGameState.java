@@ -33,7 +33,6 @@ public class StartGameState extends GameLogicState {
     }
 
     public void assignTroopsToHubs() {
-
         Random ran = new SecureRandom();
 
         for (Player player : this.players) {
@@ -48,11 +47,13 @@ public class StartGameState extends GameLogicState {
                 if(troopsToPlace > player.getUnassignedAvailableTroops()){
                     troopsToPlace = player.getUnassignedAvailableTroops();
                 }
-                hub.setAmountTroops(hub.getAmountTroops() + troopsToPlace);
+                hub.addTroops(troopsToPlace);
                 player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
+                //hub.setText(String.valueOf(hub.getAmountTroops()));
             }
         }
     }
+
 
     private void assignOneTroopEach(Player player) {
         if (player.getOwnedHubs().size() <= player.getUnassignedAvailableTroops()) {

@@ -54,7 +54,7 @@ public class ChooseStartCommand implements ClientOriginatedServerCommand{
 
         @Override
         public void writeToStream(
-                @NonNull ChooseStartCommand obj,
+                @NonNull ChooseStartCommand command,
                 @NonNull DataOutputStream stream)
                 throws IOException {
 

@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.Collections;
 import java.util.Objects;
 
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.gamestate.GameState;
 import at.aau.wagnis.server.communication.command.ClientCommand;
@@ -44,12 +45,14 @@ public class GameServer implements Runnable {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
-
-                GameState demoState = new GameState();
-                demoState.setSeed("123455123455123456123455123456123456123456123456123456123456123456123456123456123456");
-                demoState.setPlayers(Collections.emptyList());
-                demoState.setHubs(Collections.emptyList());
-                broadcastCommand(new SendGameStateCommand(demoState));
+                if(gameState == null) {
+                    gameState = new GameState();
+                    GlobalVariables.seedGenerator();
+                    gameState.setSeed(GlobalVariables.getSeed());
+                    gameState.setPlayers(Collections.emptyList());
+                    gameState.setHubs(Collections.emptyList());
+                }
+                broadcastCommand(new SendGameStateCommand(gameState));
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

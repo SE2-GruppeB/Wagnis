@@ -20,6 +20,9 @@ public class StartGameState extends GameLogicState {
 
     @Override
     public void start() {
+        // Generate new seed
+        // get all Player and hubs
+
         assignTroopsToHubs();
     }
 

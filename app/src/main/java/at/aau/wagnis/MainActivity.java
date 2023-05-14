@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
     ImageView adjacencyView;
     GameState currentState;
+    boolean wasDrawn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
         btnChat=findViewById(R.id.btn_Chat);
 
         setDisplayMetrics();
-        if(!GlobalVariables.getIsClient()){
+        /*if(!GlobalVariables.getIsClient()){
             GlobalVariables.seedGenerator();
         }
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
-        drawAdjacencies();
+        drawAdjacencies();*/
 
 
         //List<Hub> unassignedCountries = new ArrayList<>(hubs);
@@ -103,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
             // code to be executed on the UI thread
             currentState = newGameState;
             if(newGameState != null){
-                GlobalVariables.setSeed(newGameState.getSeed());
+                if(!wasDrawn){
+                    generateMap(newGameState.getSeed());
+                    wasDrawn = true;
+                }
             }
 
         }));
@@ -111,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
     popupStart(btnCards);
 
     }
+
+    private void generateMap(String seed) {
+        GlobalVariables.setSeed(seed);
+        drawHubs(GlobalVariables.getSeed());
+        GlobalVariables.setAdjacencies();
+        drawAdjacencies();
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -272,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO:startNewGame
+
                 popupWindow.dismiss();
                 return;
             }

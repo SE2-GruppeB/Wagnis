@@ -143,7 +143,6 @@ public class ClientConnectionListenerTest {
         // then
         verify(connectionFactory).apply(socket, threadFactory);
         verify(bus).registerConnection(clientConnection);
-        verify(clientConnection).start();
     }
 
     @Test

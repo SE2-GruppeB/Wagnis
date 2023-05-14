@@ -21,7 +21,7 @@ public class GameManager {
     private final GameServerFactory gameServerFactory;
 
     private final Object connectionLock = new Object();
-    private GameServer localGameServer = null;
+    public GameServer localGameServer = null;
     private GameClient gameClient = null;
 
     private final Object connectionStateLock = new Object();

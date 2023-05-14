@@ -107,7 +107,7 @@ public class GameState {
         // Hub
         String[] hubData = input.split(HUB_STRING);
         List<Hub> hubList = new ArrayList<>();
-        for(int i = 1; i < hubData.length; i++){
+        for(int i = 1; i < hubData.length-1; i++){
             String[] data = hubData[i].split(";");
             Hub hub;
             if((hub = getHubById(Integer.parseInt(data[0]))) == null){
@@ -139,10 +139,10 @@ public class GameState {
     }
 
     private Cards[] getHandByString(String playerData){
-        Cards[] hand = new Cards[Player.MAX_CARDS_IN_HAND];
         String[] cardData = playerData.split(CARD_STRING);
-        for(int j = 1; j < cardData.length; j++){
-            hand[j-1] = getCardByString(cardData[j]);
+        Cards[] hand = new Cards[cardData.length-1];
+        for(int j = 0; j < hand.length; j++){
+            hand[j] = getCardByString(cardData[j]);
         }
         return hand;
     }

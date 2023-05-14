@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
+import android.util.Log;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class GlobalVariables {
     public static Context baseContext;
     public static String hostIP;
     public static Boolean isClient = false;
-    public static String seed= "123455123455123456123455123456123456123456123456123456123456123456123456123456123456";
+    public static String seed= "42";
     public static ArrayList<String> seeds = new ArrayList<>();
     public static ArrayList<Hub> hubs = new ArrayList<>();
     public static  ArrayList<Adjacency> adjacencies = new ArrayList<>();
@@ -104,6 +105,7 @@ public class GlobalVariables {
     public static void setAdjacencies(){
         int lineHubCount=1;
         int chance = 0;
+        Log.e("DEBUG", seed + " " + seeds.size());
         for(int i =0;i<hubs.size()-hubsPerLine;i++){
             chance = Integer.parseInt(seeds.get(i));
 

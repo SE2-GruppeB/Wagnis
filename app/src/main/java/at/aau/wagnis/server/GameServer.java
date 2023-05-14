@@ -9,7 +9,7 @@ import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.command.ClientCommand;
-import at.aau.wagnis.server.communication.command.SendGameStateCommand;
+import at.aau.wagnis.server.communication.command.SendGameDataCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 import at.aau.wagnis.server.communication.connection.ClientConnectionBus;
 import at.aau.wagnis.server.communication.connection.ClientConnectionListener;
@@ -19,7 +19,7 @@ public class GameServer implements Runnable {
     private final ClientConnectionBus connectionBus;
     private final ClientConnectionListener clientConnectionListener;
     private GameData gameData = null;
-    public GameData getGameState() {
+    public GameData getGameData() {
         return gameData;
     }
     public void setGameState(GameData gameData) {
@@ -52,7 +52,7 @@ public class GameServer implements Runnable {
                     gameData.setPlayers(Collections.emptyList());
                     gameData.setHubs(Collections.emptyList());
                 }
-                broadcastCommand(new SendGameStateCommand(gameData));
+                broadcastCommand(new SendGameDataCommand(gameData));
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

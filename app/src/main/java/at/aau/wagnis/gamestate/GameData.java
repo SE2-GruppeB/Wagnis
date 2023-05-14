@@ -21,6 +21,8 @@ public class GameData {
 
     public GameData() {
         super();
+        hubs = new ArrayList<>();
+        players = new ArrayList<>();
     }
 
     public void setSeed(String seed) {
@@ -63,9 +65,11 @@ public class GameData {
             builder.append(player.getUnassignedAvailableTroops()).append(";");
             builder.append(CARD_STRING);
             for (Cards card : player.getHand()) {
-                if(card == null)
-                    continue;
-                builder.append(card.getType());
+                if(card == null) {
+                    builder.append("null");
+                }else {
+                    builder.append(card.getType());
+                }
                 builder.append(CARD_STRING);
             }
             builder.append(PLAYER_STRING);
@@ -79,12 +83,14 @@ public class GameData {
             builder.append(hub.getAmountTroops()).append(";");
             builder.append(HUB_STRING);
         }
+        builder.append("END");
         return builder.toString();
     }
 
     public void deserialize(String input){
         // Seed
-        setSeed(input.split(SEED_STRING)[1]);
+        String[] seedData = input.split(SEED_STRING);
+        setSeed(seedData[1]);
 
         // Player
         String[] playerData = input.split(PLAYER_STRING);
@@ -111,7 +117,7 @@ public class GameData {
             String[] data = hubData[i].split(";");
             Hub hub;
             if((hub = getHubById(Integer.parseInt(data[0]))) == null){
-                throw new IllegalArgumentException("Could not find hub with Id " + data[0]);
+                hub = new Hub(Integer.parseInt(data[0]));
             }
             hub.setOwner(getPlayerById(Integer.parseInt(data[1])));
             hub.setAmountTroops(Integer.parseInt(data[2]));

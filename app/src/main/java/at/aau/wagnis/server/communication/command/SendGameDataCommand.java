@@ -10,15 +10,15 @@ import at.aau.wagnis.client.ClientLogic;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
-public class SendGameStateCommand implements ClientCommand{
+public class SendGameDataCommand implements ClientCommand{
 
     private final GameData gameData;
 
-    public SendGameStateCommand(GameData gameData){
+    public SendGameDataCommand(GameData gameData){
         this.gameData = gameData;
     }
 
-    public GameData getGameState() {
+    public GameData getGameData() {
         return gameData;
     }
 
@@ -27,12 +27,12 @@ public class SendGameStateCommand implements ClientCommand{
         clientLogic.updateGameState(gameData);
     }
 
-    public static class CommandSerializer implements Serializer<SendGameStateCommand>{
+    public static class CommandSerializer implements Serializer<SendGameDataCommand>{
 
         @NonNull
         @Override
-        public Class<SendGameStateCommand> getTargetClass() {
-            return SendGameStateCommand.class;
+        public Class<SendGameDataCommand> getTargetClass() {
+            return SendGameDataCommand.class;
         }
 
         @NonNull
@@ -42,16 +42,16 @@ public class SendGameStateCommand implements ClientCommand{
         }
 
         @Override
-        public void writeToStream(@NonNull SendGameStateCommand obj, @NonNull DataOutputStream stream) throws IOException {
-            stream.writeUTF(obj.getGameState().serialize());
+        public void writeToStream(@NonNull SendGameDataCommand obj, @NonNull DataOutputStream stream) throws IOException {
+            stream.writeUTF(obj.getGameData().serialize());
         }
 
         @NonNull
         @Override
-        public SendGameStateCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
+        public SendGameDataCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
             GameData gameData = new GameData();
             gameData.deserialize(stream.readUTF());
-            return new SendGameStateCommand(gameData);
+            return new SendGameDataCommand(gameData);
         }
     }
 }

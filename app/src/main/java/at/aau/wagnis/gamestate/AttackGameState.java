@@ -83,5 +83,45 @@ public class  AttackGameState extends GameLogicState {
         //Log.d("Info :","" + diceValue);
         return diceValue;
     }
+
+    public boolean isAttacker() {
+        return attacker;
+    }
+
+    public void setAttacker(boolean attacker) {
+        this.attacker = attacker;
+    }
+
+    public boolean isDefender() {
+        return defender;
+    }
+
+    public void setDefender(boolean defender) {
+        this.defender = defender;
+    }
+
+    public int getSourceHubId() {
+        return sourceHubId;
+    }
+
+    public void setSourceHubId(int sourceHubId) {
+        this.sourceHubId = sourceHubId;
+    }
+
+    public int getTargetHubId() {
+        return targetHubId;
+    }
+
+    public void setTargetHubId(int targetHubId) {
+        this.targetHubId = targetHubId;
+    }
+
+    public void setSourceHub(Hub sourceHub) {
+        this.sourceHub = sourceHub;
+    }
+
+    public void setTargetHub(Hub targetHub) {
+        this.targetHub = targetHub;
+    }
 }
 

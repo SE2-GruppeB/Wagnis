@@ -7,24 +7,24 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import at.aau.wagnis.client.ClientLogic;
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
 public class SendGameStateCommand implements ClientCommand{
 
-    private final GameState gameState;
+    private final GameData gameData;
 
-    public SendGameStateCommand(GameState gameState){
-        this.gameState = gameState;
+    public SendGameStateCommand(GameData gameData){
+        this.gameData = gameData;
     }
 
-    public GameState getGameState() {
-        return gameState;
+    public GameData getGameState() {
+        return gameData;
     }
 
     @Override
     public void execute(@NonNull ClientLogic clientLogic) {
-        clientLogic.updateGameState(gameState);
+        clientLogic.updateGameState(gameData);
     }
 
     public static class CommandSerializer implements Serializer<SendGameStateCommand>{
@@ -49,9 +49,9 @@ public class SendGameStateCommand implements ClientCommand{
         @NonNull
         @Override
         public SendGameStateCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
-            GameState gameState = new GameState();
-            gameState.deserialize(stream.readUTF());
-            return new SendGameStateCommand(gameState);
+            GameData gameData = new GameData();
+            gameData.deserialize(stream.readUTF());
+            return new SendGameStateCommand(gameData);
         }
     }
 }

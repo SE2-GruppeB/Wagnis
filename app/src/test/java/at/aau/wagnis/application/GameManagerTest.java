@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import at.aau.wagnis.client.GameClient;
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.GameServer;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 
@@ -40,7 +40,7 @@ class GameManagerTest {
     @Mock private GameClient gameClient1;
     @Mock private GameClient gameClient2;
     @Mock private Consumer<GameManager.ConnectionState> connectionStateConsumer;
-    @Mock private Consumer<GameState> gameStateConsumer;
+    @Mock private Consumer<GameData> gameStateConsumer;
     @Mock private ClientOriginatedServerCommand serverCommand;
 
     private GameManager subject;

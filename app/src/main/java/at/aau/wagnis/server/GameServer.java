@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.gamestate.GameLogicState;
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.SendGameStateCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
@@ -18,12 +18,12 @@ public class GameServer implements Runnable {
 
     private final ClientConnectionBus connectionBus;
     private final ClientConnectionListener clientConnectionListener;
-    private GameState gameState = null;
-    public GameState getGameState() {
-        return gameState;
+    private GameData gameData = null;
+    public GameData getGameState() {
+        return gameData;
     }
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
+    public void setGameState(GameData gameData) {
+        this.gameData = gameData;
     }
 
     private GameLogicState gameLogicState;
@@ -45,14 +45,14 @@ public class GameServer implements Runnable {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
-                if(gameState == null) {
-                    gameState = new GameState();
+                if(gameData == null) {
+                    gameData = new GameData();
                     GlobalVariables.seedGenerator();
-                    gameState.setSeed(GlobalVariables.getSeed());
-                    gameState.setPlayers(Collections.emptyList());
-                    gameState.setHubs(Collections.emptyList());
+                    gameData.setSeed(GlobalVariables.getSeed());
+                    gameData.setPlayers(Collections.emptyList());
+                    gameData.setHubs(Collections.emptyList());
                 }
-                broadcastCommand(new SendGameStateCommand(gameState));
+                broadcastCommand(new SendGameStateCommand(gameData));
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

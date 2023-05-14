@@ -16,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.function.Consumer;
 
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 import at.aau.wagnis.server.communication.connection.ServerConnection;
@@ -24,8 +24,8 @@ import at.aau.wagnis.server.communication.connection.ServerConnection;
 class GameClientTest {
 
     @Mock private ServerConnection serverConnection;
-    @Mock private GameState gameState;
-    @Mock private Consumer<GameState> gameStateConsumer;
+    @Mock private GameData gameData;
+    @Mock private Consumer<GameData> gameStateConsumer;
     @Mock private ClientCommand clientCommand;
     @Mock private ClientOriginatedServerCommand serverCommand;
 
@@ -61,25 +61,25 @@ class GameClientTest {
         subject.setGameStateListener(gameStateConsumer);
 
         // when
-        subject.updateGameState(gameState);
+        subject.updateGameState(gameData);
 
         // then
         InOrder inOrder = Mockito.inOrder(gameStateConsumer);
         inOrder.verify(gameStateConsumer).accept(null);
-        inOrder.verify(gameStateConsumer).accept(gameState);
+        inOrder.verify(gameStateConsumer).accept(gameData);
         verifyNoMoreInteractions(gameStateConsumer);
     }
 
     @Test
     void updateGameStateStoresState() {
         // given
-        subject.updateGameState(gameState);
+        subject.updateGameState(gameData);
 
         // when
         subject.setGameStateListener(gameStateConsumer);
 
         // then
-        verify(gameStateConsumer).accept(gameState);
+        verify(gameStateConsumer).accept(gameData);
         verifyNoMoreInteractions(gameStateConsumer);
     }
 
@@ -90,10 +90,10 @@ class GameClientTest {
 
         // when
         subject.setGameStateListener(null);
-        subject.updateGameState(gameState);
+        subject.updateGameState(gameData);
 
         // then
-        verify(gameStateConsumer, never()).accept(gameState);
+        verify(gameStateConsumer, never()).accept(gameData);
     }
 
     @Test

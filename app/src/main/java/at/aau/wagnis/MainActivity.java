@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,7 +35,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
     ImageView adjacencyView;
-    GameState currentState;
+    GameData currentState;
     boolean wasDrawn = false;
 
     @Override

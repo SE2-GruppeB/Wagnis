@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 import at.aau.wagnis.server.communication.connection.ServerConnection;
@@ -15,8 +15,8 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
 
     private ServerConnection serverConnection = null;
 
-    private GameState currentGameState = null;
-    private Consumer<GameState> gameStateListener = null;
+    private GameData currentGameData = null;
+    private Consumer<GameData> gameStateListener = null;
 
     public synchronized void setServerConnection(@NonNull ServerConnection serverConnection) {
         this.serverConnection = serverConnection;
@@ -29,11 +29,11 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
     }
 
     @Override
-    public synchronized void updateGameState(@NonNull GameState gameState) {
-        this.currentGameState = Objects.requireNonNull(gameState);
+    public synchronized void updateGameState(@NonNull GameData gameData) {
+        this.currentGameData = Objects.requireNonNull(gameData);
 
         if (this.gameStateListener != null) {
-            this.gameStateListener.accept(currentGameState);
+            this.gameStateListener.accept(currentGameData);
         }
     }
 
@@ -43,11 +43,11 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
      *
      * If no state has been received yet, the value of the notification will be null.
      */
-    public synchronized void setGameStateListener(@Nullable Consumer<GameState> listener) {
+    public synchronized void setGameStateListener(@Nullable Consumer<GameData> listener) {
         this.gameStateListener = listener;
 
         if (this.gameStateListener != null) {
-            this.gameStateListener.accept(currentGameState);
+            this.gameStateListener.accept(currentGameData);
         }
     }
 

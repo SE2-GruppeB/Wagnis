@@ -8,7 +8,7 @@ import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.Troops;
 
-public class GameState {
+public class GameData {
 
     private static final String SEED_STRING  = "SEED";
     private static final String PLAYER_STRING  = "PLAYER";
@@ -19,7 +19,7 @@ public class GameState {
     private List<Hub> hubs;
     private List<Player> players;
 
-    public GameState() {
+    public GameData() {
         super();
     }
 

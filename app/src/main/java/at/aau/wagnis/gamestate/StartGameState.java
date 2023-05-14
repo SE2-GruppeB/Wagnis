@@ -12,17 +12,14 @@ public class StartGameState extends GameLogicState {
     private final List<Hub> hubs;
     private final List<Player> players;
 
-    public StartGameState(List<Hub> unassignedCountries, List<Player> players) {
-        this.hubs = unassignedCountries;
-        this.players = players;
+    public StartGameState(GameData gameData) {
+        this.hubs = gameData.getHubs();
+        this.players = gameData.getPlayers();
         assignCountries();
     }
 
     @Override
     public void start() {
-        // Generate new seed
-        // get all Player and hubs
-
         assignTroopsToHubs();
     }
 

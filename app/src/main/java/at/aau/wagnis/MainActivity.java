@@ -13,7 +13,6 @@ import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -34,20 +33,9 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.GameState;
-import at.aau.wagnis.gamestate.ReinforceGameState;
-import at.aau.wagnis.gamestate.StartGameState;
-
-import static at.aau.wagnis.GlobalVariables.hubs;
-import static at.aau.wagnis.GlobalVariables.players;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -114,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
             // code to be executed on the UI thread
             currentState = newGameState;
-            if(GlobalVariables.getIsClient()){
+            if(newGameState != null){
                 GlobalVariables.setSeed(newGameState.getSeed());
             }
 

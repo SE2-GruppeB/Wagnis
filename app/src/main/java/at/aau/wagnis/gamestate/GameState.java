@@ -84,10 +84,10 @@ public class GameState {
 
     public void deserialize(String input){
         // Seed
-        setSeed(input.split(SEED_STRING)[0]);
+        setSeed(input.split(SEED_STRING)[1]);
 
         // Player
-        String[] playerData = input.split(SEED_STRING);
+        String[] playerData = input.split(PLAYER_STRING);
         List<Player> playerList = new ArrayList<>();
         for(int i = 1; i< playerData.length-1; i++){
             String[] data = playerData[i].split(";");

@@ -2,6 +2,7 @@ package at.aau.wagnis.server;
 
 import androidx.annotation.NonNull;
 
+import java.util.Collections;
 import java.util.Objects;
 
 import at.aau.wagnis.gamestate.GameLogicState;
@@ -43,9 +44,12 @@ public class GameServer implements Runnable {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
-                if(gameState!=null) {
-                    broadcastCommand(new SendGameStateCommand(this.getGameState()));
-                }
+
+                GameState demoState = new GameState();
+                demoState.setSeed("123455123455123456123455123456123456123456123456123456123456123456123456123456123456");
+                demoState.setPlayers(Collections.emptyList());
+                demoState.setHubs(Collections.emptyList());
+                broadcastCommand(new SendGameStateCommand(demoState));
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

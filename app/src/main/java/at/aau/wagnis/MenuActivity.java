@@ -104,7 +104,8 @@ public class MenuActivity extends AppCompatActivity {
     }
     public void getHostIp() {
         try {
-            readQrCode();
+            throw new Exception();
+            //readQrCode();
 
         } catch (Exception e) {
 

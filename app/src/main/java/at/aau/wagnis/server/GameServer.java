@@ -7,6 +7,7 @@ import java.util.Objects;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.gamestate.GameState;
 import at.aau.wagnis.server.communication.command.ClientCommand;
+import at.aau.wagnis.server.communication.command.SendGameStateCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 import at.aau.wagnis.server.communication.connection.ClientConnectionBus;
 import at.aau.wagnis.server.communication.connection.ClientConnectionListener;
@@ -42,6 +43,9 @@ public class GameServer implements Runnable {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
+                if(gameState!=null) {
+                    broadcastCommand(new SendGameStateCommand(this.getGameState()));
+                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -58,6 +62,7 @@ public class GameServer implements Runnable {
     }
 
     public void broadcastCommand(@NonNull ClientCommand command) {
+
         this.connectionBus.broadcastCommand(command);
     }
 }

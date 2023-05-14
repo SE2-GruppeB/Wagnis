@@ -52,9 +52,9 @@ class ClientConnectionBusImplTest {
         subject.registerConnection(conn3);
 
         // then
-        verify(conn1).setClientConnectionBus(subject, 0);
-        verify(conn2).setClientConnectionBus(subject, 1);
-        verify(conn3).setClientConnectionBus(subject, 2);
+        verify(conn1).init(subject, 0);
+        verify(conn2).init(subject, 1);
+        verify(conn3).init(subject, 2);
         verifyNoMoreInteractions(conn1, conn2, conn3);
     }
 

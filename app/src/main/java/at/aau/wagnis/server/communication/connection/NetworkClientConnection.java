@@ -41,8 +41,9 @@ public class NetworkClientConnection implements ClientConnection {
     }
 
     @Override
-    public void setClientConnectionBus(@NonNull ClientConnectionBus bus, int clientId) {
+    public void init(@NonNull ClientConnectionBus bus, int clientId) {
         this.busConfigReference.set(new BusConfiguration(bus, clientId));
+        start();
     }
 
     /**

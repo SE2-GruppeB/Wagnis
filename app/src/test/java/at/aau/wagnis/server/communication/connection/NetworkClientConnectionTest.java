@@ -61,7 +61,7 @@ public class NetworkClientConnectionTest {
     @Test
     public void startStartsReaderAndWriter() {
         // when
-        subject.setClientConnectionBus(bus, 0);
+        subject.init(bus, 0);
         subject.start();
 
         // then
@@ -74,7 +74,7 @@ public class NetworkClientConnectionTest {
         // given
         IllegalStateException thrownFromReader = new IllegalStateException();
         doThrow(thrownFromReader).when(input).start(any(), any());
-        subject.setClientConnectionBus(bus, 0);
+        subject.init(bus, 0);
 
         // when & then
         IllegalStateException ex = assertThrows(
@@ -90,7 +90,7 @@ public class NetworkClientConnectionTest {
         // given
         IllegalStateException thrownFromWriter = new IllegalStateException();
         doThrow(thrownFromWriter).when(output).start(any());
-        subject.setClientConnectionBus(bus, 0);
+        subject.init(bus, 0);
 
         // when & then
         IllegalStateException ex = assertThrows(
@@ -104,7 +104,7 @@ public class NetworkClientConnectionTest {
     @Test
     public void sendObjectCallsWriter() {
         // given
-        subject.setClientConnectionBus(bus, 0);
+        subject.init(bus, 0);
         subject.start();
 
         // when
@@ -118,7 +118,7 @@ public class NetworkClientConnectionTest {
     public void closeNotifiesBusIfSet() {
         // given
         int clientId = 1;
-        subject.setClientConnectionBus(bus, clientId);
+        subject.init(bus, clientId);
 
         // when
         subject.close();
@@ -143,7 +143,7 @@ public class NetworkClientConnectionTest {
     public void callingCloseTwiceDoesNotNotifyBusTwice() {
         // given
         int clientId = 1;
-        subject.setClientConnectionBus(bus, clientId);
+        subject.init(bus, clientId);
 
         // when
         subject.close();
@@ -158,7 +158,7 @@ public class NetworkClientConnectionTest {
     public void onErrorClosesConnection() {
         // given
         int clientId = 1;
-        subject.setClientConnectionBus(bus, clientId);
+        subject.init(bus, clientId);
 
         // when
         subject.onError();
@@ -173,7 +173,7 @@ public class NetworkClientConnectionTest {
     public void onReceiveNotifiesBusIfSet() {
         // given
         int clientId = 1;
-        subject.setClientConnectionBus(bus, clientId);
+        subject.init(bus, clientId);
 
         // when
         subject.onReceive(serverCommand);

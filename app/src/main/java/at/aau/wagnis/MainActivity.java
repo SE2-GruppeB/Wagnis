@@ -110,11 +110,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-/*
+
         ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
             // code to be executed on the UI thread
             currentState = newGameState;
-        }));*/
+            if(GlobalVariables.getIsClient()){
+                GlobalVariables.setSeed(newGameState.getSeed());
+            }
+
+        }));
 
     popupStart(btnCards);
 

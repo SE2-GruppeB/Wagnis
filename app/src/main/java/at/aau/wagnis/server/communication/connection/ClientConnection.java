@@ -9,7 +9,7 @@ public interface ClientConnection {
     /**
      * Set the bus that this connection is associated with, and the id of the connection on the bus.
      */
-    void setClientConnectionBus(@NonNull ClientConnectionBus bus, int clientId);
+    void init(@NonNull ClientConnectionBus bus, int clientId);
 
     /**
      * Send a command to the connected client.

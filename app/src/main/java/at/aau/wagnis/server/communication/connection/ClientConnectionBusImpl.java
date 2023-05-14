@@ -33,7 +33,7 @@ public class ClientConnectionBusImpl implements ClientConnectionBus {
             }
 
             int clientId = nextClientId++;
-            connection.setClientConnectionBus(this, clientId);
+            connection.init(this, clientId);
             this.connectionsById.put(clientId, connection);
             serverCommandQueue.add(new HandleNewConnectionCommand(clientId));
         }

@@ -25,11 +25,13 @@ class DeckTest {
 
     @Test
     void constructorTest() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {new Deck(0);});
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Deck(0);
+        });
         String expectedMessage = "maxHubCount cannot be 0";
         String actualMessage = exception.getMessage();
 
-        assertEquals(expectedMessage,actualMessage);
+        assertEquals(expectedMessage, actualMessage);
     }
 
     // fillDeckTests and numberOfCardsInDeck test
@@ -43,12 +45,12 @@ class DeckTest {
     void fillDeckTest2() {
         for (int i = 0; i < deck.getCards().length; i++) {
             Cards cards;
-            if(i % 3 == 0){
-                 cards = new Cards(100 + i, Troops.INFANTRY,deck);
-            } else if (i % 3 == 1){
-                 cards = new Cards(100 + i,Troops.CAVALRY,deck);
+            if (i % 3 == 0) {
+                cards = new Cards(100 + i, Troops.INFANTRY, deck);
+            } else if (i % 3 == 1) {
+                cards = new Cards(100 + i, Troops.CAVALRY, deck);
             } else {
-                 cards = new Cards(100 + i,Troops.ARTILLERY,deck);
+                cards = new Cards(100 + i, Troops.ARTILLERY, deck);
             }
             assertEquals(deck.getCards()[i], cards);
         }
@@ -74,14 +76,14 @@ class DeckTest {
         }
 
         for (int i = 0; i < deck.getIsInDeck().length; i++) {
-           assertFalse(deck.getIsInDeck()[i]);
+            assertFalse(deck.getIsInDeck()[i]);
         }
     }
 
     @Test
     void drawCardFromDeckTest2() {
         for (int i = 0; i < cardCount; i++) {
-           deck.drawCardFromDeck();
+            deck.drawCardFromDeck();
         }
 
         assertNull(deck.drawCardFromDeck());
@@ -90,7 +92,7 @@ class DeckTest {
     @Test
     void drawCardFromDeckPerIdTest() {
         for (int i = 0; i < cardCount; i++) {
-            assertEquals(deck.getCards()[i],deck.drawCardFromDeckPerID(i));
+            assertEquals(deck.getCards()[i], deck.drawCardFromDeckPerID(i));
             assertFalse(deck.getIsInDeck()[i]);
 
         }

@@ -9,10 +9,8 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -21,9 +19,12 @@ public class SerializingWriterTest {
 
     private static final String TAG = "some-tag";
 
-    @Mock private SerializerLoader loader;
-    @Mock private DataOutputStream outputStream;
-    @Mock private Serializer<Object> serializer;
+    @Mock
+    private SerializerLoader loader;
+    @Mock
+    private DataOutputStream outputStream;
+    @Mock
+    private Serializer<Object> serializer;
 
     private SerializingWriter<Object> subject;
 

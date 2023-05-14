@@ -1,7 +1,7 @@
 package at.aau.wagnis.ObjectTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,8 @@ class AdjacencyTest {
 
     @Mock
     Hub hub1;
-    @Mock Hub hub2;
+    @Mock
+    Hub hub2;
 
     Adjacency adjacency;
 

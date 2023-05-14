@@ -23,12 +23,18 @@ import at.aau.wagnis.server.communication.connection.ClientConnectionListener;
 @Timeout(5)
 class GameServerTest {
 
-    @Mock private ClientConnectionBus bus;
-    @Mock private ClientConnectionListener listener;
-    @Mock private ServerCommand serverCommand;
-    @Mock private ClientCommand clientCommand;
-    @Mock private GameLogicState initialGameLogicState;
-    @Mock private GameLogicState gameLogicState;
+    @Mock
+    private ClientConnectionBus bus;
+    @Mock
+    private ClientConnectionListener listener;
+    @Mock
+    private ServerCommand serverCommand;
+    @Mock
+    private ClientCommand clientCommand;
+    @Mock
+    private GameLogicState initialGameLogicState;
+    @Mock
+    private GameLogicState gameLogicState;
 
     private GameServer subject;
 

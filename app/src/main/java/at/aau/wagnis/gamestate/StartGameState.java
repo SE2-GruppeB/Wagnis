@@ -44,16 +44,21 @@ public class StartGameState extends GameLogicState {
                     break;
                 }
                 int troopsToPlace = ran.nextInt(3) + 1;
-                if(troopsToPlace > player.getUnassignedAvailableTroops()){
+                if (troopsToPlace > player.getUnassignedAvailableTroops()) {
                     troopsToPlace = player.getUnassignedAvailableTroops();
                 }
                 hub.addTroops(troopsToPlace);
                 player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
-                //hub.setText(String.valueOf(hub.getAmountTroops()));
+                System.out.println(hubs);
+            }
+        }
+
+        for (Player player : this.players) {
+            for (Hub hub : player.getOwnedHubs()) {
+                hub.setText("Troops: " + String.valueOf(hub.getAmountTroops()));
             }
         }
     }
-
 
     private void assignOneTroopEach(Player player) {
         if (player.getOwnedHubs().size() <= player.getUnassignedAvailableTroops()) {

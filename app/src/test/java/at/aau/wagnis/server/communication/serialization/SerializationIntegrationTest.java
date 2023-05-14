@@ -4,7 +4,6 @@ package at.aau.wagnis.server.communication.serialization;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

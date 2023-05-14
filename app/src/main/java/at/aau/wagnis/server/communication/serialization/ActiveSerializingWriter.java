@@ -65,7 +65,7 @@ public class ActiveSerializingWriter<T> {
         this.errorCallback = errorCallback;
 
         thread = threadFactory.apply(() -> {
-            while(!Thread.interrupted()) {
+            while (!Thread.interrupted()) {
                 this.writeInternal();
             }
         });
@@ -97,6 +97,7 @@ public class ActiveSerializingWriter<T> {
 
     /**
      * Enqueue an object to be written asynchronously
+     *
      * @param obj The object to enqueue
      * @throws IllegalStateException If the writer has not been started yet, has been closed, or in case of queue overflow
      */

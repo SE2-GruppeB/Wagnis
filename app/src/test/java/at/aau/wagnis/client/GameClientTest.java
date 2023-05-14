@@ -23,11 +23,16 @@ import at.aau.wagnis.server.communication.connection.ServerConnection;
 
 class GameClientTest {
 
-    @Mock private ServerConnection serverConnection;
-    @Mock private GameState gameState;
-    @Mock private Consumer<GameState> gameStateConsumer;
-    @Mock private ClientCommand clientCommand;
-    @Mock private ClientOriginatedServerCommand serverCommand;
+    @Mock
+    private ServerConnection serverConnection;
+    @Mock
+    private GameState gameState;
+    @Mock
+    private Consumer<GameState> gameStateConsumer;
+    @Mock
+    private ClientCommand clientCommand;
+    @Mock
+    private ClientOriginatedServerCommand serverCommand;
 
     private GameClient subject;
 

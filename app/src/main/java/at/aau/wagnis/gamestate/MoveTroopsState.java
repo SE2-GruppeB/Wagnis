@@ -26,8 +26,8 @@ public class MoveTroopsState {
             throw new IllegalArgumentException("Illegal move not enough troops at source hub");
         }
 
-        this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops()-numTroops);
-        this.targetHub.setAmountTroops(this.targetHub.getAmountTroops()+numTroops);
+        this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - numTroops);
+        this.targetHub.setAmountTroops(this.targetHub.getAmountTroops() + numTroops);
 
         //Log.d("TAG", "sourceHub");
         //Log.d("TAG", "targetHub");

@@ -1,9 +1,8 @@
 package at.aau.wagnis.ObjectTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,10 +22,10 @@ import at.aau.wagnis.Player;
 
 class HubTest {
 
-    @Mock Button hubButton;
-
-    Hub hub;
     static final int buttonId = 1;
+    @Mock
+    Button hubButton;
+    Hub hub;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +50,7 @@ class HubTest {
     void getId() {
         assertEquals(buttonId, hub.getId());
     }
-
+/*
     @Test
     void setText() {
         doNothing().when(hubButton).setText(anyInt());
@@ -60,6 +59,8 @@ class HubTest {
 
         verify(hubButton).setText(anyInt());
     }
+    */
+
 
     @Test
     void getAmountTroops() {

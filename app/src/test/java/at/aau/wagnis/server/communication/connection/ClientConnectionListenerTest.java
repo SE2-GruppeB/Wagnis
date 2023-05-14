@@ -10,11 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,15 +23,23 @@ import java.util.function.Function;
 
 public class ClientConnectionListenerTest {
 
-    @Mock private ServerSocket serverSocket;
-    @Mock private ClientConnectionBus bus;
-    @Mock private ClientConnectionListener.ConnectionFactory connectionFactory;
-    @Mock private NetworkClientConnection clientConnection;
-    @Mock private Socket socket;
-    @Mock private Function<Runnable, Thread> threadFactory;
-    @Mock private Thread thread;
+    @Mock
+    private ServerSocket serverSocket;
+    @Mock
+    private ClientConnectionBus bus;
+    @Mock
+    private ClientConnectionListener.ConnectionFactory connectionFactory;
+    @Mock
+    private NetworkClientConnection clientConnection;
+    @Mock
+    private Socket socket;
+    @Mock
+    private Function<Runnable, Thread> threadFactory;
+    @Mock
+    private Thread thread;
 
-    @InjectMocks private ClientConnectionListener subject;
+    @InjectMocks
+    private ClientConnectionListener subject;
 
     @BeforeEach
     public void setup() {

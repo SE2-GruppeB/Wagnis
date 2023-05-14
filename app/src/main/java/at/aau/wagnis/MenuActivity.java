@@ -28,6 +28,17 @@ public class MenuActivity extends AppCompatActivity {
     Button sourcesBtn;
     Button joinBtn;
 
+    public static void setUnavailableAgencis(RadioGroup rg) {
+        for (int i = 0; i < rg.getChildCount(); i++) {
+            RadioButton rb = (RadioButton) rg.getChildAt(i);
+            for (String s : GlobalVariables.getUnavailableAgencies()) {
+                if (rb.getText().toString().equals(s)) {
+                    rb.setEnabled(false);
+                }
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +95,6 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-
     public void chooseFighterPopUp(View view) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -106,9 +116,9 @@ public class MenuActivity extends AppCompatActivity {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RadioButton selectedTeam=popUp.findViewById(rg.getCheckedRadioButtonId());
+                RadioButton selectedTeam = popUp.findViewById(rg.getCheckedRadioButtonId());
                 GlobalVariables.setAgency(selectedTeam.getText().toString());
-                Toast.makeText(MenuActivity.this, "Agency: "+GlobalVariables.getAgency(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MenuActivity.this, "Agency: " + GlobalVariables.getAgency(), Toast.LENGTH_SHORT).show();
                 popupWindow.dismiss();
                 changeActivity();
                 return;
@@ -116,53 +126,43 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    public static void setUnavailableAgencis(RadioGroup rg){
-        for(int i = 0;i<rg.getChildCount();i++){
-            RadioButton rb = (RadioButton) rg.getChildAt(i);
-            for(String s : GlobalVariables.getUnavailableAgencies()){
-                if(rb.getText().toString().equals(s)){
-                    rb.setEnabled(false);
-                }
-            }
-        }
-    }
     public void joinGame(View view) {
         try {
             readQrCode();
 
         } catch (Exception e) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popUp = inflater.inflate(R.layout.popup_connect, null);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            View popUp = inflater.inflate(R.layout.popup_connect, null);
 
 
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
-        int width = (int) px;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true;
-        PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics());
+            int width = (int) px;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            boolean focusable = true;
+            PopupWindow popupWindow = new PopupWindow(popUp, width, height, focusable);
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-        Button btnConnect = popUp.findViewById(R.id.btn_connect);
-        EditText hostIP = popUp.findViewById(R.id.txtIP);
+            Button btnConnect = popUp.findViewById(R.id.btn_connect);
+            EditText hostIP = popUp.findViewById(R.id.txtIP);
 
 
-        btnConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GlobalVariables.setHostIP(hostIP.getText().toString());
-                GlobalVariables.setIsClient(true);
-                popupWindow.dismiss();
-                chooseFighterPopUp(joinBtn);
-                return;
-            }
-        });
-    }
+            btnConnect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GlobalVariables.setHostIP(hostIP.getText().toString());
+                    GlobalVariables.setIsClient(true);
+                    popupWindow.dismiss();
+                    chooseFighterPopUp(joinBtn);
+                    return;
+                }
+            });
+        }
 
         //TODO: Initiate Server Connection
 
     }
 
-    private void readQrCode(){
+    private void readQrCode() {
         IntentIntegrator ig11 = new IntentIntegrator(this);
         ig11.setOrientationLocked(true);
         ig11.setPrompt("Scan a QR Code");
@@ -187,19 +187,22 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    private void goToUrl (String url) {
+    private void goToUrl(String url) {
         Uri uriUrl = Uri.parse(url);
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
         startActivity(launchBrowser);
     }
-    public void goToAppIcon (View view) {
-        goToUrl ( "https://icons8.de");
+
+    public void goToAppIcon(View view) {
+        goToUrl("https://icons8.de");
     }
-    public void goToBackground (View view) {
-        goToUrl ( "https://www.vecteezy.com/vector-art/17535964-mars-landscape-with-craters-and-red-rocky-surface");
+
+    public void goToBackground(View view) {
+        goToUrl("https://www.vecteezy.com/vector-art/17535964-mars-landscape-with-craters-and-red-rocky-surface");
     }
-    public void goToSurface (View view) {
-        goToUrl ( "https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
+
+    public void goToSurface(View view) {
+        goToUrl("https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
     }
 }
 

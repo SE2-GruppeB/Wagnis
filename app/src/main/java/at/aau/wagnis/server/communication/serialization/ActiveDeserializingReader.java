@@ -52,7 +52,7 @@ public class ActiveDeserializingReader<T> {
      * Initialize this reader.
      *
      * @param receiveCallback A callback that runs for every received object.
-     * @param errorCallback A callback that is run on error, indicating that the reader is about to close.
+     * @param errorCallback   A callback that is run on error, indicating that the reader is about to close.
      * @throws IllegalStateException In case the reader has already been started or is closed.
      */
     public synchronized void start(
@@ -72,8 +72,8 @@ public class ActiveDeserializingReader<T> {
         this.errorCallback = errorCallback;
 
         thread = threadFactory.apply(() -> {
-            while(!Thread.interrupted()) {
-               this.readInternal();
+            while (!Thread.interrupted()) {
+                this.readInternal();
             }
         });
         thread.start();

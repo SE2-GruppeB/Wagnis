@@ -12,8 +12,7 @@ import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
-public class ChooseStartCommand implements ClientOriginatedServerCommand{
-
+public class ChooseStartCommand implements ClientOriginatedServerCommand {
     private final List<Hub> hubs;
     private final List<Player> players;
 
@@ -23,22 +22,20 @@ public class ChooseStartCommand implements ClientOriginatedServerCommand{
     }
 
     @Override
-    public void setClientId(int clientId) {
-
-    }
-
-    @Override
     public int getClientId() {
         return 0;
     }
 
+    @Override
+    public void setClientId(int clientId) {
+    }
 
     @Override
     public void execute(@NonNull GameLogicState gameLogicState) {
-        gameLogicState.chooseStart(hubs,players);
+        gameLogicState.chooseStart(hubs, players);
     }
 
-    public static class CommandSerializer implements Serializer<ChooseStartCommand>{
+    public static class CommandSerializer implements Serializer<ChooseStartCommand> {
 
         @NonNull
         @Override
@@ -57,7 +54,6 @@ public class ChooseStartCommand implements ClientOriginatedServerCommand{
                 @NonNull ChooseStartCommand command,
                 @NonNull DataOutputStream stream)
                 throws IOException {
-
 
         }
 

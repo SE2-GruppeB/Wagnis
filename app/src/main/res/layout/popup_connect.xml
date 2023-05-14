@@ -20,10 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:gravity="center"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="0dp"
         android:ems="10"
+        android:gravity="center"
         android:inputType="text" />
 
     <Button
@@ -32,9 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:gravity="center"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="0dp"
+        android:gravity="center"
         android:text="Connect" />
 
 </RelativeLayout>

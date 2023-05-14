@@ -1,7 +1,5 @@
 package at.aau.wagnis.GameStateTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,10 +18,11 @@ class EndGameStateTest {
     EndGameState endGameState;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         endGameState = new EndGameState(gameServer);
     }
+
     @Test
     void end() {
         endGameState.end();

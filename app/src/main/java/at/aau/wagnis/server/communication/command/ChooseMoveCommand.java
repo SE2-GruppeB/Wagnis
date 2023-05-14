@@ -6,13 +6,13 @@ import at.aau.wagnis.gamestate.GameLogicState;
 
 public class ChooseMoveCommand implements ClientOriginatedServerCommand {
     @Override
-    public void setClientId(int clientId) {
-
+    public int getClientId() {
+        return 0;
     }
 
     @Override
-    public int getClientId() {
-        return 0;
+    public void setClientId(int clientId) {
+
     }
 
     @Override

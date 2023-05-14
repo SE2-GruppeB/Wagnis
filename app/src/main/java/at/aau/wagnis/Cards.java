@@ -6,10 +6,26 @@ public class Cards {
     private Deck deck;
 
     public Cards(int id, Troops type, Deck deck) {
-        if (id < 0 || type == null || deck == null){throw new IllegalArgumentException("Invalid Id can not be negative, Type and Deck can not be null");}
+        if (id < 0 || type == null || deck == null) {
+            throw new IllegalArgumentException("Invalid Id can not be negative, Type and Deck can not be null");
+        }
         this.id = id;
         this.type = type;
         this.deck = deck;
+    }
+
+    public static boolean checkIfCardSameType(Cards first, Cards second, Cards third) {
+        if (first.equals(second) && first.equals(third)) {
+            throw new IllegalArgumentException("you cant use the same card thrice");
+        }
+        return first.getType().equals(second.getType()) && first.getType().equals(third.getType());
+    }
+
+    public static boolean checkIfEachCardDiffType(Cards first, Cards second, Cards third) {
+        if (first.equals(second) && first.equals(third)) {
+            throw new IllegalArgumentException("you cant use the same card thrice");
+        }
+        return !first.getType().equals(second.getType()) && !first.getType().equals(third.getType()) && !second.getType().equals(third.getType());
     }
 
     public Deck getDeck() {
@@ -17,7 +33,9 @@ public class Cards {
     }
 
     public void setDeck(Deck deck) {
-        if (deck == null) {throw new IllegalArgumentException("Deck can not be null");}
+        if (deck == null) {
+            throw new IllegalArgumentException("Deck can not be null");
+        }
         this.deck = deck;
     }
 
@@ -26,7 +44,9 @@ public class Cards {
     }
 
     public void setType(Troops type) {
-        if (type == null) {throw new IllegalArgumentException("Type can not be null");}
+        if (type == null) {
+            throw new IllegalArgumentException("Type can not be null");
+        }
         this.type = type;
     }
 
@@ -35,25 +55,13 @@ public class Cards {
     }
 
     public void setId(int id) {
-        if (id < 0) {throw new IllegalArgumentException("Id can not be negative");}
+        if (id < 0) {
+            throw new IllegalArgumentException("Id can not be negative");
+        }
         this.id = id;
     }
 
-    public static boolean checkIfCardSameType(Cards first, Cards second, Cards third){
-        if (first.equals(second)&& first.equals(third)){
-            throw new IllegalArgumentException("you cant use the same card thrice");
-        }
-        return first.getType().equals(second.getType()) && first.getType().equals(third.getType());
-    }
-
-    public static boolean checkIfEachCardDiffType(Cards first, Cards second, Cards third){
-        if (first.equals(second)&& first.equals(third)){
-            throw new IllegalArgumentException("you cant use the same card thrice");
-        }
-        return !first.getType().equals(second.getType()) && !first.getType().equals(third.getType()) && !second.getType().equals(third.getType());
-    }
-
-    public void placeCardInDeck(){
+    public void placeCardInDeck() {
         deck.placeCardInDeck(this);
     }
 

@@ -2,15 +2,24 @@ package at.aau.wagnis.gamestate;
 
 import at.aau.wagnis.Hub;
 
-public class MoveTroopsState {
+public class MoveTroopsState extends GameLogicState {
     private Hub sourceHub;
     private Hub targetHub;
+
+    private int sourceHubId;
+    private int targetHubId;
 
     private int numTroops;
 
     public MoveTroopsState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
+    }
+
+    public MoveTroopsState(int sourceHubId, int targetHubId, int numTroops) {
+        this.sourceHubId = sourceHubId;
+        this.targetHubId = targetHubId;
+        this.numTroops = numTroops;
     }
 
     public void move(int numTroops) {

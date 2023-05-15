@@ -32,7 +32,7 @@ public abstract class GameLogicState {
     public void move() {
     }
 
-    public void chooseMove() {
+    public void chooseMove(int playerId, int sourceHubId, int targetHubId, int numTroops) {
     }
 
     public void handleConnectionBusClosed() {
@@ -47,6 +47,5 @@ public abstract class GameLogicState {
 
     public void checkForVictory() {
     }
-
 
 }

@@ -11,8 +11,8 @@ import at.aau.wagnis.Player;
  */
 
 public class AttackGameState extends GameLogicState {
-    private final boolean attacker = false;
-    private final boolean defender = false;
+    private boolean attacker = false;
+    private boolean defender = false;
     private Hub sourceHub;
     private Hub targetHub;
     private int sourceHubId;
@@ -34,8 +34,16 @@ public class AttackGameState extends GameLogicState {
         return sourceHub;
     }
 
+    public void setSourceHub(Hub sourceHub) {
+        this.sourceHub = sourceHub;
+    }
+
     public Hub getTargetHub() {
         return targetHub;
+    }
+
+    public void setTargetHub(Hub targetHub) {
+        this.targetHub = targetHub;
     }
 
     @Override
@@ -111,14 +119,6 @@ public class AttackGameState extends GameLogicState {
 
     public void setTargetHubId(int targetHubId) {
         this.targetHubId = targetHubId;
-    }
-
-    public void setSourceHub(Hub sourceHub) {
-        this.sourceHub = sourceHub;
-    }
-
-    public void setTargetHub(Hub targetHub) {
-        this.targetHub = targetHub;
     }
 }
 

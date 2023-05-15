@@ -35,6 +35,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.aau.wagnis.gamestate.AttackGameState;
+import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.StartGameState;
 
 
@@ -184,16 +186,6 @@ public class MainActivity extends AppCompatActivity {
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
-
-
-        List<Hub> unassignedCountries = new ArrayList<>(hubs);
-
-        players.add(new Player(1));
-        players.add(new Player(2));
-
-        StartGameState startGameState = new StartGameState(unassignedCountries, players);
-
-        startGameState.start();
 
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override

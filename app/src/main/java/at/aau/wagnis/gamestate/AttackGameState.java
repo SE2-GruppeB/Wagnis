@@ -18,8 +18,6 @@ public class AttackGameState extends GameLogicState {
     private int sourceHubId;
     private int targetHubId;
 
-    //int sourceHubId= sourceHub.getId();
-    //int targetHubId= targetHub.getId();
     public AttackGameState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
@@ -27,22 +25,6 @@ public class AttackGameState extends GameLogicState {
 
     public AttackGameState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
-        this.targetHub = targetHub;
-    }
-
-    public Hub getSourceHub() {
-        return sourceHub;
-    }
-
-    public void setSourceHub(Hub sourceHub) {
-        this.sourceHub = sourceHub;
-    }
-
-    public Hub getTargetHub() {
-        return targetHub;
-    }
-
-    public void setTargetHub(Hub targetHub) {
         this.targetHub = targetHub;
     }
 
@@ -70,7 +52,7 @@ public class AttackGameState extends GameLogicState {
             attackingPlayer.addHub(this.targetHub);
             Player defendingPlayer = targetHub.getOwner();
             defendingPlayer.removeHub(this.targetHub);
-            if (gamewon(attackingPlayer)) {
+            if (gameWon(attackingPlayer)) {
                 this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
             } else {
                 this.gameServer.setGameLogicState(new ChooseAttackGameState());
@@ -78,7 +60,7 @@ public class AttackGameState extends GameLogicState {
         }
     }
 
-    public boolean gamewon(Player player) {
+    public boolean gameWon(Player player) {
         return player.getOwnedHubs().size() == 42;
     }
 
@@ -87,6 +69,14 @@ public class AttackGameState extends GameLogicState {
         int diceValue = randomGen.nextInt(6) + 1;
         //Log.d("Info :","" + diceValue);
         return diceValue;
+    }
+
+    public Hub getSourceHub() {
+        return sourceHub;
+    }
+
+    public Hub getTargetHub() {
+        return targetHub;
     }
 
     public boolean isAttacker() {
@@ -105,9 +95,7 @@ public class AttackGameState extends GameLogicState {
         this.defender = defender;
     }
 
-    public int getSourceHubId() {
-        return sourceHubId;
-    }
+    public int getSourceHubId() {return sourceHubId;}
 
     public void setSourceHubId(int sourceHubId) {
         this.sourceHubId = sourceHubId;
@@ -119,6 +107,14 @@ public class AttackGameState extends GameLogicState {
 
     public void setTargetHubId(int targetHubId) {
         this.targetHubId = targetHubId;
+    }
+
+    public void setSourceHub(Hub sourceHub) {
+        this.sourceHub = sourceHub;
+    }
+
+    public void setTargetHub(Hub targetHub) {
+        this.targetHub = targetHub;
     }
 }
 

@@ -21,6 +21,7 @@ public class ChooseMoveCommand implements ClientOriginatedServerCommand {
         this.numTroops = numTroops;
     }
 
+
     @Override
     public int getClientId() {
         return 0;

@@ -78,7 +78,7 @@ public class AttackGameStateTest {
         for (int i = 0; i < 42; i++) {
             player.addHub(new Hub(Mockito.mock(Button.class)));
         }
-        assertTrue(gameState.gamewon(player));
+        assertTrue(gameState.gameWon(player));
     }
 
     @Test
@@ -87,6 +87,6 @@ public class AttackGameStateTest {
         for (int i = 0; i < 20; i++) {
             player.addHub(new Hub(Mockito.mock(Button.class)));
         }
-        assertFalse(gameState.gamewon(player));
+        assertFalse(gameState.gameWon(player));
     }
 }

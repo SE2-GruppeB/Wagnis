@@ -39,7 +39,7 @@ public class AttackGameState extends GameLogicState {
 
         if (attackerDiceRolls > defenderDiceRolls) {
             this.targetHub.setAmountTroops(this.targetHub.getAmountTroops() - 1);
-        } else if (attackerDiceRolls < defenderDiceRolls) {
+        } else {
             this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - 1);
         }
 

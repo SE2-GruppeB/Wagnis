@@ -59,12 +59,12 @@ public class AttackGameState extends GameLogicState {
             if (gameWon(attackingPlayer)) {
                 this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
                 //Send winner id via broadcast to all clients
-                this.gameServer.broadcastCommand(new ClientCommand() {
+                /*this.gameServer.broadcastCommand(new ClientCommand() {
                     @Override
                     public void execute(@NonNull ClientLogic clientLogic) {
                         clientLogic.updateGameLogicState(new VictoryState(attackingPlayer));
                     }
-                });
+                });*/
             } else {
                 this.gameServer.setGameLogicState(new ChooseAttackGameState());
             }

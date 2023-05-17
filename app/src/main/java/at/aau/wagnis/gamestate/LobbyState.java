@@ -22,7 +22,7 @@ public class LobbyState extends GameLogicState{
         seedGenerator();
         hubs = new ArrayList<>(generateHubs());
         hubsPerLine = (int) Math.ceil(hubs.size()/6f);
-        setAdjacencies(adjacencies);
+        setAdjacencies(seed);
     }
 
     private void seedGenerator() {
@@ -38,7 +38,7 @@ public class LobbyState extends GameLogicState{
         this.seed = stringBuilder.toString();
     }
 
-    public void setAdjacencies(List<Adjacency> adjacencies){
+    public void setAdjacencies(String seed){
         int lineHubCount=1;
         int chance = 0;
 
@@ -103,6 +103,22 @@ public class LobbyState extends GameLogicState{
 
     public String getSeed() {
         return seed;
+    }
+
+    public List<Hub> getHubs() {
+        return hubs;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Adjacency> getAdjacencies() {
+        return adjacencies;
+    }
+
+    public int getHubsPerLine() {
+        return hubsPerLine;
     }
 
     public void addPlayer(Player player){

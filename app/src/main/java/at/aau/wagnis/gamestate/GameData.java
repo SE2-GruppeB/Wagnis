@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.wagnis.Cards;
+import at.aau.wagnis.Deck;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.Troops;
@@ -148,7 +149,7 @@ public class GameData {
         String[] cardData = playerData.split(CARD_STRING);
         Cards[] hand = new Cards[cardData.length-1];
         for(int j = 0; j < hand.length; j++){
-            hand[j] = getCardByString(cardData[j]);
+            hand[j] = getCardByString(cardData[j+1]);
         }
         return hand;
     }
@@ -166,8 +167,8 @@ public class GameData {
                 troop = Troops.INFANTRY;
                 break;
             default:
-                troop = null;
+                return null;
         }
-        return new Cards(0, troop, null);
+        return new Cards(0, troop, new Deck(1));
     }
 }

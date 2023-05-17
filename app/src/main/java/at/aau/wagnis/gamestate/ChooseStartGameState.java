@@ -9,7 +9,7 @@ public class ChooseStartGameState extends GameLogicState {
 
     @Override
     public void chooseStart(List<Hub> hubs, List<Player> players) {
-        this.gameServer.getGameState();
-        this.gameServer.setGameLogicState(new StartGameState(hubs, players));
+        this.gameServer.getGameData();
+        //this.gameServer.setGameLogicState(new StartGameState(hubs, players));
     }
 }

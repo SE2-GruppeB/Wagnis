@@ -4,16 +4,6 @@
     android:layout_height="wrap_content"
     android:background="#92A4A8">
 
-    <Button
-        android:id="@+id/btn_Close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="320dp"
-        android:text="Close" />
 
     <TextView
         android:id="@+id/textView2"
@@ -21,70 +11,83 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Made with Resources from"
         android:textSize="20sp"
-        android:textStyle="bold" />
-
+        android:textStyle="bold"
+        android:layout_marginStart="0dp"/>
     <Button
         android:id="@+id/btn_AppIcon"
+        android:text="AppIcon - Icons8.de"
+        android:onClick="goToAppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="50dp"
-        android:autoLink="web"
         android:clickable="true"
+        android:autoLink="web"
         android:cursorVisible="true"
-        android:linksClickable="true"
-        android:onClick="goToAppIcon"
-        android:text="AppIcon - Icons8.de" />
+        android:linksClickable="true" />
 
     <Button
         android:id="@+id/btn_dome"
+        android:text="Dome - Icons8.de"
+        android:onClick="goToAppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="100dp"
-        android:autoLink="web"
         android:clickable="true"
+        android:autoLink="web"
         android:cursorVisible="true"
-        android:linksClickable="true"
-        android:onClick="goToAppIcon"
-        android:text="Dome - Icons8.de" />
+        android:linksClickable="true" />
 
     <Button
         android:id="@+id/btn_background"
+        android:text="Background - Vecteezy.com"
+        android:onClick="goToBackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="150dp"
-        android:autoLink="web"
         android:clickable="true"
+        android:autoLink="web"
         android:cursorVisible="true"
-        android:linksClickable="true"
-        android:onClick="goToBackground"
-        android:text="Background - Vecteezy.com" />
-
+        android:linksClickable="true" />
     <Button
         android:id="@+id/btn_surfaceBackground"
+        android:text="Surface-Background - Vecteezy.com"
+        android:onClick="goToSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="200dp"
+        android:clickable="true"
+        android:autoLink="web"
+        android:cursorVisible="true"
+        android:linksClickable="true" />
+
+    <Button
+        android:id="@+id/btn_surfaceBackground2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="250dp"
         android:autoLink="web"
         android:clickable="true"
         android:cursorVisible="true"
         android:linksClickable="true"
-        android:onClick="goToSurface"
-        android:text="Surface-Background - Vecteezy.com" />
+        android:onClick="goToUI"
+        android:text="UI-Background - Vecteezy.com" />
 </RelativeLayout>

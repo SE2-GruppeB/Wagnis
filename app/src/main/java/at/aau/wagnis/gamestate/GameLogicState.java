@@ -1,5 +1,6 @@
 package at.aau.wagnis.gamestate;
 
+
 import java.util.List;
 
 import at.aau.wagnis.Hub;
@@ -39,8 +40,11 @@ public abstract class GameLogicState {
         Thread.currentThread().interrupt();
     }
 
-    public void handleClosedConnection(int clientId) {
-    }
+
+    public void handleNewConnection(int clientId) { }
+
+    public void handleClosedConnection(int clientId) { }
+
 
     public void end() {
     }

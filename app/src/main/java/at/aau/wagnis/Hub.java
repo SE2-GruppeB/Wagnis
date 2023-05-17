@@ -16,6 +16,13 @@ public class Hub {
         this.owner = new Player();
     }
 
+    public Hub(int id) {
+        this.hubButton = null;
+        this.id = id;
+        this.amountTroops = 0;
+        this.owner = new Player();
+    }
+
     public Button getHubButton() {
         return this.hubButton;
     }

@@ -11,14 +11,14 @@ import org.mockito.MockitoAnnotations;
 
 import at.aau.wagnis.gamestate.AttackGameState;
 import at.aau.wagnis.gamestate.ChooseAttackGameState;
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.GameServer;
 
 public class ChooseAttackGameStateTest {
     @Mock
     private GameServer gameServer;
     @Mock
-    private GameState gameState;
+    private GameData gameState;
 
     private ChooseAttackGameState chooseAttackGameState;
 
@@ -37,7 +37,7 @@ public class ChooseAttackGameStateTest {
 
         chooseAttackGameState.chooseAttack(playerId, sourceHubId, targetHubId);
 
-        verify(gameServer).getGameState();
+        verify(gameServer).getGameData();
         verify(gameServer).setGameLogicState(any(AttackGameState.class));
     }
 

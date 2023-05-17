@@ -4,10 +4,10 @@ import at.aau.wagnis.server.GameServer;
 
 public class EndGameState extends GameLogicState {
 
-    GameServer gameServer;
 
-    public EndGameState(GameServer gameServer) {
-        this.gameServer = gameServer;
+    public EndGameState(){
+        super();
+
     }
 
     //Todo

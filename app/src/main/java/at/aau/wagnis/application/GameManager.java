@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import at.aau.wagnis.client.GameClient;
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.GameServer;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
 
@@ -21,6 +21,7 @@ public class GameManager {
     private final GameServerFactory gameServerFactory;
 
     private final Object connectionLock = new Object();
+
     private final Object connectionStateLock = new Object();
     private GameServer localGameServer = null;
     private GameClient gameClient = null;
@@ -117,7 +118,7 @@ public class GameManager {
      * <p>
      * If no state has been received yet, the value of the notification will be null.
      */
-    public void setGameStateListener(@Nullable Consumer<GameState> listener) {
+    public void setGameStateListener(@Nullable Consumer<GameData> listener) {
         synchronized (connectionLock) {
             if (gameClient == null) {
                 throw new IllegalStateException("Game client is not ready");

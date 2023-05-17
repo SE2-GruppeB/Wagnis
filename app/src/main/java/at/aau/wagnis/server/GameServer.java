@@ -2,11 +2,14 @@ package at.aau.wagnis.server;
 
 import androidx.annotation.NonNull;
 
+import java.util.Collections;
 import java.util.Objects;
 
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.gamestate.GameLogicState;
-import at.aau.wagnis.gamestate.GameState;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.command.ClientCommand;
+import at.aau.wagnis.server.communication.command.SendGameDataCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 import at.aau.wagnis.server.communication.connection.ClientConnectionBus;
 import at.aau.wagnis.server.communication.connection.ClientConnectionListener;
@@ -15,7 +18,14 @@ public class GameServer implements Runnable {
 
     private final ClientConnectionBus connectionBus;
     private final ClientConnectionListener clientConnectionListener;
-    private GameState gameState = null;
+    private GameData gameData = null;
+    public GameData getGameData() {
+        return gameData;
+    }
+    public void setGameState(GameData gameData) {
+        this.gameData = gameData;
+    }
+
     private GameLogicState gameLogicState;
 
     public GameServer(
@@ -27,22 +37,22 @@ public class GameServer implements Runnable {
         this.gameLogicState = Objects.requireNonNull(initialState);
     }
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     /**
      * Process commands from the ClientConnectionBus until the thread is interrupted.
      */
     public void run() {
         try {
-            while (!Thread.currentThread().isInterrupted()) {
+            while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
+                if(gameData == null) {
+                    gameData = new GameData();
+                    GlobalVariables.seedGenerator();
+                    gameData.setSeed(GlobalVariables.getSeed());
+                    gameData.setPlayers(Collections.emptyList());
+                    gameData.setHubs(Collections.emptyList());
+                }
+                broadcastCommand(new SendGameDataCommand(gameData));
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -59,6 +69,7 @@ public class GameServer implements Runnable {
     }
 
     public void broadcastCommand(@NonNull ClientCommand command) {
+
         this.connectionBus.broadcastCommand(command);
     }
 }

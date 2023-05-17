@@ -9,8 +9,7 @@ import at.aau.wagnis.server.communication.command.ServerCommand;
 public interface ClientConnectionBus {
 
     /**
-     * Add a new connection to the bus, will call {@link ClientConnection#setClientConnectionBus}
-     *
+     * Add a new connection to the bus, will call {@link ClientConnection#init}
      * @throws IllegalStateException if the bus is closed
      */
     void registerConnection(@NonNull ClientConnection connection) throws IllegalStateException;
@@ -40,7 +39,6 @@ public interface ClientConnectionBus {
 
     /**
      * Notify the bus that a ClientConnection is closing
-     *
      * @throws IllegalStateException if there is no connection with the given id
      */
     void handleClosedConnection(int clientId) throws IllegalStateException;

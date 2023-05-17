@@ -1,34 +1,35 @@
 package at.aau.wagnis.GameStateTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-
-import android.widget.Button;
+import at.aau.wagnis.Hub;
+import at.aau.wagnis.Player;
+import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.gamestate.StartGameState;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
-import at.aau.wagnis.Hub;
-import at.aau.wagnis.Player;
-import at.aau.wagnis.gamestate.StartGameState;
+import android.widget.Button;
+
+import java.util.ArrayList;
 
 public class StartGameStateTest {
 
-    final int num_players = 6;
-    final int num_hubs = 6;
     private StartGameState startGameState;
     private ArrayList<Player> players;
+    private GameData gameData;
     private ArrayList<Hub> hubs;
+    final int num_players = 6;
+    final int num_hubs = 6;
 
     @BeforeEach
     public void setUp() {
         hubs = new ArrayList<>();
         players = new ArrayList<>();
-        startGameState = new StartGameState(hubs, players);
+        gameData = new GameData();
     }
 
     @Test
@@ -44,7 +45,10 @@ public class StartGameStateTest {
             hubs.add(hub);
         }
 
-        StartGameState startGameState = new StartGameState(hubs, players);
+        gameData.setHubs(hubs);
+        gameData.setPlayers(players);
+        startGameState = new StartGameState(gameData);
+
         startGameState.assignCountries();
 
         for (Hub hub : hubs) {
@@ -63,7 +67,9 @@ public class StartGameStateTest {
             player.addHub(hub);
         }
 
-        StartGameState startGameState = new StartGameState(hubs, players);
+        gameData.setHubs(hubs);
+        gameData.setPlayers(players);
+        startGameState = new StartGameState(gameData);
 
         startGameState.assignTroopsToHubs();
 

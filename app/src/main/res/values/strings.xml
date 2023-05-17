@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Wagnis</string>
+    <string name="connecting">Connecting…</string>
+    <string name="connection_failed">Connection failed</string>
 </resources>

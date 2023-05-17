@@ -7,9 +7,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player implements Serializable {
+import at.aau.wagnis.server.communication.serialization.Serializer;
 
-    private static final int MAX_CARDS_IN_HAND = 5;
+public class Player {
+
+    public static final int MAX_CARDS_IN_HAND = 5;
     private static final int BASE_TROOPS_PER_ROUND = 3;
     private int playerId;
     private int allTroopsPerRound;

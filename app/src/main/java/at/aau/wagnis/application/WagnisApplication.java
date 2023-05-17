@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import at.aau.wagnis.gamestate.LobbyState;
 import at.aau.wagnis.gamestate.StartGameState;
 import at.aau.wagnis.server.communication.connection.NetworkServerConnection;
 
@@ -22,7 +23,7 @@ public class WagnisApplication extends Application {
             new GameServerFactory(
                     Thread::new,
                     ServerSocket::new,
-                    () -> new StartGameState(new ArrayList<>(), new ArrayList<>())
+                    () -> new LobbyState()
             )
     );
 

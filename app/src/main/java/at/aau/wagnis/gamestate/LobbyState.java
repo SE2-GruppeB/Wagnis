@@ -1,5 +1,7 @@
 package at.aau.wagnis.gamestate;
 
+import androidx.annotation.VisibleForTesting;
+
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,9 @@ public class LobbyState extends GameLogicState{
         this.seed = stringBuilder.toString();
     }
 
+    @VisibleForTesting
     public void setAdjacencies(String seed){
+        adjacencies = new ArrayList<>();
         int lineHubCount=1;
         int chance = 0;
 
@@ -54,7 +58,8 @@ public class LobbyState extends GameLogicState{
                     adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
                     lineHubCount=1;
                 }
-            }if (chance %3==0){
+            }
+            if (chance %3==0){
                 adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
             }else if (chance % 5==0) {
                 if(lineHubCount == hubsPerLine){

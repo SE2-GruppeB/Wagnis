@@ -298,8 +298,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            restart();
         }
+    }
+
+    public void restart(){
+        Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
+        int pendingIntent = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager manager = (AlarmManager)getApplicationContext().getSystemService(getApplicationContext().ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
     }
     public void popupSettings(){
 
@@ -334,12 +343,7 @@ public class MainActivity extends AppCompatActivity {
         btnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
-                int pendingIntent = 123456;
-                PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager manager = (AlarmManager)getApplicationContext().getSystemService(getApplicationContext().ALARM_SERVICE);
-                manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                System.exit(0);
+                restart();
             }
         });
 

@@ -35,34 +35,7 @@ public class ChooseStartCommand implements ClientOriginatedServerCommand {
         gameLogicState.chooseStart(hubs, players);
     }
 
-    public static class CommandSerializer implements Serializer<ChooseStartCommand> {
-
-        @NonNull
-        @Override
-        public Class<ChooseStartCommand> getTargetClass() {
-            return ChooseStartCommand.class;
-        }
-
-        @NonNull
-        @Override
-        public String getTypeTag() {
-            return "choose-start";
-        }
-
-        @Override
-        public void writeToStream(
-                @NonNull ChooseStartCommand command,
-                @NonNull DataOutputStream stream)
-                throws IOException {
-
-        }
-
-        @NonNull
-        @Override
-        public ChooseStartCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
-            return null;
-        }
-    }
+    // TODO: implement how this command sends/receives
 
 }
 

@@ -33,25 +33,35 @@ public class StartGameState extends GameLogicState {
     }
 
     public void assignTroopsToHubs() {
-
         Random ran = new SecureRandom();
 
-        for (Player player : this.players) {
+        for (Player player : players) {
             assignOneTroopEach(player);
             while (hasTroops(player)) {
-                int i = ran.nextInt(player.getOwnedHubs().size());
-                Hub hub = player.getOwnedHubs().get(i);
+                Hub hub = getRandomHub(player, ran);
                 if (!hasTroops(player)) {
                     break;
                 }
-                int troopsToPlace = ran.nextInt(3) + 1;
-                if(troopsToPlace > player.getUnassignedAvailableTroops()){
-                    troopsToPlace = player.getUnassignedAvailableTroops();
-                }
-                hub.setAmountTroops(hub.getAmountTroops() + troopsToPlace);
-                player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
+                int troopsToPlace = getRandomTroopsToPlace(player, ran);
+                placeTroopsOnHub(player, hub, troopsToPlace);
             }
         }
+        updateHubText();
+    }
+
+    private Hub getRandomHub(Player player, Random ran) {
+        int i = ran.nextInt(player.getOwnedHubs().size());
+        return player.getOwnedHubs().get(i);
+    }
+
+    private int getRandomTroopsToPlace(Player player, Random ran) {
+        int troopsToPlace = ran.nextInt(3) + 1;
+        return Math.min(troopsToPlace, player.getUnassignedAvailableTroops());
+    }
+
+    private void placeTroopsOnHub(Player player, Hub hub, int troopsToPlace) {
+        hub.addTroops(troopsToPlace);
+        player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
     }
 
     private void assignOneTroopEach(Player player) {
@@ -64,14 +74,22 @@ public class StartGameState extends GameLogicState {
     }
 
     private boolean hasTroops(Player player) {
-        return (player.getUnassignedAvailableTroops() > 0);
+        return player.getUnassignedAvailableTroops() > 0;
+    }
+
+    private void updateHubText() {
+        for (Player player : players) {
+            for (Hub hub : player.getOwnedHubs()) {
+                hub.setText("Troops: " + hub.getAmountTroops());
+            }
+        }
     }
 
     public List<Hub> getHubs() {
-        return this.hubs;
+        return hubs;
     }
 
     public List<Player> getPlayers() {
-        return this.players;
+        return players;
     }
 }

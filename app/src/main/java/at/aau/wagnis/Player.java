@@ -28,7 +28,16 @@ public class Player {
         this.unassignedAvailableTroops = 60;
     }
 
-    public Player(){
+    public Player() {
+        this.hand = new Cards[MAX_CARDS_IN_HAND];
+        allTroopsPerRound = BASE_TROOPS_PER_ROUND;
+        this.unassignedAvailableTroops = 60;
+    }
+
+    public Player(int playerId) {
+        this.ownedHubs = new ArrayList<>();
+        this.playerId = playerId;
+        //this.playerColor = Color.valueOf(Color.BLACK);
         this.hand = new Cards[MAX_CARDS_IN_HAND];
         allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;
@@ -54,18 +63,19 @@ public class Player {
         return hand;
     }
 
-    public void addHub(Hub hub){
-        this.ownedHubs.add(hub);
-    }
-
-    public void removeHub(Hub hub){
-        this.ownedHubs.remove(hub);
-    }
     public void setHand(Cards[] hand) {
-        if(hand.length != MAX_CARDS_IN_HAND){
+        if (hand.length != MAX_CARDS_IN_HAND) {
             throw new IllegalArgumentException("Unsupported length of Cards Array");
         }
         this.hand = hand;
+    }
+
+    public void addHub(Hub hub) {
+        this.ownedHubs.add(hub);
+    }
+
+    public void removeHub(Hub hub) {
+        this.ownedHubs.remove(hub);
     }
 
     public int getUnassignedAvailableTroops() {
@@ -76,15 +86,6 @@ public class Player {
         this.unassignedAvailableTroops = unassignedAvailableTroops;
     }
 
-    public Player(int playerId) {
-        this.ownedHubs = new ArrayList<>();
-        this.playerId = playerId;
-        //this.playerColor = Color.valueOf(Color.BLACK);
-        this.hand = new Cards[MAX_CARDS_IN_HAND];
-        allTroopsPerRound = BASE_TROOPS_PER_ROUND;
-        this.unassignedAvailableTroops = 60;
-    }
-
     public int getPlayerId() {
         return playerId;
     }
@@ -93,9 +94,9 @@ public class Player {
         this.playerId = playerId;
     }
 
-    public boolean addCardToHand(Cards card){
-        for (int i = 0; i < MAX_CARDS_IN_HAND; i++){
-            if (hand[i] == null){
+    public boolean addCardToHand(Cards card) {
+        for (int i = 0; i < MAX_CARDS_IN_HAND; i++) {
+            if (hand[i] == null) {
                 hand[i] = card;
                 return true;
             }
@@ -103,19 +104,19 @@ public class Player {
         return false;
     }
 
-    public void deleteCardById(int i){
-        if(hand[i] == null){
+    public void deleteCardById(int i) {
+        if (hand[i] == null) {
             throw new IllegalArgumentException("Card not in players' hand");
         }
         hand[i].placeCardInDeck();
         hand[i] = null;
     }
 
-    public void sortHand(){
+    public void sortHand() {
         Cards[] sortedHand = new Cards[MAX_CARDS_IN_HAND];
         int y = 0;
-        for (int i = 0; i < MAX_CARDS_IN_HAND; i++){
-            if (hand[i] != null){
+        for (int i = 0; i < MAX_CARDS_IN_HAND; i++) {
+            if (hand[i] != null) {
                 sortedHand[y] = hand[i];
                 y++;
             }
@@ -123,26 +124,26 @@ public class Player {
         this.hand = sortedHand;
     }
 
-    public void deleteGroupOfCardPerId(int id1,int id2,int id3){
+    public void deleteGroupOfCardPerId(int id1, int id2, int id3) {
         deleteCardById(id1);
         deleteCardById(id2);
         deleteCardById(id3);
     }
 
-    public void useCards(int firstCId,int secCId,int thirdCId){
-         if (Cards.checkIfCardSameType(hand[firstCId],hand[secCId],hand[thirdCId])){
-             if (hand[firstCId].getType().equals(Troops.INFANTRY)){
-                 allTroopsPerRound += 1;
-             } else if (hand[firstCId].getType().equals(Troops.CAVALRY)) {
-                 allTroopsPerRound += 3;
-             } else {
-                 allTroopsPerRound += 5;
-             }
-             deleteGroupOfCardPerId(firstCId,secCId,thirdCId);
-         } else if (Cards.checkIfEachCardDiffType(hand[firstCId],hand[secCId],hand[thirdCId])){
-             allTroopsPerRound += 10;
-             deleteGroupOfCardPerId(firstCId,secCId,thirdCId);
-         }
+    public void useCards(int firstCId, int secCId, int thirdCId) {
+        if (Cards.checkIfCardSameType(hand[firstCId], hand[secCId], hand[thirdCId])) {
+            if (hand[firstCId].getType().equals(Troops.INFANTRY)) {
+                allTroopsPerRound += 1;
+            } else if (hand[firstCId].getType().equals(Troops.CAVALRY)) {
+                allTroopsPerRound += 3;
+            } else {
+                allTroopsPerRound += 5;
+            }
+            deleteGroupOfCardPerId(firstCId, secCId, thirdCId);
+        } else if (Cards.checkIfEachCardDiffType(hand[firstCId], hand[secCId], hand[thirdCId])) {
+            allTroopsPerRound += 10;
+            deleteGroupOfCardPerId(firstCId, secCId, thirdCId);
+        }
     }
 
     public int getUnassignedTroops() {
@@ -153,20 +154,20 @@ public class Player {
         return this.allTroopsPerRound;
     }
 
-    public int calcTroopsToDeploy(){
+    public int calcTroopsToDeploy() {
         //TODO implement Method waiting
 
         return allTroopsPerRound;
     }
 
     public void resetTroopsPerRound() {
-       allTroopsPerRound = BASE_TROOPS_PER_ROUND;
+        allTroopsPerRound = BASE_TROOPS_PER_ROUND;
     }
 
-    public int countAmountTroops(){
+    public int countAmountTroops() {
         int amountTroops = 0;
-        for(Hub hub : this.ownedHubs){
-            amountTroops+=hub.getAmountTroops();
+        for (Hub hub : this.ownedHubs) {
+            amountTroops += hub.getAmountTroops();
         }
         return amountTroops;
     }

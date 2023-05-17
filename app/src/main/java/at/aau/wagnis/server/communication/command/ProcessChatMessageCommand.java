@@ -52,17 +52,17 @@ public class ProcessChatMessageCommand implements ClientOriginatedServerCommand 
     }
 
     @Override
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
-    }
-
-    @Override
     public int getClientId() {
         if (this.clientId != null) {
             return clientId;
         } else {
             throw new IllegalStateException("ClientId has not been set");
         }
+    }
+
+    @Override
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
     public static class CommandSerializer implements Serializer<ProcessChatMessageCommand> {

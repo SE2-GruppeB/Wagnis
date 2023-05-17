@@ -33,6 +33,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.GameData;
@@ -41,11 +42,10 @@ import at.aau.wagnis.gamestate.GameData;
 public class MainActivity extends AppCompatActivity {
 
 
-    FloatingActionButton endTurn,btnCards,btnSettings, btnChat;
+    FloatingActionButton endTurn, btnCards, btnSettings, btnChat;
     ImageView adjacencyView;
     GameData currentState;
     boolean wasDrawn = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,27 +54,18 @@ public class MainActivity extends AppCompatActivity {
 
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
-        btnCards=findViewById(R.id.btn_Cards);
-        btnSettings=findViewById(R.id.btn_Settings);
-        btnChat=findViewById(R.id.btn_Chat);
+        btnCards = findViewById(R.id.btn_Cards);
+        btnSettings = findViewById(R.id.btn_Settings);
+        btnChat = findViewById(R.id.btn_Chat);
 
         setDisplayMetrics();
         /*if(!GlobalVariables.getIsClient()){
+
             GlobalVariables.seedGenerator();
         }
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();*/
-
-
-        //List<Hub> unassignedCountries = new ArrayList<>(hubs);
-
-        //players.add(new Player(1));
-        //players.add(new Player(2));
-
-        //StartGameState startGameState = new StartGameState(unassignedCountries, players);
-
-        //startGameState.start();
 
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,10 +103,9 @@ public class MainActivity extends AppCompatActivity {
 
         }));
 
-    popupStart(btnCards);
+        popupStart(btnCards);
 
     }
-
     private void generateMap(String seed) {
         GlobalVariables.setSeed(seed);
         drawHubs(GlobalVariables.getSeed());
@@ -140,9 +130,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         moveTaskToBack(true);
     }
+
     @Override
     public void onResume() {
         super.onResume();
+
 
     }
     public void setDisplayMetrics(){
@@ -155,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     public static int dpToPx(int dp){
         return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
     }
-    public  PopupWindow createPopUp(int popupId){
+    public PopupWindow createPopUp(int popupId){
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
@@ -169,31 +161,34 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void drawHubs(String seed){
+
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
         ConstraintSet cs = new ConstraintSet();
 
-        for(int i=1;i<=seed.length();i++){
-            if(i%2==0){
-                GlobalVariables.seeds.add(seed.substring(i-2,i));
+        for (int i = 1; i <= seed.length(); i++) {
+            if (i % 2 == 0) {
+                GlobalVariables.seeds.add(seed.substring(i - 2, i));
             }
         }
 
         int hubs = 0;
-        GlobalVariables.hubsPerLine = (int)Math.ceil(GlobalVariables.seeds.size()/6f);
+        GlobalVariables.hubsPerLine = (int) Math.ceil(GlobalVariables.seeds.size() / 6f);
         int lineHubCount = 0;
 
-        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx()-dpToPx(100))/GlobalVariables.hubsPerLine;
+        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx() - dpToPx(100)) / GlobalVariables.hubsPerLine;
         int height = GlobalVariables.getDisplayHeightPx();
-        int heightSpace = height/6;
+        int heightSpace = height / 6;
 
         //System.out.println("HubsPerLine:" + hubsPerLine);
         //System.out.println("HubWidthSpace"+hubWidthSpace);
         //System.out.println("HeightSpace:"+heightSpace);
 
-        for(String s : GlobalVariables.seeds){
+        for (String s : GlobalVariables.seeds) {
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            hub.setId(100+hubs);
-            hub.setText("Hub: "+hub.getId());
+            hub.setId(100 + hubs);
+
+            //hub.setText("Hub: " + hub.getId());
+
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -215,30 +210,35 @@ public class MainActivity extends AppCompatActivity {
                     int[] v = {1,2,3,4,5};
                     popupDiceRoll(v);
                     GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
+
                     System.out.println("Hub:" +hub.getId());
+
                 }
             });
+
             GlobalVariables.hubs.add(new Hub(hub));
+
+
             layout.addView(hub);
 
-            int top = (hubs/GlobalVariables.hubsPerLine)*heightSpace;
-            int pos = hubWidthSpace/100*Integer.parseInt(s);
-            int left = hubWidthSpace*lineHubCount+pos;
+            int top = (hubs / GlobalVariables.hubsPerLine) * heightSpace;
+            int pos = hubWidthSpace / 100 * Integer.parseInt(s);
+            int left = hubWidthSpace * lineHubCount + pos;
             //System.out.println("Position:" + top+","+left);
 
             cs.clone(layout);
-            cs.connect(hub.getId(),ConstraintSet.TOP,layout.getId(),ConstraintSet.TOP,top);
-            cs.connect(hub.getId(),ConstraintSet.LEFT,layout.getId(),ConstraintSet.LEFT,left);
+            cs.connect(hub.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, top);
+            cs.connect(hub.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, left);
             cs.applyTo(layout);
             hubs++;
             lineHubCount++;
-            if(lineHubCount==GlobalVariables.hubsPerLine){
-                lineHubCount=0;
+            if (lineHubCount == GlobalVariables.hubsPerLine) {
+                lineHubCount = 0;
             }
         }
     }
 
-    public void drawAdjacencies(){
+    public void drawAdjacencies() {
         int height = GlobalVariables.getDisplayHeightPx();
         int width = GlobalVariables.getDisplayWidthPx();
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -254,10 +254,10 @@ public class MainActivity extends AppCompatActivity {
             int pxWidth = dpToPx(21);
             int pxHeight = dpToPx(60);
 
-            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin+pxWidth;
-            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin+pxHeight;
-            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin+pxWidth;
-            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+pxHeight;
+            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
+            int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;
+            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin + pxWidth;
+            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin + pxHeight;
             // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
             canvas.drawLine(startX, startY, endX, endY, paint);
 
@@ -268,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
     public void popupStart(View view){
         LayoutInflater inflater = this.getLayoutInflater();
         final View layout = inflater.inflate(R.layout.popup_start, null);
-
         final PopupWindow popupWindow = new PopupWindow(layout ,  FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,false);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_start);
         TextView playerCount = popupWindow.getContentView().findViewById(R.id.txtPlayerCount);
@@ -445,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               int troops = np.getValue();
+                int troops = np.getValue();
                 //player.setUnassindeAvailableTroops(=-troops)      //delete now used troops
                 Hub selected = GlobalVariables.findHubById(hubButton.getId());
                 //selected.setText(selected.getHubButton().getText().toString()+troops);
@@ -469,9 +468,9 @@ public class MainActivity extends AppCompatActivity {
 
                 int troops = np.getValue();
 
-               // if(gamestate == AttackGameState){
-                    //calc battle
-               // }else{
+                // if(gamestate == AttackGameState){
+                //calc battle
+                // }else{
                 //selectedHubs.get(0).setAmountTroops(selectedHubs.get(0).getAmountTroops()-troops);
                 //selectedHubs.get(1).setAmountTroops(selectedHubs.get(1).getAmountTroops()+troops);
                 //selectedHubs.get(0).setText(selectedHubs.get(0).getAmountTroops());
@@ -482,7 +481,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public  void popupChat(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_chat);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
@@ -506,6 +504,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

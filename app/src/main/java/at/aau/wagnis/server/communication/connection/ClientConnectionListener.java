@@ -35,6 +35,7 @@ public class ClientConnectionListener {
 
     /**
      * Start accepting new clients
+     *
      * @throws IllegalStateException If the listener has already been started or is closed
      */
     public synchronized void start() {

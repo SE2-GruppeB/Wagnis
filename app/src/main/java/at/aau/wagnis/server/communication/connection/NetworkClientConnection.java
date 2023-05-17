@@ -48,8 +48,9 @@ public class NetworkClientConnection implements ClientConnection {
 
     /**
      * Initialize the connection
+     *
      * @throws IllegalStateException If the connection has been started already, has been closed,
-     * or if the associated bus has not been set
+     *                               or if the associated bus has not been set
      */
     public void start() throws IllegalStateException {
         if (busConfigReference.get() == null) {

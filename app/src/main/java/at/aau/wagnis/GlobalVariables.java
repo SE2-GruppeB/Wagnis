@@ -8,33 +8,30 @@ import android.util.Log;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Random;
-
-import at.aau.wagnis.application.GameManager;
-import at.aau.wagnis.application.WagnisApplication;
-
-import static android.content.Context.WIFI_SERVICE;
 
 public class GlobalVariables {
-    public static String agency ="";
+
+    public final static String troop = "troop";
+    public static String agency = "";
+
     public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<String> unavailableAgencies = new ArrayList<>();
-    public final static String troop = "troop";
-
     public static Context baseContext;
     public static String hostIP;
     public static Boolean isClient = false;
+
     public static String seed= "42";
+
     public static ArrayList<String> seeds = new ArrayList<>();
     public static ArrayList<Hub> hubs = new ArrayList<>();
-    public static  ArrayList<Adjacency> adjacencies = new ArrayList<>();
-    static int displayWidthPx,displayHeightPx;
+    public static ArrayList<Adjacency> adjacencies = new ArrayList<>();
     public static int hubsPerLine;
     public static MediaPlayer mediaPlayer;
+    static int displayWidthPx, displayHeightPx;
 
-    public static Hub findHubById(int id){
-        for(Hub h : hubs){
-            if(h.getId()==id){
+    public static Hub findHubById(int id) {
+        for (Hub h : hubs) {
+            if (h.getId() == id) {
                 return h;
             }
         }
@@ -102,35 +99,37 @@ public class GlobalVariables {
     }
 
 
-    public static void setAdjacencies(){
-        int lineHubCount=1;
+    public static void setAdjacencies() {
+        int lineHubCount = 1;
         int chance = 0;
-        Log.e("DEBUG", seed + " " + seeds.size());
-        for(int i =0;i<hubs.size()-hubsPerLine;i++){
+
+        for (int i = 0; i < hubs.size() - hubsPerLine; i++) {
+
             chance = Integer.parseInt(seeds.get(i));
 
-            if(chance%2==0){
-                if(lineHubCount%hubsPerLine==0) {
+            if (chance % 2 == 0) {
+                if (lineHubCount % hubsPerLine == 0) {
                     adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
-                }else{
-                    adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
-                    lineHubCount=1;
+                } else {
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
+                    lineHubCount = 1;
                 }
-            }if (chance %3==0){
-                adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
-            }else if (chance % 5==0) {
-                if(lineHubCount == hubsPerLine){
-                    adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
-                }else{
-                    adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine-1)));
+            }
+            if (chance % 3 == 0) {
+                adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
+            } else if (chance % 5 == 0) {
+                if (lineHubCount == hubsPerLine) {
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
+                } else {
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine - 1)));
                 }
-            }else{
-                adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine-1)));
+            } else {
+                adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine - 1)));
 
             }
             lineHubCount++;
         }
-        for(int i=hubs.size()-hubsPerLine;i<hubs.size()-1;i++){
+        for (int i = hubs.size() - hubsPerLine; i < hubs.size() - 1; i++) {
             adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
         }
     }
@@ -149,7 +148,7 @@ public class GlobalVariables {
     }
 
 
-    public static String getIpAddress(){
+    public static String getIpAddress() {
         WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }

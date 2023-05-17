@@ -9,15 +9,18 @@ import java.io.IOException;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
-public class ChooseAttackCommand implements ClientOriginatedServerCommand {
+public class ChooseMoveCommand implements ClientOriginatedServerCommand {
 
     private final int sourceHubId;
     private final int targetHubId;
+    private final int numTroops;
 
-    public ChooseAttackCommand(int sourceHubId, int targetHubId) {
+    public ChooseMoveCommand(int sourceHubId, int targetHubId, int numTroops) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
+        this.numTroops = numTroops;
     }
+
 
     @Override
     public int getClientId() {
@@ -31,36 +34,39 @@ public class ChooseAttackCommand implements ClientOriginatedServerCommand {
 
     @Override
     public void execute(@NonNull GameLogicState gameLogicState) {
-        gameLogicState.chooseAttack(getClientId(), sourceHubId, targetHubId);
+        gameLogicState.chooseMove(getClientId(), sourceHubId, targetHubId, numTroops);
+
     }
 
-    public static class CommandSerializer implements Serializer<ChooseAttackCommand> {
+    public static class CommandSerializer implements Serializer<ChooseMoveCommand> {
 
         @NonNull
         @Override
-        public Class<ChooseAttackCommand> getTargetClass() {
-            return ChooseAttackCommand.class;
+        public Class<ChooseMoveCommand> getTargetClass() {
+            return ChooseMoveCommand.class;
         }
 
         @NonNull
         @Override
         public String getTypeTag() {
-            return "choose-attack";
+            return "choose-move";
         }
 
         @Override
         public void writeToStream(
-                @NonNull ChooseAttackCommand command,
+                @NonNull ChooseMoveCommand command,
                 @NonNull DataOutputStream stream
         ) throws IOException {
             stream.writeInt(command.sourceHubId);
             stream.writeInt(command.targetHubId);
+            stream.writeInt(command.numTroops);
         }
+
 
         @NonNull
         @Override
-        public ChooseAttackCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
-            return new ChooseAttackCommand(stream.readInt(), stream.readInt());
+        public ChooseMoveCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
+            return new ChooseMoveCommand(stream.readInt(), stream.readInt(), stream.readInt());
         }
     }
 }

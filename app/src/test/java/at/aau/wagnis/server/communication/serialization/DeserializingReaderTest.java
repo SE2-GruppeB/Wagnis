@@ -12,10 +12,8 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -25,9 +23,12 @@ public class DeserializingReaderTest {
     private static final String TAG = "some-tag";
     private static final Class<Object> EXPECTED_CLASS = Object.class;
 
-    @Mock private SerializerLoader loader;
-    @Mock private DataInputStream dataInputStream;
-    @Mock private Serializer<Object> serializer;
+    @Mock
+    private SerializerLoader loader;
+    @Mock
+    private DataInputStream dataInputStream;
+    @Mock
+    private Serializer<Object> serializer;
 
     private DeserializingReader<Object> subject;
 

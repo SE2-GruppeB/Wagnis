@@ -15,10 +15,8 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,11 +32,16 @@ import at.aau.wagnis.server.communication.serialization.ActiveSerializingWriter;
 
 class NetworkClientConnectionTest {
 
-    @Mock private ActiveDeserializingReader<ClientOriginatedServerCommand> input;
-    @Mock private ActiveSerializingWriter<ClientCommand> output;
-    @Mock private ClientConnectionBus bus;
-    @Mock private ClientCommand clientCommand;
-    @Mock private ClientOriginatedServerCommand serverCommand;
+    @Mock
+    private ActiveDeserializingReader<ClientOriginatedServerCommand> input;
+    @Mock
+    private ActiveSerializingWriter<ClientCommand> output;
+    @Mock
+    private ClientConnectionBus bus;
+    @Mock
+    private ClientCommand clientCommand;
+    @Mock
+    private ClientOriginatedServerCommand serverCommand;
 
     private NetworkClientConnection subject;
 

@@ -1,24 +1,23 @@
 package at.aau.wagnis.gamestate;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 import at.aau.wagnis.Hub;
-import at.aau.wagnis.PLRNG;
 import at.aau.wagnis.Player;
 
 /**
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
  */
 
-public class  AttackGameState extends GameLogicState {
-    private static final PLRNG RNG = new PLRNG();
-    private Hub sourceHub;
-    private Hub targetHub;
+public class AttackGameState extends GameLogicState {
     private boolean attacker = false;
     private boolean defender = false;
-
+    private Hub sourceHub;
+    private Hub targetHub;
     private int sourceHubId;
     private int targetHubId;
-    //int sourceHubId= sourceHub.getId();
-    //int targetHubId= targetHub.getId();
+
     public AttackGameState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
@@ -29,19 +28,10 @@ public class  AttackGameState extends GameLogicState {
         this.targetHub = targetHub;
     }
 
-
-    public Hub getSourceHub() {
-        return sourceHub;
-    }
-
-    public Hub getTargetHub() {
-        return targetHub;
-    }
-
     @Override
     public void attack() {
-        int attackerDiceRolls = RNG.diceRoll();
-        int defenderDiceRolls = RNG.diceRoll();
+        int attackerDiceRolls = diceRoll();
+        int defenderDiceRolls = diceRoll();
 
         if (this.sourceHub.getAmountTroops() == 1 || this.targetHub.getAmountTroops() <= 0) {
             throw new IllegalArgumentException("Illegal attack");
@@ -62,16 +52,78 @@ public class  AttackGameState extends GameLogicState {
             attackingPlayer.addHub(this.targetHub);
             Player defendingPlayer = targetHub.getOwner();
             defendingPlayer.removeHub(this.targetHub);
-            if (gamewon(attackingPlayer)) {
+            if (gameWon(attackingPlayer)) {
                 this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
-            }else {
+                //Send winner id via broadcast to all clients
+                /*this.gameServer.broadcastCommand(new ClientCommand() {
+                    @Override
+                    public void execute(@NonNull ClientLogic clientLogic) {
+                        clientLogic.updateGameLogicState(new VictoryState(attackingPlayer));
+                    }
+                });*/
+            } else {
                 this.gameServer.setGameLogicState(new ChooseAttackGameState());
             }
         }
     }
 
-    public boolean gamewon(Player player) {
+    public boolean gameWon(Player player) {
         return player.getOwnedHubs().size() == 42;
+    }
+
+    private int diceRoll() {
+        Random randomGen = new SecureRandom();
+        int diceValue = randomGen.nextInt(6) + 1;
+        //Log.d("Info :","" + diceValue);
+        return diceValue;
+    }
+
+    public Hub getSourceHub() {
+        return sourceHub;
+    }
+
+    public void setSourceHub(Hub sourceHub) {
+        this.sourceHub = sourceHub;
+    }
+
+    public Hub getTargetHub() {
+        return targetHub;
+    }
+
+    public void setTargetHub(Hub targetHub) {
+        this.targetHub = targetHub;
+    }
+
+    public boolean isAttacker() {
+        return attacker;
+    }
+
+    public void setAttacker(boolean attacker) {
+        this.attacker = attacker;
+    }
+
+    public boolean isDefender() {
+        return defender;
+    }
+
+    public void setDefender(boolean defender) {
+        this.defender = defender;
+    }
+
+    public int getSourceHubId() {
+        return sourceHubId;
+    }
+
+    public void setSourceHubId(int sourceHubId) {
+        this.sourceHubId = sourceHubId;
+    }
+
+    public int getTargetHubId() {
+        return targetHubId;
+    }
+
+    public void setTargetHubId(int targetHubId) {
+        this.targetHubId = targetHubId;
     }
 }
 

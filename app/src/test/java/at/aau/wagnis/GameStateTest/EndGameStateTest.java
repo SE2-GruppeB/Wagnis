@@ -18,11 +18,12 @@ class EndGameStateTest {
     EndGameState endGameState;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         endGameState = new EndGameState();
         endGameState.setGameServer(gameServer);
     }
+
     @Test
     void end() {
         endGameState.end();

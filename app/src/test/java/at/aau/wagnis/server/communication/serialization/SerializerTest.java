@@ -38,7 +38,7 @@ public class SerializerTest {
     public void noDuplicateSerializersForClass() {
         Set<Class<?>> seenClasses = new HashSet<>();
 
-        for(Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
+        for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             if (!seenClasses.add(serializer.getTargetClass())) {
                 fail(String.format("Duplicate serializers for class '%s'", serializer.getTargetClass().getName()));
             }
@@ -49,7 +49,7 @@ public class SerializerTest {
     public void noDuplicateSerializersForTag() {
         Set<String> seenTags = new HashSet<>();
 
-        for(Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
+        for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             if (!seenTags.add(serializer.getTypeTag())) {
                 fail(String.format("Duplicate serializers for tag '%s'", serializer.getTypeTag()));
             }

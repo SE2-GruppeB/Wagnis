@@ -30,9 +30,12 @@ import at.aau.wagnis.server.communication.serialization.ActiveSerializingWriter;
 
 class NetworkServerConnectionTest {
 
-    @Mock private ActiveDeserializingReader<ClientCommand> input;
-    @Mock private ActiveSerializingWriter<ClientOriginatedServerCommand> output;
-    @Mock private Consumer<ClientCommand> commandConsumer;
+    @Mock
+    private ActiveDeserializingReader<ClientCommand> input;
+    @Mock
+    private ActiveSerializingWriter<ClientOriginatedServerCommand> output;
+    @Mock
+    private Consumer<ClientCommand> commandConsumer;
 
     private NetworkServerConnection subject;
 

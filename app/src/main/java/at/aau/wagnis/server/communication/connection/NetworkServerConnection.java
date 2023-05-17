@@ -42,6 +42,7 @@ public class NetworkServerConnection implements ServerConnection {
 
     /**
      * Initialize the connection
+     *
      * @throws IllegalStateException If the connection has been started already, has been closed or
      *                               if no command consumer has been set yet.
      */

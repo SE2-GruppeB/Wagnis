@@ -10,16 +10,13 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -27,10 +24,14 @@ import java.util.function.Function;
 @Timeout(5)
 public class ActiveSerializingWriterTest {
 
-    @Mock private SerializingWriter<Object> writer;
-    @Mock private Function<Runnable, Thread> threadFactory;
-    @Mock private Thread thread;
-    @Mock private Runnable errorCallback;
+    @Mock
+    private SerializingWriter<Object> writer;
+    @Mock
+    private Function<Runnable, Thread> threadFactory;
+    @Mock
+    private Thread thread;
+    @Mock
+    private Runnable errorCallback;
 
     private ActiveSerializingWriter<Object> subject;
 

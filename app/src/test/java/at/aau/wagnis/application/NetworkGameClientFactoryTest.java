@@ -24,11 +24,16 @@ import at.aau.wagnis.server.communication.connection.NetworkServerConnection;
 
 class NetworkGameClientFactoryTest {
 
-    @Mock private Function<Runnable, Thread> threadFactory;
-    @Mock private NetworkGameClientFactory.SocketFactory socketFactory;
-    @Mock private Socket socket;
-    @Mock private NetworkGameClientFactory.NetworkServerConnectionFactory serverConnectionFactory;
-    @Mock private NetworkServerConnection serverConnection;
+    @Mock
+    private Function<Runnable, Thread> threadFactory;
+    @Mock
+    private NetworkGameClientFactory.SocketFactory socketFactory;
+    @Mock
+    private Socket socket;
+    @Mock
+    private NetworkGameClientFactory.NetworkServerConnectionFactory serverConnectionFactory;
+    @Mock
+    private NetworkServerConnection serverConnection;
 
     private NetworkGameClientFactory subject;
 

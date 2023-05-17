@@ -11,13 +11,10 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -25,11 +22,16 @@ import java.util.function.Function;
 
 public class ActiveDeserializingReaderTest {
 
-    @Mock private DeserializingReader<Object> reader;
-    @Mock private Function<Runnable, Thread> threadFactory;
-    @Mock private Thread thread;
-    @Mock private Runnable errorCallback;
-    @Mock private Consumer<Object> receiveCallback;
+    @Mock
+    private DeserializingReader<Object> reader;
+    @Mock
+    private Function<Runnable, Thread> threadFactory;
+    @Mock
+    private Thread thread;
+    @Mock
+    private Runnable errorCallback;
+    @Mock
+    private Consumer<Object> receiveCallback;
 
     private ActiveDeserializingReader<Object> subject;
 

@@ -23,72 +23,72 @@ class LobbyStateTest {
 
     @Test
     void testSeedGenerator() {
-        assertEquals(lobbyState.getSeed().length(),84);
+        assertEquals(84,lobbyState.getSeed().length());
     }
 
     @Test
     void testHubGeneration() {
-        assertEquals(lobbyState.getHubs().size(),42);
+        assertEquals(42,lobbyState.getHubs().size());
 
         int hubId = 100;
         for(Hub h : lobbyState.getHubs()){
-            assertEquals(h.getId(),hubId);
+            assertEquals(hubId,h.getId());
             hubId++;
         }
 
-        assertEquals(lobbyState.getHubsPerLine(),7);
+        assertEquals(7,lobbyState.getHubsPerLine());
     }
 
     @Test
     void testFindHubById() {
         Hub testHub=lobbyState.findHubById(100);
-        assertEquals(testHub.getId(),100);
+        assertEquals(100,testHub.getId());
 
         testHub=lobbyState.findHubById(10);
-        assertEquals(testHub,null);
+        assertEquals(null,testHub);
 
         testHub=lobbyState.findHubById(200);
-        assertEquals(testHub,null);
+        assertEquals(null,testHub);
     }
 
     @Test
     void testAdjacencies() {
         lobbyState.setAdjacencies("123455103456123456123456123456123456123456123456123456123456123456123456123456123456");
 
-        assertNotEquals(lobbyState.getAdjacencies(),null);
+        assertNotEquals(null,lobbyState.getAdjacencies());
         for(Adjacency a :lobbyState.getAdjacencies()){
-            assertNotEquals(a.getHub1(),null);
-            assertNotEquals(a.getHub2(),null);
+            assertNotEquals(null,a.getHub1());
+            assertNotEquals(null,a.getHub2());
             assertNotEquals(a.getHub1(),a.getHub2());
         }
         assertTrue(lobbyState.getAdjacencies().size()>42);
 
-        assertEquals(lobbyState.getAdjacencies().get(0).getHub1().getId(),100);
-        assertEquals(lobbyState.getAdjacencies().get(0).getHub2().getId(),101);
+        assertEquals(100,lobbyState.getAdjacencies().get(0).getHub1().getId());
+        assertEquals(101,lobbyState.getAdjacencies().get(0).getHub2().getId());
 
-        assertEquals(lobbyState.getAdjacencies().get(1).getHub1().getId(),100);
-        assertEquals(lobbyState.getAdjacencies().get(1).getHub2().getId(),107);
+        assertEquals(100,lobbyState.getAdjacencies().get(1).getHub1().getId());
+        assertEquals(107,lobbyState.getAdjacencies().get(1).getHub2().getId());
 
-        assertEquals(lobbyState.getAdjacencies().get(2).getHub1().getId(),101);
-        assertEquals(lobbyState.getAdjacencies().get(2).getHub2().getId(),102);
+        assertEquals(101,lobbyState.getAdjacencies().get(2).getHub1().getId());
+        assertEquals(102,lobbyState.getAdjacencies().get(2).getHub2().getId());
 
-        assertEquals(lobbyState.getAdjacencies().get(2).getHub1().getId(),101);
-        assertEquals(lobbyState.getAdjacencies().get(2).getHub2().getId(),107);
+        assertEquals(101,lobbyState.getAdjacencies().get(2).getHub1().getId());
+        assertEquals(107,lobbyState.getAdjacencies().get(2).getHub2().getId());
 
-        assertEquals(lobbyState.getAdjacencies().get(3).getHub1().getId(),102);
-        assertEquals(lobbyState.getAdjacencies().get(3).getHub2().getId(),108);
+        assertEquals(102,lobbyState.getAdjacencies().get(3).getHub1().getId());
+        assertEquals(108,lobbyState.getAdjacencies().get(3).getHub2().getId());
 
-        assertEquals(lobbyState.getAdjacencies().get(4).getHub1().getId(),103);
-        assertEquals(lobbyState.getAdjacencies().get(4).getHub2().getId(),104);
+        assertEquals(103,lobbyState.getAdjacencies().get(4).getHub1().getId());
+        assertEquals(104,lobbyState.getAdjacencies().get(4).getHub2().getId());
 
-        assertEquals(lobbyState.getAdjacencies().get(4).getHub1().getId(),103);
-        assertEquals(lobbyState.getAdjacencies().get(4).getHub2().getId(),109);
+        assertEquals(103,lobbyState.getAdjacencies().get(4).getHub1().getId());
+        assertEquals(109,lobbyState.getAdjacencies().get(4).getHub2().getId());
 
     }
     @Test
     void testPlayer(){
-        assertEquals(lobbyState.getPlayers().size(),0);
+        assertEquals(0,lobbyState.getPlayers().size());
         lobbyState.addPlayer(player);
-        assertEquals(lobbyState.getPlayers().size(),1);
+        assertEquals(1,lobbyState.getPlayers().size());
     }
 }

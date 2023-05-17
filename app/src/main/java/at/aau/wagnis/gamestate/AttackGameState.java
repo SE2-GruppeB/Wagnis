@@ -1,10 +1,14 @@
 package at.aau.wagnis.gamestate;
 
+import androidx.annotation.NonNull;
+
 import java.security.SecureRandom;
 import java.util.Random;
 
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
+import at.aau.wagnis.client.ClientLogic;
+import at.aau.wagnis.server.communication.command.ClientCommand;
 
 /**
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
@@ -54,6 +58,13 @@ public class AttackGameState extends GameLogicState {
             defendingPlayer.removeHub(this.targetHub);
             if (gameWon(attackingPlayer)) {
                 this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
+                //Send winner id via broadcast to all clients
+                this.gameServer.broadcastCommand(new ClientCommand() {
+                    @Override
+                    public void execute(@NonNull ClientLogic clientLogic) {
+                        clientLogic.updateGameLogicState(new VictoryState(attackingPlayer));
+                    }
+                });
             } else {
                 this.gameServer.setGameLogicState(new ChooseAttackGameState());
             }

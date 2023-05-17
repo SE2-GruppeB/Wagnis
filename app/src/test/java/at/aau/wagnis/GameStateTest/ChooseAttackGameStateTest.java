@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
 import at.aau.wagnis.gamestate.AttackGameState;
 import at.aau.wagnis.gamestate.ChooseAttackGameState;
 import at.aau.wagnis.gamestate.GameState;

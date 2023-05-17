@@ -20,9 +20,11 @@ public class MoveTroopsState extends GameLogicState {
         this.numTroops = numTroops;
     }
 
-    public void move(int numTroops) { moveTroopsBetweenHubs(numTroops); }
+    public void move(int numTroops) {
+        moveTroopsBetweenHubs(numTroops);
+    }
 
-    private void moveTroopsBetweenHubs(int numTroops)  {
+    private void moveTroopsBetweenHubs(int numTroops) {
 
 
         if (sourceHub == null || targetHub == null) {
@@ -42,16 +44,18 @@ public class MoveTroopsState extends GameLogicState {
     }
 
 
-
     public int getSourceHubId() {
         return sourceHubId;
     }
+
     public void setSourceHubId(int sourceHubId) {
         this.sourceHubId = sourceHubId;
     }
+
     public int getTargetHubId() {
         return targetHubId;
     }
+
     public void setTargetHubId(int targetHubId) {
         this.targetHubId = targetHubId;
     }

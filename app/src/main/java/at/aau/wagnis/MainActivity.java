@@ -1,8 +1,5 @@
 package at.aau.wagnis;
 
-import static at.aau.wagnis.GlobalVariables.hubs;
-import static at.aau.wagnis.GlobalVariables.players;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,13 +28,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import at.aau.wagnis.gamestate.AttackGameState;
-import at.aau.wagnis.gamestate.MoveTroopsState;
-import at.aau.wagnis.gamestate.StartGameState;
 
 
 public class MainActivity extends AppCompatActivity {

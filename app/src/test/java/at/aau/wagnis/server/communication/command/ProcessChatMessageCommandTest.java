@@ -32,6 +32,71 @@ public class ProcessChatMessageCommandTest {
     }
 
     @Test
+    public void throwsForNullMessage() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand(null)
+        );
+
+        assertEquals("Message can't be null!", ex.getMessage());
+    }
+
+    @Test
+    public void throwsForEmptyMessage() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand("")
+        );
+
+        assertEquals("Message can't be empty!", ex.getMessage());
+    }
+
+    @Test
+    public void throwsForNewLine() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand("\n")
+        );
+
+        assertEquals("Message can't contain new line!", ex.getMessage());
+    }
+
+    @Test
+    public void throwsForCarriageReturn() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand("\r")
+        );
+
+        assertEquals("Message can't contain carriage return!", ex.getMessage());
+    }
+
+
+    @Test
+    public void throwsForLongMessage() {
+        //given
+        StringBuilder sb = new StringBuilder(201);
+
+        for (int i = 0; i < 201; i++) {
+            sb.append("a");
+        }
+
+        String input = sb.toString();
+
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand(input)
+        );
+
+        assertEquals("Message too long!", ex.getMessage());
+    }
+
+    @Test
     public void getClientIdReturnsIdIfSet() {
         // given
         int clientId = 5;

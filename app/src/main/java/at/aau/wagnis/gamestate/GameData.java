@@ -19,11 +19,13 @@ public class GameData {
     private String seed;
     private List<Hub> hubs;
     private List<Player> players;
+    private List<ChatMessage> messages;
 
     public GameData() {
         super();
         hubs = new ArrayList<>();
         players = new ArrayList<>();
+        messages = new ArrayList<>();
     }
 
     public void setSeed(String seed) {
@@ -86,6 +88,8 @@ public class GameData {
         }
         builder.append("END");
         return builder.toString();
+
+
     }
 
     public void deserialize(String input){
@@ -170,5 +174,13 @@ public class GameData {
                 return null;
         }
         return new Cards(0, troop, new Deck(1));
+    }
+
+    public void addMessage(int clientId, String message) {
+        this.messages.add(new ChatMessage(clientId, message));
+    }
+
+    public List<ChatMessage> getMessages() {
+        return this.messages;
     }
 }

@@ -37,6 +37,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             // code to be executed on the UI thread
             currentState = newGameState;
             if(newGameState != null){
+                System.out.println(currentState.getMessages());
                 if(!wasDrawn){
                     generateMap(newGameState.getSeed());
                     wasDrawn = true;
@@ -504,6 +506,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 System.out.println(sendMsg.getText());
+                getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString()));
                 return;
             }
         });

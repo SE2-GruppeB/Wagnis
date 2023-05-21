@@ -10,8 +10,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 
 public class GlobalVariables {
-
-    public final static String troop = "troop";
     public static String agency = "";
 
     public static ArrayList<Player> players = new ArrayList<>();
@@ -19,10 +17,9 @@ public class GlobalVariables {
     public static Context baseContext;
     public static String hostIP;
     public static Boolean isClient = false;
-
     public static String seed= "42";
-
     public static ArrayList<String> seeds = new ArrayList<>();
+
     public static ArrayList<Hub> hubs = new ArrayList<>();
     public static ArrayList<Adjacency> adjacencies = new ArrayList<>();
     public static int hubsPerLine;

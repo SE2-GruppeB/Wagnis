@@ -1,5 +1,7 @@
 package at.aau.wagnis.gamestate;
 
+import android.content.Context;
+
 import at.aau.wagnis.Hub;
 
 public class MoveTroopsState extends GameLogicState {
@@ -9,9 +11,12 @@ public class MoveTroopsState extends GameLogicState {
     private int targetHubId;
     private int numTroops;
 
-    public MoveTroopsState(Hub sourceHub, Hub targetHub) {
+    private Context context;
+
+    public MoveTroopsState(Hub sourceHub, Hub targetHub, Context context) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
+        this.context = context;
     }
 
     public MoveTroopsState(int sourceHubId, int targetHubId, int numTroops) {
@@ -24,8 +29,7 @@ public class MoveTroopsState extends GameLogicState {
         moveTroopsBetweenHubs(numTroops);
     }
 
-    private void moveTroopsBetweenHubs(int numTroops) {
-
+    private void moveTroopsBetweenHubs(int numTroops) throws IllegalArgumentException{
 
         if (sourceHub == null || targetHub == null) {
             throw new IllegalArgumentException("Invalid source or target hub.");

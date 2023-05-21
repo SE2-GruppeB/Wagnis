@@ -37,6 +37,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.gamestate.StartGameState;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();*/
+
 
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override

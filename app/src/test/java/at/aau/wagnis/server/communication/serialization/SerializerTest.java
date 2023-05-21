@@ -17,19 +17,19 @@ public class SerializerTest {
     public void noMissingValues() {
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             assertNotNull(
-                    String.format("Serializer '%s' has null target class", serializer.getClass().getName()),
-                    serializer.getTargetClass().toString()
+                    serializer.getTargetClass(),
+                    String.format("Serializer '%s' has null target class", serializer.getClass().getName())
             );
 
             assertNotNull(
-                    String.format("Serializer '%s' has null type tag", serializer.getClass().getName()),
-                    serializer.getTypeTag()
+                    serializer.getTypeTag(),
+                    String.format("Serializer '%s' has null type tag", serializer.getClass().getName())
             );
 
             assertNotEquals(
-                    String.format("Serializer '%s' has empty type tag", serializer.getClass().getName()),
                     "",
-                    serializer.getTypeTag()
+                    serializer.getTypeTag(),
+                    String.format("Serializer '%s' has empty type tag", serializer.getClass().getName())
             );
         }
     }

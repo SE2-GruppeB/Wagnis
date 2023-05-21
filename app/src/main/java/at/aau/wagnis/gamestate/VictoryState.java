@@ -10,6 +10,7 @@ import at.aau.wagnis.VictoryScreen;
  * Die ViktoryState Klasse soll den Zustand repräsentieren, wenn ein Spieler alle Hubs erobert hat.
  */
 public class VictoryState extends GameLogicState {
+
     private Player winner;
 
     public VictoryState(Player winner) {

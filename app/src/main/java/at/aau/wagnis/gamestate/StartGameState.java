@@ -1,11 +1,16 @@
 package at.aau.wagnis.gamestate;
 
+import androidx.annotation.NonNull;
+
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
+import at.aau.wagnis.client.ClientLogic;
+import at.aau.wagnis.server.communication.command.ClientCommand;
 
 public class StartGameState extends GameLogicState {
 
@@ -21,7 +26,25 @@ public class StartGameState extends GameLogicState {
     @Override
     public void start() {
         assignTroopsToHubs();
+
+        this.gameServer.broadcastCommand(new ClientCommand() {
+            @Override
+            public void execute(@NonNull ClientLogic clientLogic) {
+                GameData g = new GameData();
+                g.setHubs(GlobalVariables.getHubs());
+                g.setSeed(GlobalVariables.getSeed());
+                g.setHubs(GlobalVariables.getHubs());
+                g.setPlayers(GlobalVariables.getPlayers());
+                g.serialize();
+                clientLogic.updateGameState(g);
+            }
+        });
+
+
     }
+
+
+
 
     public void assignCountries() {
         for (int i = 0; i < this.hubs.size(); i++) {

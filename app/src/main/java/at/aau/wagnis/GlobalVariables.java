@@ -12,6 +12,10 @@ import java.util.ArrayList;
 public class GlobalVariables {
     public static String agency = "";
 
+    public static ArrayList<Player> getPlayers() {
+        return players;
+    }
+
     public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<String> unavailableAgencies = new ArrayList<>();
     public static Context baseContext;

@@ -72,7 +72,7 @@ public class AttackGameState extends GameLogicState {
     }
 
     private int diceRoll() {
-        Random randomGen = new SecureRandom();
+        Random randomGen = new Random();
         int diceValue = randomGen.nextInt(6) + 1;
         //Log.d("Info :","" + diceValue);
         return diceValue;

@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Supplier;
 
 import at.aau.wagnis.client.ClientLogic;
 import at.aau.wagnis.gamestate.ChatMessage;
@@ -30,6 +31,12 @@ public class SendGameDataCommand implements ClientCommand{
     }
 
     public static class CommandSerializer implements Serializer<SendGameDataCommand>{
+
+        public  void setGameDataSupplier(Supplier<GameData> gameDataSupplier) {
+            this.gameDataSupplier = gameDataSupplier;
+        }
+
+        private  Supplier<GameData> gameDataSupplier = GameData::new;
 
         @NonNull
         @Override
@@ -57,7 +64,7 @@ public class SendGameDataCommand implements ClientCommand{
         @NonNull
         @Override
         public SendGameDataCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
-            GameData gameData = new GameData();
+            GameData gameData = gameDataSupplier.get();
             gameData.deserialize(stream.readUTF());
             int messageCount = stream.readInt();
             for (int i = 0; i < messageCount; i++) {

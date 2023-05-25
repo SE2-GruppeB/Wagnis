@@ -20,9 +20,9 @@ public class ChatMessage {
 
     @Override
     public String toString() {
-        return "ChatMessage{" +
-                "clientId=" + clientId +
-                ", message='" + message + '\'' +
-                '}';
+        return "[" +
+                + clientId +
+                "] "
+                + message;
     }
 }

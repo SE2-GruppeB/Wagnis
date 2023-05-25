@@ -2,7 +2,9 @@ package at.aau.wagnis.server.communication.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,7 +68,7 @@ class SendGameDataCommandTest {
     }
 
     @Test
-    void serializeAndderserialize() throws IOException {
+    void serializeAndderserializeWithMsg() throws IOException {
         when(gameData.serialize()).thenReturn("serialzed");
         when((gameData.getMessages())).thenReturn(Collections.singletonList(chatMessage));
         when(chatMessage.getClientId()).thenReturn(1);
@@ -86,6 +88,28 @@ class SendGameDataCommandTest {
         SendGameDataCommand result = commandSerializer.readFromStream(dataInputStream);
 
         verify(gameData2).addMessage(1,"hello");
+        verify(gameData2).deserialize("serialzed");
+    }
+
+    @Test
+    void serializeAndderserializeWithoutMsg() throws IOException {
+        when(gameData.serialize()).thenReturn("serialzed");
+        when((gameData.getMessages())).thenReturn(Collections.emptyList());
+
+        SendGameDataCommand.CommandSerializer commandSerializer = new SendGameDataCommand.CommandSerializer();
+        commandSerializer.setGameDataSupplier(() -> gameData2);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        commandSerializer.writeToStream(command, dataOutputStream);
+
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+
+        InputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+        SendGameDataCommand result = commandSerializer.readFromStream(dataInputStream);
+
+        verify(gameData2,never()).addMessage(anyInt(),any());
         verify(gameData2).deserialize("serialzed");
     }
 }

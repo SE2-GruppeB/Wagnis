@@ -1,10 +1,13 @@
 package at.aau.wagnis.gamestate;
 
+import android.content.Intent;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Deck;
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.Troops;
@@ -108,6 +111,14 @@ public class GameData {
             // Card
             player.setHand(getHandByString(playerData[i]));
             playerList.add(player);
+
+            if(player.getOwnedHubs().size() == 42){
+                //Spieler hat gewonnen
+                player.getPlayerId(); // Gewinner Id
+                //Event triggern, für Victory screen Pornhub aufrufen
+                //this.gameServer.setGameLogicState(new VictoryState(player));
+                return;
+            }
         }
         setPlayers(playerList);
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import at.aau.wagnis.Hub;
 
-public class ReinforceGameState {
+public class ReinforceGameState extends GameLogicState{
     private List<Hub> hubs;
     private List<Integer> troopsToDeploy;
 
@@ -54,5 +54,6 @@ public class ReinforceGameState {
             Log.d("Info", "Added " + troopsToDeploy.get(i) + " troops to hub " + hubs.get(i).getId());
             hubs.get(i).addTroops(troopsToDeploy.get(i));
         }
+        this.gameServer.setGameLogicState(new ChooseAttackGameState());
     }
 }

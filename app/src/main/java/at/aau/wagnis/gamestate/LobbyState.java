@@ -12,10 +12,10 @@ import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
 public class LobbyState extends GameLogicState{
-    final int NUMBER_OF_HUBS=42;
-    final int MIN_SEEDVALUE_PER_HUB=10;
-    final int MIN_HUB_ID=100;
-    final int MAX_HUB_ID=142;
+    static final int NUMBER_OF_HUBS=42;
+    static final int MIN_SEEDVALUE_PER_HUB=10;
+    static final int MIN_HUB_ID=0;
+    static final int MAX_HUB_ID=MIN_HUB_ID+NUMBER_OF_HUBS;
     private int hubsPerLine;
     private List<Player> players;
     private HashMap<Integer,Hub> hubs;
@@ -53,8 +53,8 @@ public class LobbyState extends GameLogicState{
         int chance = 0;
 
         List<String> seeds = splitSeed(seed);
-        
-        for(int i =0;i<hubs.size()-hubsPerLine;i++){
+
+        for(int i =MIN_HUB_ID;i<MAX_HUB_ID-hubsPerLine;i++){
             chance = Integer.parseInt(seeds.get(i));
 
             if(chance%2==0){

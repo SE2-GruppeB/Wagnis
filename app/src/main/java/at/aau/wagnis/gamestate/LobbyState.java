@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import at.aau.wagnis.Adjacency;
 
@@ -11,28 +12,33 @@ import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
 public class LobbyState extends GameLogicState{
+    final int NUMBER_OF_HUBS=42;
+    final int MIN_SEEDVALUE_PER_HUB=10;
+    final int MIN_HUB_ID=100;
+    final int MAX_HUB_ID=142;
     private int hubsPerLine;
     private List<Player> players;
-    private List<Hub> hubs;
+    private HashMap<Integer,Hub> hubs;
     private List<Adjacency> adjacencies;
     private String seed;
 
+
     public LobbyState(){
         players = new ArrayList<>();
-        hubs = new ArrayList<>();
+        hubs = new HashMap<>();
         adjacencies = new ArrayList<>();
         seedGenerator();
-        hubs = new ArrayList<>(generateHubs());
+        hubs = generateHubs();
         hubsPerLine = (int) Math.ceil(hubs.size()/6f);
         setAdjacencies(seed);
     }
 
     private void seedGenerator() {
-        SecureRandom secureRandom = new SecureRandom();
+        SecureRandom secureRandom = new SecureRandom(); //secureRandom because of SonarCloud
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 42; i++) {
+        for (int i = 0; i < NUMBER_OF_HUBS; i++) {
             int s = 0;
-            while (s <= 10) {
+            while (s <= MIN_SEEDVALUE_PER_HUB) {       //every two digits define one hub, therefore 42 Hubs = 84 digit seed
                 s = secureRandom.nextInt(100);
             }
             stringBuilder.append(s);
@@ -88,20 +94,19 @@ public class LobbyState extends GameLogicState{
         return seeds;
     }
 
-    public Hub findHubById(int id){
-        for(Hub h : hubs){
-            if(h.getId()==id){
-                return h;
-            }
+    public Hub findHubById(int id) {
+        try{
+            return hubs.get(id);
+        }catch(Exception e){
+            return null;
         }
-        return null;
     }
 
-    private List<Hub> generateHubs(){
-        List<Hub> generatedHubs = new ArrayList<>();
-        for(int i = 100; i < 142; i++){
+    private HashMap<Integer,Hub> generateHubs(){
+        HashMap<Integer,Hub> generatedHubs = new HashMap<>();
+        for(int i = MIN_HUB_ID; i < MAX_HUB_ID; i++){
             Hub hub = new Hub(i);
-            generatedHubs.add(hub);
+            generatedHubs.put(hub.getId(),hub);
         }
         return generatedHubs;
     }
@@ -111,7 +116,7 @@ public class LobbyState extends GameLogicState{
     }
 
     public List<Hub> getHubs() {
-        return hubs;
+        return new ArrayList<>(hubs.values());
     }
 
     public List<Player> getPlayers() {
@@ -133,7 +138,7 @@ public class LobbyState extends GameLogicState{
     public void next(){
         GameData gameData = new GameData();
         gameData.setSeed(seed);
-        gameData.setHubs(hubs);
+        gameData.setHubs(new ArrayList<>(hubs.values()));
         gameData.setPlayers(players);
         gameServer.setGameLogicState(new StartGameState(gameData));
     }

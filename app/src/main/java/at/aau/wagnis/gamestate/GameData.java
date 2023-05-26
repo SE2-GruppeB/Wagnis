@@ -115,7 +115,6 @@ public class GameData {
             if(player.getOwnedHubs().size() == 42){
                 //Spieler hat gewonnen
                 player.getPlayerId(); // Gewinner Id
-                //Event triggern, für Victory screen Pornhub aufrufen
                 //this.gameServer.setGameLogicState(new VictoryState(player));
                 return;
             }

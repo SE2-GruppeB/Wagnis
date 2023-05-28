@@ -21,7 +21,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.function.Function;
 
-public class ClientConnectionListenerTest {
+class ClientConnectionListenerTest {
 
     @Mock
     private ServerSocket serverSocket;
@@ -42,7 +42,7 @@ public class ClientConnectionListenerTest {
     private ClientConnectionListener subject;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         when(threadFactory.apply(any())).thenReturn(thread);
 
@@ -55,7 +55,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void startCreatesThread() {
+    void startCreatesThread() {
         // when
         subject.start();
 
@@ -65,7 +65,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void callingStartTwiceThrowsIllegalStateException() {
+    void callingStartTwiceThrowsIllegalStateException() {
         subject.start();
 
         // when & then
@@ -78,7 +78,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void closeBeforeStartClosesServerSocket() throws IOException {
+    void closeBeforeStartClosesServerSocket() throws IOException {
         // when
         subject.close();
 
@@ -87,7 +87,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void closeAfterStartInterruptsThread() throws IOException {
+    void closeAfterStartInterruptsThread() throws IOException {
         // given
         subject.start();
 
@@ -100,7 +100,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void callingCloseTwiceDoesNotCloseSocketTwice() throws IOException {
+    void callingCloseTwiceDoesNotCloseSocketTwice() throws IOException {
         // when
         subject.close();
         subject.close();
@@ -110,7 +110,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void startAfterCloseThrowsIllegalStateException() {
+    void startAfterCloseThrowsIllegalStateException() {
         // given
         subject.close();
 
@@ -124,7 +124,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void ioExceptionOnCloseDoesNotCauseAnotherException() throws IOException {
+    void ioExceptionOnCloseDoesNotCauseAnotherException() throws IOException {
         // given
         doThrow(new IOException()).when(serverSocket).close();
 
@@ -137,7 +137,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void handleNextClientCreatesConnection() throws IOException {
+    void handleNextClientCreatesConnection() throws IOException {
         // given
         when(serverSocket.accept()).thenReturn(socket);
         when(connectionFactory.apply(any(), any())).thenReturn(clientConnection);
@@ -151,7 +151,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void handleNextClientClosesServerSocketOnIOException() throws IOException {
+    void handleNextClientClosesServerSocketOnIOException() throws IOException {
         // given
         when(serverSocket.accept()).thenThrow(new IOException());
 
@@ -163,7 +163,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void handleNextClientClosesSocketOnIOExceptionAfterAccept() throws IOException {
+    void handleNextClientClosesSocketOnIOExceptionAfterAccept() throws IOException {
         // given
         when(serverSocket.accept()).thenReturn(socket);
         when(connectionFactory.apply(any(), any())).thenThrow(new IOException());
@@ -178,7 +178,7 @@ public class ClientConnectionListenerTest {
     }
 
     @Test
-    public void handleNextClientStillClosesServerSocketIfClientSocketFailsToClose() throws IOException {
+    void handleNextClientStillClosesServerSocketIfClientSocketFailsToClose() throws IOException {
         // given
         when(serverSocket.accept()).thenReturn(socket);
         when(connectionFactory.apply(any(), any())).thenThrow(new IOException());

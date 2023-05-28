@@ -13,7 +13,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ProcessChatMessageCommandTest {
+class ProcessChatMessageCommandTest {
 
     private ProcessChatMessageCommand command;
 
@@ -23,7 +23,7 @@ public class ProcessChatMessageCommandTest {
     }
 
     @Test
-    public void getClientIdThrowsIfNotSet() {
+    void getClientIdThrowsIfNotSet() {
         // when & then
         assertThrows(
                 IllegalStateException.class,
@@ -32,7 +32,7 @@ public class ProcessChatMessageCommandTest {
     }
 
     @Test
-    public void getClientIdReturnsIdIfSet() {
+    void getClientIdReturnsIdIfSet() {
         // given
         int clientId = 5;
         command.setClientId(clientId);
@@ -45,7 +45,7 @@ public class ProcessChatMessageCommandTest {
     }
 
     @Test
-    public void canBeSerializedAndDeserialized() throws IOException {
+    void canBeSerializedAndDeserialized() throws IOException {
         // given
         ProcessChatMessageCommand.CommandSerializer commandSerializer = new ProcessChatMessageCommand.CommandSerializer();
 

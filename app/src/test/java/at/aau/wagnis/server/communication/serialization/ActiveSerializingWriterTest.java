@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.function.Function;
 
 @Timeout(5)
-public class ActiveSerializingWriterTest {
+class ActiveSerializingWriterTest {
 
     @Mock
     private SerializingWriter<Object> writer;
@@ -44,7 +44,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void startCreatesThread() {
+    void startCreatesThread() {
         // when
         subject.start(errorCallback);
 
@@ -54,7 +54,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void callingStartTwiceThrowsIllegalStateException() {
+    void callingStartTwiceThrowsIllegalStateException() {
         // given
         subject.start(errorCallback);
 
@@ -68,7 +68,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void startAfterCloseThrowsIllegalStateException() {
+    void startAfterCloseThrowsIllegalStateException() {
         // given
         subject.close();
 
@@ -82,7 +82,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void closeBeforeStartClosesWriter() throws IOException {
+    void closeBeforeStartClosesWriter() throws IOException {
         // when
         subject.close();
 
@@ -92,7 +92,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void closeAfterStartInterruptsThread() throws IOException {
+    void closeAfterStartInterruptsThread() throws IOException {
         // given
         subject.start(errorCallback);
 
@@ -106,7 +106,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void closingTwiceDoesNotCloseWriterTwice() throws IOException {
+    void closingTwiceDoesNotCloseWriterTwice() throws IOException {
         // when
         subject.close();
         subject.close();
@@ -117,7 +117,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void ioExceptionOnCloseDoesNotCauseAnotherException() throws IOException {
+    void ioExceptionOnCloseDoesNotCauseAnotherException() throws IOException {
         // given
         doThrow(new IOException()).when(writer).close();
 
@@ -130,7 +130,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void writeBeforeStartThrowsIllegalStateException() {
+    void writeBeforeStartThrowsIllegalStateException() {
         // given
         Object input = new Object();
 
@@ -144,7 +144,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void writeAfterCloseThrowsIllegalStateException() {
+    void writeAfterCloseThrowsIllegalStateException() {
         // given
         Object input = new Object();
 
@@ -161,7 +161,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void writeInternalWritesObjectsInOrder() throws SerializationException, IOException {
+    void writeInternalWritesObjectsInOrder() throws SerializationException, IOException {
         // given
         Object input1 = new Object();
         Object input2 = new Object();
@@ -185,7 +185,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void writeInternalCallsErrorCallbackOnIOException() throws SerializationException, IOException {
+    void writeInternalCallsErrorCallbackOnIOException() throws SerializationException, IOException {
         // given
         doThrow(new IOException()).when(writer).write(any());
 
@@ -202,7 +202,7 @@ public class ActiveSerializingWriterTest {
     }
 
     @Test
-    public void writeInternalCallsErrorCallbackOnSerializationException() throws SerializationException, IOException {
+    void writeInternalCallsErrorCallbackOnSerializationException() throws SerializationException, IOException {
         // given
         doThrow(new SerializationException("")).when(writer).write(any());
 

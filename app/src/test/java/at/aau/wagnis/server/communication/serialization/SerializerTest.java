@@ -11,10 +11,10 @@ import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-public class SerializerTest {
+class SerializerTest {
 
     @Test
-    public void noMissingValues() {
+    void noMissingValues() {
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             assertNotNull(
                     serializer.getTargetClass(),
@@ -35,7 +35,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void noDuplicateSerializersForClass() {
+    void noDuplicateSerializersForClass() {
         Set<Class<?>> seenClasses = new HashSet<>();
 
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
@@ -46,7 +46,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void noDuplicateSerializersForTag() {
+    void noDuplicateSerializersForTag() {
         Set<String> seenTags = new HashSet<>();
 
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {

@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class SerializingWriterTest {
+class SerializingWriterTest {
 
     private static final String TAG = "some-tag";
 
@@ -35,7 +35,7 @@ public class SerializingWriterTest {
     }
 
     @Test
-    public void writesWithSerializer() throws SerializationException, IOException {
+    void writesWithSerializer() throws SerializationException, IOException {
         // given
         when(loader.forObject(any())).thenReturn(serializer);
         when(serializer.getTypeTag()).thenReturn(TAG);
@@ -55,7 +55,7 @@ public class SerializingWriterTest {
     }
 
     @Test
-    public void throwsWhenSerializerNotFound() {
+    void throwsWhenSerializerNotFound() {
         // given
         when(loader.forObject(any())).thenReturn(null);
         Object input = new Object();
@@ -68,7 +68,7 @@ public class SerializingWriterTest {
     }
 
     @Test
-    public void flush() throws IOException {
+    void flush() throws IOException {
         // when
         subject.flush();
 
@@ -77,7 +77,7 @@ public class SerializingWriterTest {
     }
 
     @Test
-    public void close() throws IOException {
+    void close() throws IOException {
         // when
         subject.close();
 

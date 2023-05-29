@@ -18,7 +18,7 @@ import org.mockito.MockitoAnnotations;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class DeserializingReaderTest {
+class DeserializingReaderTest {
 
     private static final String TAG = "some-tag";
     private static final Class<Object> EXPECTED_CLASS = Object.class;
@@ -39,7 +39,7 @@ public class DeserializingReaderTest {
     }
 
     @Test
-    public void readsWithSerializer() throws IOException, SerializationException {
+    void readsWithSerializer() throws IOException, SerializationException {
         // given
         Object serializerOutput = new Object();
 
@@ -60,7 +60,7 @@ public class DeserializingReaderTest {
     }
 
     @Test
-    public void throwsWhenSerializerNotFound() throws IOException {
+    void throwsWhenSerializerNotFound() throws IOException {
         // given
         when(dataInputStream.readUTF()).thenReturn(TAG);
         when(loader.forTag(any(), any())).thenReturn(null);
@@ -74,7 +74,7 @@ public class DeserializingReaderTest {
     }
 
     @Test
-    public void close() throws IOException {
+    void close() throws IOException {
         // when
         subject.close();
 

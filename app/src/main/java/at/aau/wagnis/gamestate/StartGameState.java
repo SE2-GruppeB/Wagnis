@@ -31,7 +31,6 @@ public class StartGameState extends GameLogicState {
             player.addHub(hub);
         }
     }
-
     Random ran = new Random();
 
     public void assignTroopsToHubs() {

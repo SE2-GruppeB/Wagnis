@@ -34,9 +34,9 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        GlobalVariables.mediaPlayer = MediaPlayer.create(this.getApplicationContext(), R.raw.music1);
-        GlobalVariables.mediaPlayer.start();
-        GlobalVariables.mediaPlayer.setLooping(true);
+        GlobalVariables.setMediaPlayer(MediaPlayer.create(this.getApplicationContext(), R.raw.music1));
+        GlobalVariables.getMediaPlayer().start();
+        GlobalVariables.getMediaPlayer().setLooping(true);
 
         sourcesBtn = findViewById(R.id.btn_sources);
         sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));

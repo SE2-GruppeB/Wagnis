@@ -4,27 +4,25 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
-import android.util.Log;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
 public class GlobalVariables {
-    public static String agency = "";
+    private static String agency = "";
 
-    public static ArrayList<Player> players = new ArrayList<>();
-    public static ArrayList<String> unavailableAgencies = new ArrayList<>();
-    public static Context baseContext;
-    public static String hostIP;
-    public static Boolean isClient = false;
-    public static String seed= "42";
-    public static ArrayList<String> seeds = new ArrayList<>();
-
-    public static ArrayList<Hub> hubs = new ArrayList<>();
-    public static ArrayList<Adjacency> adjacencies = new ArrayList<>();
-    public static int hubsPerLine;
-    public static MediaPlayer mediaPlayer;
-    static int displayWidthPx, displayHeightPx;
+    private static ArrayList<Player> players = new ArrayList<>();
+    private static Context baseContext;
+    private static String hostIP;
+    private static Boolean isClient = false;
+    private static String seed= "42";
+    private static ArrayList<String> seeds = new ArrayList<>();
+    private static ArrayList<Hub> hubs = new ArrayList<>();
+    private static ArrayList<Adjacency> adjacencies = new ArrayList<>();
+    private static int hubsPerLine;
+    private static MediaPlayer mediaPlayer;
+    private static int displayWidthPx;
+    private static int displayHeightPx;
 
     public static Hub findHubById(int id) {
         for (Hub h : hubs) {
@@ -35,20 +33,24 @@ public class GlobalVariables {
         return null;
     }
 
-    public static ArrayList<String> getUnavailableAgencies() {
-        return unavailableAgencies;
+    public static ArrayList<Player> getPlayers() {
+        return players;
     }
 
-    public static void addUnavailableAgencies(String unavailableAgency) {
-        GlobalVariables.unavailableAgencies.add(unavailableAgency);
+    public static void setPlayers(ArrayList<Player> players) {
+        GlobalVariables.players = players;
     }
 
-    public static String getHostIP() {
-        return hostIP;
+    public static ArrayList<String> getSeeds() {
+        return seeds;
     }
 
-    public static void setHostIP(String hostIP) {
-        GlobalVariables.hostIP = hostIP;
+    public static void setHubs(ArrayList<Hub> hubs) {
+        GlobalVariables.hubs = hubs;
+    }
+
+    public static ArrayList<Adjacency> getAdjacencies() {
+        return adjacencies;
     }
 
     public static Boolean getIsClient() {
@@ -61,10 +63,6 @@ public class GlobalVariables {
 
     public static String getAgency() {
         return agency;
-    }
-
-    public static void setAgency(String team) {
-        GlobalVariables.agency = team;
     }
 
     public static String getSeed() {
@@ -173,6 +171,4 @@ public class GlobalVariables {
         WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
-
-
 }

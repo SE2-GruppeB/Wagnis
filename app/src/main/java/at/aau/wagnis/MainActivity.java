@@ -143,19 +143,19 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 1; i <= seed.length(); i++) {
             if (i % 2 == 0) {
-                GlobalVariables.seeds.add(seed.substring(i - 2, i));
+                GlobalVariables.getSeeds().add(seed.substring(i - 2, i));
             }
         }
 
         int hubs = 0;
-        GlobalVariables.setHubsPerLine((int) Math.ceil(GlobalVariables.seeds.size() / 6f));
+        GlobalVariables.setHubsPerLine((int) Math.ceil(GlobalVariables.getSeeds().size() / 6f));
         int lineHubCount = 0;
 
         int hubWidthSpace = (GlobalVariables.getDisplayWidthPx() - dpToPx(100)) / GlobalVariables.getHubsPerLine();
         int height = GlobalVariables.getDisplayHeightPx();
         int heightSpace = height / 6;
 
-        for (String s : GlobalVariables.seeds) {
+        for (String s : GlobalVariables.getSeeds()) {
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
             hub.setId(100 + hubs);
 
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Hub:" +hub.getId());
 
             });
-            GlobalVariables.hubs.add(new Hub(hub));
+            GlobalVariables.getHubs().add(new Hub(hub));
             layout.addView(hub);
 
             int top = (hubs / GlobalVariables.getHubsPerLine()) * heightSpace;
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         paint.setStrokeWidth(8);
         paint.setAntiAlias(true);
 
-        for (Adjacency adjacency : GlobalVariables.adjacencies) {
+        for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {
             int pxWidth = dpToPx(21);
             int pxHeight = dpToPx(60);
 

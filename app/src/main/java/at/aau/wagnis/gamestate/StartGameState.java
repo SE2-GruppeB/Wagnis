@@ -32,9 +32,8 @@ public class StartGameState extends GameLogicState {
         }
     }
 
+    Random ran = new Random();
     public void assignTroopsToHubs() {
-        Random ran = new Random();
-
         for (Player player : players) {
             assignOneTroopEach(player);
             while (hasTroops(player)) {

@@ -83,6 +83,30 @@ public class GlobalVariables {
         GlobalVariables.displayWidthPx = displayWidthPx;
     }
 
+    public static MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
+    public static void setMediaPlayer(MediaPlayer mediaPlayer) {
+        GlobalVariables.mediaPlayer = mediaPlayer;
+    }
+
+    public static int getHubsPerLine() {
+        return hubsPerLine;
+    }
+
+    public static void setHubsPerLine(int hubsPerLine) {
+        GlobalVariables.hubsPerLine = hubsPerLine;
+    }
+
+    public static Context getBaseContext() {
+        return baseContext;
+    }
+
+    public static void setBaseContext(Context baseContext) {
+        GlobalVariables.baseContext = baseContext;
+    }
+
     public static int getDisplayHeightPx() {
         return displayHeightPx;
     }

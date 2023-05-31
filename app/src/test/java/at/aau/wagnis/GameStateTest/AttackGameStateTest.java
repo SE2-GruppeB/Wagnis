@@ -1,5 +1,6 @@
 package at.aau.wagnis.GameStateTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,6 +9,8 @@ import android.widget.Button;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -89,4 +92,17 @@ public class AttackGameStateTest {
         }
         assertFalse(gameState.gameWon(player));
     }
+
+    @Test
+    void testAttackerDiceRoll(){
+        gameState.attack();
+        assertEquals(3,gameState.testAttackerDiceRoll);
+    }
+
+    @Test
+    void testDefenderDiceRoll(){
+        gameState.attack();
+        assertEquals(2,gameState.testDefenderDiceRoll);
+    }
+
 }

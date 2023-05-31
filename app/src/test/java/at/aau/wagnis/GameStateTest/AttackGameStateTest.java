@@ -146,4 +146,16 @@ public class AttackGameStateTest {
         assertEquals(2,gameState2.testDefenderDiceRoll);
     }
 
+    @Test
+    void testIsAttacker(){
+        gameState.setAttacker(true);
+        assertTrue(gameState.isAttacker());
+    }
+
+    @Test
+    void testIsDefender(){
+        gameState.setDefender(true);
+        assertTrue(gameState.isDefender());
+    }
+
 }

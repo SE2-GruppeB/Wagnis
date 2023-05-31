@@ -1,9 +1,12 @@
 package at.aau.wagnis.gamestate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import static at.aau.wagnis.gamestate.GameData.MSG_HISTORY_LENGTH;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -127,6 +130,39 @@ class GameDataTest {
                 return false;
         }
         return true;
+    }
+
+    @Test
+    void msgHistoryLengthExceededTest() {
+        int exceededLength = 5;
+        for(int i = 0; i < MSG_HISTORY_LENGTH+exceededLength; i++) {
+            gameData1.addMessage(0,""+i);
+        }
+        List<ChatMessage> result = gameData1.getMessages();
+        assertEquals(MSG_HISTORY_LENGTH, result.size());
+
+        for(int i = 0; i < MSG_HISTORY_LENGTH; i++) {
+            ChatMessage chatMessage = result.get(i);
+            assertEquals(""+(i+exceededLength), chatMessage.getMessage());
+        }
+
+
+    }
+
+    @Test
+    void msgHistoryLengthTest() {
+        for(int i = 0; i < MSG_HISTORY_LENGTH; i++) {
+            gameData1.addMessage(0,""+i);
+        }
+        List<ChatMessage> result = gameData1.getMessages();
+        assertEquals(MSG_HISTORY_LENGTH, result.size());
+
+        for(int i = 0; i < MSG_HISTORY_LENGTH; i++) {
+            ChatMessage chatMessage = result.get(i);
+            assertEquals(""+i, chatMessage.getMessage());
+        }
+
+
     }
 
 }

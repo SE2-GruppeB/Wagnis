@@ -50,29 +50,34 @@ public class AttackGameState extends GameLogicState {
             case 2:{
                 attackerDiceRolls = diceRoll();
                 testAttackerDiceRoll = 1;
+                break;
                 // Attacker greift mit einer Truppe an
             }
             case 3:{
                 attackerDiceRolls = diceRoll() + diceRoll();
                 testAttackerDiceRoll = 2;
+                break;
                 //Attacker greift mit zwei Truppen an
             }
             default:{
                 attackerDiceRolls = diceRoll() + diceRoll() + diceRoll();
                 testAttackerDiceRoll = 3;
+                break;
                 //Attacker greift mit mehr als zwei Truppen an
             }
         }
 
         switch (defenderTroops){
-            case 2:{
+            case 1:{
                 defenderDiceRolls = diceRoll();
                 testDefenderDiceRoll = 1;
+                break;
                 //Verteidiger besitzt nur eine Truppe am Feld
             }
             default:{
                 defenderDiceRolls = diceRoll() + diceRoll();
                 testDefenderDiceRoll = 2;
+                break;
                 //Verteidiger besitzt mehr als eine Truppe am Feld
             }
         }

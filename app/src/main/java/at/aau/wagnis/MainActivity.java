@@ -33,11 +33,9 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.GameData;
-import at.aau.wagnis.gamestate.StartGameState;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         btnSettings = findViewById(R.id.btn_Settings);
         btnChat = findViewById(R.id.btn_Chat);
 
+        btnCards.setVisibility(View.GONE);
+
         setDisplayMetrics();
         /*if(!GlobalVariables.getIsClient()){
 
@@ -73,14 +73,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 popupCards();
-                return;
             }
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupSettings();
-                return;
             }
         });
 

@@ -3,11 +3,8 @@ package at.aau.wagnis;
 
 import android.graphics.Color;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import at.aau.wagnis.server.communication.serialization.Serializer;
 
 public class Player {
 
@@ -156,6 +153,7 @@ public class Player {
 
     public int calcTroopsToDeploy() {
         //TODO implement Method waiting
+
 
         return allTroopsPerRound;
     }

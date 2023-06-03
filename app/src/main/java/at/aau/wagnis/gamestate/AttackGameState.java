@@ -18,6 +18,12 @@ public class AttackGameState extends GameLogicState {
     private int sourceHubId;
     private int targetHubId;
 
+    public int testAttackerDiceRoll;
+
+    public int testDefenderDiceRoll;
+
+
+
     public AttackGameState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
@@ -30,11 +36,50 @@ public class AttackGameState extends GameLogicState {
 
     @Override
     public void attack() {
-        int attackerDiceRolls = diceRoll();
-        int defenderDiceRolls = diceRoll();
+
+        int attackerDiceRolls;
+        int defenderDiceRolls;
+        int attackerTroops = sourceHub.getAmountTroops();
+        int defenderTroops = targetHub.getAmountTroops();
 
         if (this.sourceHub.getAmountTroops() == 1 || this.targetHub.getAmountTroops() <= 0) {
             throw new IllegalArgumentException("Illegal attack");
+        }
+
+        switch (attackerTroops){
+            case 2:{
+                attackerDiceRolls = diceRoll();
+                testAttackerDiceRoll = 1;
+                break;
+                // Attacker greift mit einer Truppe an
+            }
+            case 3:{
+                attackerDiceRolls = diceRoll() + diceRoll();
+                testAttackerDiceRoll = 2;
+                break;
+                //Attacker greift mit zwei Truppen an
+            }
+            default:{
+                attackerDiceRolls = diceRoll() + diceRoll() + diceRoll();
+                testAttackerDiceRoll = 3;
+                break;
+                //Attacker greift mit mehr als zwei Truppen an
+            }
+        }
+
+        switch (defenderTroops){
+            case 1:{
+                defenderDiceRolls = diceRoll();
+                testDefenderDiceRoll = 1;
+                break;
+                //Verteidiger besitzt nur eine Truppe am Feld
+            }
+            default:{
+                defenderDiceRolls = diceRoll() + diceRoll();
+                testDefenderDiceRoll = 2;
+                break;
+                //Verteidiger besitzt mehr als eine Truppe am Feld
+            }
         }
 
         if (attackerDiceRolls > defenderDiceRolls) {

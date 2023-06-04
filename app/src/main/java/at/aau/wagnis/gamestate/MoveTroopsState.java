@@ -32,6 +32,7 @@ public class MoveTroopsState extends GameLogicState {
     }
 
 
+
     private boolean isMoveValid(int numTroops) {
         if (sourceHub == null || targetHub == null) {
             return false;

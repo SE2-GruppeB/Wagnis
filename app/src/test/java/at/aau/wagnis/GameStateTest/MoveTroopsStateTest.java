@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.MoveTroopsState;
@@ -24,7 +25,7 @@ public class MoveTroopsStateTest {
     public void setUp() {
         sourceHub = new Hub(Mockito.mock(Button.class));
         targetHub = new Hub(Mockito.mock(Button.class));
-        moveTroopsState = new MoveTroopsState(sourceHub, targetHub );
+        moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
         Player player = new Player(1);
         sourceHub.setOwner(player);
         targetHub.setOwner(player);

@@ -25,13 +25,15 @@ public class MoveTroopsState extends GameLogicState {
         this.numTroops = numTroops;
     }
 
-    public void move(int numTroops) {
+    public boolean move(int numTroops) {
         if (isMoveValid(numTroops)) {
             moveTroopsBetweenHubs(numTroops);
+            return true; // Successful move
         } else {
-            throw new IllegalArgumentException("Invalid move.");
+            return false; // Invalid move
         }
     }
+
 
     private boolean isMoveValid(int numTroops) {
         if (sourceHub == null || targetHub == null) {

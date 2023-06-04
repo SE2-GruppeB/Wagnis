@@ -7,12 +7,10 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.client.GameClient;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.GameServer;
 import at.aau.wagnis.server.communication.command.ClientOriginatedServerCommand;
-import at.aau.wagnis.server.communication.command.IdentifyCommand;
 
 public class GameManager {
 
@@ -69,9 +67,6 @@ public class GameManager {
                 gameClient = gameClientFactory.createGameClient(serverAddress, GAME_PORT);
 
                 setConnectionState(ConnectionState.CONNECTED);
-
-                String ipAddress = GlobalVariables.getIpAddress();
-                postCommand(new IdentifyCommand(ipAddress));
             } catch (IOException e) {
                 this.reset();
                 setConnectionState(ConnectionState.ERROR);

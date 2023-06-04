@@ -359,12 +359,13 @@ public class MainActivity extends AppCompatActivity {
 
         Cards[] cards = player.getHand();
 
-        Button btn0 = popupWindow.getContentView().findViewById(R.id.btn_Card0);
-        Button btn1 = popupWindow.getContentView().findViewById(R.id.btn_Card1);
-        Button btn2 = popupWindow.getContentView().findViewById(R.id.btn_Card2);
-        Button btn3 = popupWindow.getContentView().findViewById(R.id.btn_Card3);
-        Button btn4 = popupWindow.getContentView().findViewById(R.id.btn_Card4);
-        Button[] btns = {btn0,btn1,btn2,btn3,btn4};
+        Button[] btns = new Button[5];
+        btns[0] = popupWindow.getContentView().findViewById(R.id.btn_Card0);
+        btns[1] = popupWindow.getContentView().findViewById(R.id.btn_Card1);
+        btns[2] = popupWindow.getContentView().findViewById(R.id.btn_Card2);
+        btns[3] = popupWindow.getContentView().findViewById(R.id.btn_Card3);
+        btns[4] = popupWindow.getContentView().findViewById(R.id.btn_Card4);
+
         boolean[] btnsPressed = new boolean[5];
         AtomicInteger countOfBtnsPressed = new AtomicInteger();
 

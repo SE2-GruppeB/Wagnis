@@ -26,23 +26,26 @@ public class MoveTroopsState extends GameLogicState {
     }
 
     public void move(int numTroops) {
-        moveTroopsBetweenHubs(numTroops);
+        if (isMoveValid(numTroops)) {
+            moveTroopsBetweenHubs(numTroops);
+        } else {
+            throw new IllegalArgumentException("Invalid move.");
+        }
     }
 
-    private void moveTroopsBetweenHubs(int numTroops) throws IllegalArgumentException{
-
+    private boolean isMoveValid(int numTroops) {
         if (sourceHub == null || targetHub == null) {
-            throw new IllegalArgumentException("Invalid source or target hub.");
+            return false;
         }
 
         if (sourceHub.getOwner() != targetHub.getOwner()) {
-            throw new IllegalArgumentException("Cannot move troops between hubs owned by different players.");
+            return false;
         }
 
-        if (sourceHub.getAmountTroops() <= 1 || sourceHub.getAmountTroops() < numTroops) {
-            throw new IllegalArgumentException("Illegal move: not enough troops at source hub.");
-        }
+        return sourceHub.getAmountTroops() > 1 && sourceHub.getAmountTroops() >= numTroops;
+    }
 
+    private void moveTroopsBetweenHubs(int numTroops) {
         sourceHub.setAmountTroops(sourceHub.getAmountTroops() - numTroops);
         targetHub.setAmountTroops(targetHub.getAmountTroops() + numTroops);
     }

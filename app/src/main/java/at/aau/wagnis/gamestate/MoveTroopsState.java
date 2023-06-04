@@ -60,6 +60,7 @@ public class MoveTroopsState extends GameLogicState {
         return false;
     }
 
+
     private void moveTroopsBetweenHubs(int numTroops) {
         sourceHub.setAmountTroops(sourceHub.getAmountTroops() - numTroops);
         targetHub.setAmountTroops(targetHub.getAmountTroops() + numTroops);

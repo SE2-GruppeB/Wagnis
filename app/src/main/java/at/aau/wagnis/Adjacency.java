@@ -15,7 +15,15 @@ public class Adjacency {
         return hub1;
     }
 
+    public void setHub1(Hub hub1) {
+        this.hub1 = hub1;
+    }
+
     public Hub getHub2() {
         return hub2;
+    }
+
+    public void setHub2(Hub hub2) {
+        this.hub2 = hub2;
     }
 }

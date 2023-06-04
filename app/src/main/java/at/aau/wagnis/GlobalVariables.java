@@ -25,6 +25,7 @@ public class GlobalVariables {
     public static int hubsPerLine;
     public static MediaPlayer mediaPlayer;
     static int displayWidthPx, displayHeightPx;
+    private static String localIpAddress;
 
     public static Hub findHubById(int id) {
         for (Hub h : hubs) {
@@ -93,6 +94,14 @@ public class GlobalVariables {
 
     public static ArrayList<Hub> getHubs() {
         return hubs;
+    }
+
+    public static String getLocalIpAddress() {
+        return localIpAddress;
+    }
+
+    public static void setLocalIpAddress(String localIpAddress) {
+        GlobalVariables.localIpAddress = localIpAddress;
     }
 
 

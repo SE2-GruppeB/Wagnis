@@ -40,6 +40,7 @@ import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.gamestate.StartGameState;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 
 
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();*/
+
 
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override

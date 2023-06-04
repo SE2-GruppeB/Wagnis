@@ -3,6 +3,7 @@ package at.aau.wagnis.GameStateTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import android.content.Context;
 import android.widget.Button;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,11 +19,13 @@ public class MoveTroopsStateTest {
     private Hub targetHub;
     private MoveTroopsState moveTroopsState;
 
+    private Context context;
+
     @BeforeEach
     public void setUp() {
         sourceHub = new Hub(Mockito.mock(Button.class));
         targetHub = new Hub(Mockito.mock(Button.class));
-        moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
+        moveTroopsState = new MoveTroopsState(sourceHub, targetHub,context );
         Player player = new Player(1);
         sourceHub.setOwner(player);
         targetHub.setOwner(player);

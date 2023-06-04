@@ -11,12 +11,9 @@ public class MoveTroopsState extends GameLogicState {
     private int targetHubId;
     private int numTroops;
 
-    private Context context;
-
-    public MoveTroopsState(Hub sourceHub, Hub targetHub, Context context) {
+    public MoveTroopsState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
-        this.context = context;
     }
 
     public MoveTroopsState(int sourceHubId, int targetHubId, int numTroops) {
@@ -25,13 +22,15 @@ public class MoveTroopsState extends GameLogicState {
         this.numTroops = numTroops;
     }
 
-    public void move(int numTroops) {
+    public boolean move(int numTroops) {
         if (isMoveValid(numTroops)) {
             moveTroopsBetweenHubs(numTroops);
+            return true; // Successful move
         } else {
-            throw new IllegalArgumentException("Invalid move.");
+            return false; // Invalid move
         }
     }
+
 
     private boolean isMoveValid(int numTroops) {
         if (sourceHub == null || targetHub == null) {

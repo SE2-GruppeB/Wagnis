@@ -19,13 +19,12 @@ public class MoveTroopsStateTest {
     private Hub targetHub;
     private MoveTroopsState moveTroopsState;
 
-    private Context context;
 
     @BeforeEach
     public void setUp() {
         sourceHub = new Hub(Mockito.mock(Button.class));
         targetHub = new Hub(Mockito.mock(Button.class));
-        moveTroopsState = new MoveTroopsState(sourceHub, targetHub,context );
+        moveTroopsState = new MoveTroopsState(sourceHub, targetHub );
         Player player = new Player(1);
         sourceHub.setOwner(player);
         targetHub.setOwner(player);

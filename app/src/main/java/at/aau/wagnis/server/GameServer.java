@@ -2,12 +2,11 @@ package at.aau.wagnis.server;
 
 import androidx.annotation.NonNull;
 
-import java.util.Collections;
 import java.util.Objects;
 
-import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.gamestate.LobbyState;
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.SendGameDataCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
@@ -46,13 +45,10 @@ public class GameServer implements Runnable {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
-                if(gameData == null) {
-                    gameData = new GameData();
-                    GlobalVariables.seedGenerator();
-                    gameData.setSeed(GlobalVariables.getSeed());
-                    gameData.setPlayers(Collections.emptyList());
-                    gameData.setHubs(Collections.emptyList());
+                if(gameLogicState instanceof LobbyState) {
+                    gameData = ((LobbyState) gameLogicState).getGameData();
                 }
+
                 broadcastCommand(new SendGameDataCommand(gameData));
             }
         } catch (InterruptedException e) {

@@ -33,6 +33,15 @@ public class LobbyState extends GameLogicState{
         setAdjacencies(seed);
     }
 
+    public GameData getGameData() {
+        GameData gameData = new GameData();
+        gameData.setSeed(seed);
+        gameData.setHubs(hubs);
+        gameData.setPlayers(players);
+
+        return gameData;
+    }
+
     private void seedGenerator() {
         SecureRandom secureRandom = new SecureRandom(); //secureRandom because of SonarCloud
         StringBuilder stringBuilder = new StringBuilder();

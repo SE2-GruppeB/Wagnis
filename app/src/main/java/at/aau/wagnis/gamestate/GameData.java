@@ -15,15 +15,18 @@ public class GameData {
     private static final String PLAYER_STRING  = "PLAYER";
     private static final String CARD_STRING  = "CARD";
     private static final String HUB_STRING  = "HUB";
+    protected static final int MSG_HISTORY_LENGTH = 10;
 
     private String seed;
     private List<Hub> hubs;
     private List<Player> players;
+    private List<ChatMessage> messages;
 
     public GameData() {
         super();
         hubs = new ArrayList<>();
         players = new ArrayList<>();
+        messages = new ArrayList<>();
     }
 
     public void setSeed(String seed) {
@@ -86,6 +89,8 @@ public class GameData {
         }
         builder.append("END");
         return builder.toString();
+
+
     }
 
     public void deserialize(String input){
@@ -170,5 +175,17 @@ public class GameData {
                 return null;
         }
         return new Cards(0, troop, new Deck(1));
+    }
+
+    public void addMessage(int clientId, String message) {
+        if(messages.size() >= MSG_HISTORY_LENGTH) {
+            messages.remove(0);
+        }
+        this.messages.add(new ChatMessage(clientId, message));
+
+    }
+
+    public List<ChatMessage> getMessages() {
+        return this.messages;
     }
 }

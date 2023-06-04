@@ -33,9 +33,14 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 
+import java.util.stream.Collectors;
+
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
+import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.gamestate.StartGameState;
+import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -76,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
+            if(newGameState != null && currentState != null && !(currentState.getMessages().equals(newGameState.getMessages()))) {
+                btnChat.setCustomSize(300);
+            }
+
             // code to be executed on the UI thread
             currentState = newGameState;
             if(newGameState != null && !wasDrawn){
@@ -395,9 +404,21 @@ public class MainActivity extends AppCompatActivity {
     public  void popupChat(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_chat);
         popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+        btnChat.clearCustomSize();
+
         Button btnExit = popupWindow.getContentView().findViewById(R.id.btn_Exit);
         Button btnSend = popupWindow.getContentView().findViewById(R.id.btn_Send);
+
         TextView msg = popupWindow.getContentView().findViewById(R.id.chatMsg);
+        if(currentState != null) {
+            String messages = currentState.getMessages()
+                    .stream()
+                    .map(ChatMessage::toString)
+                    .collect(Collectors.joining("\n"));
+
+            msg.setText(messages);
+        }
+
         EditText sendMsg = popupWindow.getContentView().findViewById(R.id.sendMsg);
         btnExit.setOnClickListener(view -> {
             popupWindow.dismiss();
@@ -405,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnSend.setOnClickListener(view -> {
-            System.out.println(sendMsg.getText());
+            getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString()));
         });
     }
 }

@@ -31,15 +31,14 @@ public class StartGameState extends GameLogicState {
             player.addHub(hub);
         }
     }
+    Random ran = new Random();
 
     public void assignTroopsToHubs() {
-        Random ran = new SecureRandom();
-
         for (Player player : players) {
             assignOneTroopEach(player);
             while (hasTroops(player)) {
                 Hub hub = getRandomHub(player, ran);
-                if (!hasTroops(player)) {
+                if (!hasTroops(player)) { // This is used to stop placing troops on hubs for a player if they have no remaining unassigned troops available
                     break;
                 }
                 int troopsToPlace = getRandomTroopsToPlace(player, ran);

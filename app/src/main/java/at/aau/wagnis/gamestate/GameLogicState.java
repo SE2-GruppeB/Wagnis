@@ -26,6 +26,9 @@ public abstract class GameLogicState {
 
     public void attack() {
     }
+    public void handleChatMessage(Integer clientId, String message) {
+        this.gameServer.getGameData().addMessage(clientId,message);
+    }
 
     public void chooseAttack(int playerId, int sourceHubId, int targetHubId) {
     }

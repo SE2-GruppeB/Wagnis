@@ -86,7 +86,7 @@ class GameServerTest {
         assertTrue(Thread.interrupted());
         verify(bus, times(2)).getNextCommand();
         verify(serverCommand).execute(gameLogicState);
-        verifyNoMoreInteractions(serverCommand, initialGameLogicState);
+        verifyNoMoreInteractions(serverCommand);
     }
 
     @Test

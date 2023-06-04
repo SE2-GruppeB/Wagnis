@@ -66,19 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
         setDisplayMetrics();
 
-        btnCards.setOnClickListener(view -> {
-            popupCards();
+        btnCards.setOnClickListener(view -> popupCards());
+        btnSettings.setOnClickListener(view -> popupSettings());
 
-        });
-        btnSettings.setOnClickListener(view -> {
-            popupSettings();
-
-        });
-
-        btnChat.setOnClickListener(view -> {
-            popupChat();
-
-        });
+        btnChat.setOnClickListener(view -> popupChat());
 
         ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
             if(newGameState != null && currentState != null && !(currentState.getMessages().equals(newGameState.getMessages()))) {
@@ -267,9 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
         popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
-        btnClose.setOnClickListener(view -> {
-            popupWindow.dismiss();
-        });
+        btnClose.setOnClickListener(view -> popupWindow.dismiss());
 
         SwitchCompat switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
         switchMusic.setTextOn("On");
@@ -294,9 +283,7 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
 
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
-        btnBack.setOnClickListener(view -> {
-            popupWindow.dismiss();
-        });
+        btnBack.setOnClickListener(view -> popupWindow.dismiss());
 
         Cards c1 = new Cards(4000,Troops.INFANTRY,null);
         Cards c2 = new Cards(4001,Troops.ARTILLERY,null);
@@ -347,9 +334,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Back);
-        btnBack.setOnClickListener(view -> {
-            popupWindow.dismiss();
-        });
+        btnBack.setOnClickListener(view -> popupWindow.dismiss());
 
 
         NumberPicker n1 = popupWindow.getContentView().findViewById(R.id.dice1);
@@ -420,13 +405,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         EditText sendMsg = popupWindow.getContentView().findViewById(R.id.sendMsg);
-        btnExit.setOnClickListener(view -> {
-            popupWindow.dismiss();
-            return;
-        });
+        btnExit.setOnClickListener(view -> popupWindow.dismiss());
 
-        btnSend.setOnClickListener(view -> {
-            getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString()));
-        });
+        btnSend.setOnClickListener(view -> getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString())));
     }
 }

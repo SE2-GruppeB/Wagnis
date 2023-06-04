@@ -35,6 +35,7 @@ public class GameServer implements Runnable {
         this.connectionBus = Objects.requireNonNull(connectionBus);
         this.clientConnectionListener = Objects.requireNonNull(clientConnectionListener);
         this.gameLogicState = Objects.requireNonNull(initialState);
+        this.gameLogicState.setGameServer(this);
     }
 
     /**

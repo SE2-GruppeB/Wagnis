@@ -5,8 +5,8 @@ import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GlobalVariables {
     private static String agency = "";
@@ -41,12 +41,12 @@ public class GlobalVariables {
         GlobalVariables.hostIP = hostIP;
     }
 
-    public static ArrayList<Player> getPlayers() {
+    public static List<Player> getPlayers() {
         return players;
     }
 
-    public static void setPlayers(ArrayList<Player> players) {
-        GlobalVariables.players = players;
+    public static void setPlayers(List <Player> players) {
+        GlobalVariables.players = (ArrayList<Player>) players;
     }
 
     public static ArrayList<String> getSeeds() {
@@ -126,6 +126,16 @@ public class GlobalVariables {
     }
 
 
+    private static int setAdjacenciesChanceModTwoEqualsZero(int lineHubCount, int i){
+        if (lineHubCount % hubsPerLine == 0) {
+            adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
+            return lineHubCount;
+        } else {
+            adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
+            return 1;
+        }
+    }
+
     public static void setAdjacencies() {
         int lineHubCount = 1;
         int chance = 0;
@@ -135,13 +145,15 @@ public class GlobalVariables {
             chance = Integer.parseInt(seeds.get(i));
 
             if (chance % 2 == 0) {
-                if (lineHubCount % hubsPerLine == 0) {
+               /* if (lineHubCount % hubsPerLine == 0) {
                     adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
                 } else {
                     adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
                     lineHubCount = 1;
-                }
+                }*/
+               lineHubCount = setAdjacenciesChanceModTwoEqualsZero(lineHubCount, i);
             }
+
             if (chance % 3 == 0) {
                 adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
             } else if (chance % 5 == 0) {

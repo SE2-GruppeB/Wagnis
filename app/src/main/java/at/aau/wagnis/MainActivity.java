@@ -41,9 +41,9 @@ import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
-import at.aau.wagnis.gamestate.StartGameState;
+import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
-
+import at.aau.wagnis.server.communication.command.StartGameCommand;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,9 +53,14 @@ public class MainActivity extends AppCompatActivity {
     ImageView adjacencyView;
     GameData currentState;
     boolean wasDrawn = false;
+    PopupWindow startpopup;
+    TextView playerCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
+
         setContentView(R.layout.activity_main);
         GlobalVariables.baseContext = this;
 
@@ -107,10 +112,22 @@ public class MainActivity extends AppCompatActivity {
             currentState = newGameState;
             if(newGameState != null){
                 System.out.println(currentState.getMessages());
+                if(startpopup!=null&&startpopup.isShowing()){
+                    updatePlayerCount();
+                   //playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
+                }
+
+                /*if(currentState.getCurrentGameState() instanceof StartGameState){
+                    if(startpopup.isShowing()){
+                         startpopup.dismiss();
+                    }
+                   }
+                }*/
                 if(!wasDrawn){
                     generateMap(newGameState.getSeed());
                     wasDrawn = true;
                 }
+
             }
 
         }));
@@ -277,26 +294,36 @@ public class MainActivity extends AppCompatActivity {
 
         adjacencyView.setImageBitmap(bitmap);
     }
+
+    private void updatePlayerCount(){
+        if(startpopup!=null&&startpopup.isShowing()){
+            playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
+        }
+    }
     public void popupStart(View view){
         LayoutInflater inflater = this.getLayoutInflater();
         final View layout = inflater.inflate(R.layout.popup_start, null);
-        final PopupWindow popupWindow = new PopupWindow(layout ,  FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,false);
-        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_start);
-        TextView playerCount = popupWindow.getContentView().findViewById(R.id.txtPlayerCount);
-        ImageView qrCode = popupWindow.getContentView().findViewById(R.id.qrCode);
+        startpopup = new PopupWindow(layout ,  FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,false);
+        Button btnClose = startpopup.getContentView().findViewById(R.id.btn_start);
+        playerCount = startpopup.getContentView().findViewById(R.id.txtPlayerCount);
+        ImageView qrCode = startpopup.getContentView().findViewById(R.id.qrCode);
 
-       view.post(() -> popupWindow.showAtLocation(view,Gravity.CENTER, 0, 0));//Call popUp after setup has finished
+
+      if(view.post(() -> startpopup.showAtLocation(view,Gravity.CENTER, 0, 0))){ //Call popUp after setup has finished
+         updatePlayerCount();
+
+        }
 
         if(GlobalVariables.isClient){
             btnClose.setEnabled(false);
         }
-       //TODO: update playerCount
+
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO:startNewGame
+                getGameManager().postCommand(new StartGameCommand());
 
-                popupWindow.dismiss();
+                //popupWindow.dismiss();
                 return;
             }
         });

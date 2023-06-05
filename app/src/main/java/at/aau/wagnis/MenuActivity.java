@@ -104,21 +104,25 @@ public class MenuActivity extends AppCompatActivity {
     }
     public void getHostIp() {
         try {
-            throw new Exception();
-            //readQrCode();
+            //throw new Exception();
+            readQrCode();
 
         } catch (Exception e) {
-
-            PopupWindow popupWindow= createPopUp(R.layout.popup_connect);
-            popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
-
-            Button btnConnect = popupWindow.getContentView().findViewById(R.id.btn_connect);
-            EditText hostIP = popupWindow.getContentView().findViewById(R.id.txtIP);
-            btnConnect.setOnClickListener(view -> {
-                popupWindow.dismiss();
-                new Thread(() -> getGameManager().joinGameByServerAddress(hostIP.getText().toString())).start();
-            });
+            popupIp();
         }
+    }
+
+    private void popupIp(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_connect);
+        popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
+
+        Button btnConnect = popupWindow.getContentView().findViewById(R.id.btn_connect);
+        EditText hostIP = popupWindow.getContentView().findViewById(R.id.txtIP);
+        btnConnect.setOnClickListener(view -> {
+            GlobalVariables.setHostIP(hostIP.getText().toString());
+            popupWindow.dismiss();
+            new Thread(() -> getGameManager().joinGameByServerAddress(hostIP.getText().toString())).start();
+        });
     }
     private void readQrCode(){
         IntentIntegrator ig11 = new IntentIntegrator(this);
@@ -134,11 +138,14 @@ public class MenuActivity extends AppCompatActivity {
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
                 Toast.makeText(getBaseContext(), "Invalid Code", Toast.LENGTH_SHORT).show();
+                popupIp();
             } else {
-                new Thread(() -> getGameManager().joinGameByServerAddress(intentResult.getContents())).start();
+                String ip = intentResult.getContents();
+                GlobalVariables.setHostIP(ip);
+                new Thread(() -> getGameManager().joinGameByServerAddress(ip)).start();
             }
         } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            popupIp();
         }
     }
 

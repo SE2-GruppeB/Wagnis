@@ -39,7 +39,6 @@ public abstract class GameLogicState {
     public void chooseMove(int playerId, int sourceHubId, int targetHubId, int numTroops) {
     }
 
-
     public void handleConnectionBusClosed() {
         Thread.currentThread().interrupt();
     }

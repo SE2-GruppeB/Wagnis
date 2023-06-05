@@ -25,7 +25,7 @@ public class GlobalVariables {
     public static MediaPlayer mediaPlayer;
     static int displayWidthPx, displayHeightPx;
 
-    public static Deck mainDeck = new Deck(hubs.size());
+    //public static Deck mainDeck = new Deck(hubs.size());
 
     public static Hub findHubById(int id) {
         for (Hub h : hubs) {

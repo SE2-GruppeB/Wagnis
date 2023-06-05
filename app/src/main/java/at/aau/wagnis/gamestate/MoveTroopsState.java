@@ -1,7 +1,11 @@
 package at.aau.wagnis.gamestate;
 
+import static at.aau.wagnis.GlobalVariables.adjacencies;
+import static at.aau.wagnis.GlobalVariables.findHubById;
+
 import android.content.Context;
 
+import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Hub;
 
 public class MoveTroopsState extends GameLogicState {
@@ -9,20 +13,19 @@ public class MoveTroopsState extends GameLogicState {
     private Hub targetHub;
     private int sourceHubId;
     private int targetHubId;
+
     private int numTroops;
 
-    private Context context;
-
-    public MoveTroopsState(Hub sourceHub, Hub targetHub, Context context) {
+    public MoveTroopsState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
-        this.context = context;
+
     }
 
-    public MoveTroopsState(int sourceHubId, int targetHubId, int numTroops) {
+    public MoveTroopsState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
-        this.numTroops = numTroops;
+
     }
 
     public void move(int numTroops) {
@@ -42,8 +45,23 @@ public class MoveTroopsState extends GameLogicState {
             return false;
         }
 
+        if (!areHubsAdjacent(sourceHub, targetHub)) {
+            return false;
+        }
+
         return sourceHub.getAmountTroops() > 1 && sourceHub.getAmountTroops() >= numTroops;
     }
+
+    private boolean areHubsAdjacent(Hub sourceHub, Hub targetHub) {
+        for (Adjacency adjacency : adjacencies) {
+            if ((adjacency.getHub1() == sourceHub && adjacency.getHub2() == targetHub) ||
+                    (adjacency.getHub1() == targetHub && adjacency.getHub2() == sourceHub)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private void moveTroopsBetweenHubs(int numTroops) {
         sourceHub.setAmountTroops(sourceHub.getAmountTroops() - numTroops);

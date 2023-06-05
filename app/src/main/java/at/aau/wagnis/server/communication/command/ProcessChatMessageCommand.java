@@ -16,14 +16,36 @@ public class ProcessChatMessageCommand implements ClientOriginatedServerCommand 
     private final String message;
     private Integer clientId = null;
 
-    public ProcessChatMessageCommand(@NonNull String message) {
-        this.message = Objects.requireNonNull(message);
+    public ProcessChatMessageCommand(String message) {
+        if(message == null) {
+            throw new IllegalArgumentException("Message can't be null!");
+        }
+
+        if(message.equals("")) {
+            throw new IllegalArgumentException("Message can't be empty!");
+        }
+
+        if(message.contains("\n")) {
+            throw new IllegalArgumentException("Message can't contain new line!");
+        }
+
+        if(message.contains("\r")) {
+            throw new IllegalArgumentException("Message can't contain carriage return!");
+        }
+
+        if(message.length() >= 200) {
+            throw new IllegalArgumentException("Message too long!");
+        }
+        this.message = message;
     }
 
     @Override
     public void execute(@NonNull GameLogicState gameLogicState) {
-        // TODO
+        gameLogicState.handleChatMessage(this.clientId, this.message);
+
+
     }
+
 
     @Override
     public boolean equals(@Nullable Object o) {

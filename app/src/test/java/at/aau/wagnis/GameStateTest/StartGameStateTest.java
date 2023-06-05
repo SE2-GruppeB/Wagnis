@@ -32,6 +32,9 @@ public class StartGameStateTest {
         gameData = new GameData();
     }
 
+    /**
+     * Überprüft, ob jedem Hub ein Besitzer zugewiesen wurde.
+     */
     @Test
     public void testAssignCountries() {
 
@@ -56,6 +59,9 @@ public class StartGameStateTest {
         }
     }
 
+    /**
+     * Überprüft, ob jedem Hub eine Truppenanzahl größer als 0 zugewiesen wurde.
+     */
     @Test
     public void testAssignTroopsToHubs() {
 
@@ -77,5 +83,4 @@ public class StartGameStateTest {
             assertTrue(hub.getAmountTroops() > 0);
         }
     }
-
 }

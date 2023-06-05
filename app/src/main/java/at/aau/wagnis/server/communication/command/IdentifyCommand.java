@@ -40,7 +40,7 @@ public class IdentifyCommand implements ClientOriginatedServerCommand{
         }
     }
 
-    public class CommandSerializer implements Serializer<IdentifyCommand>{
+    public static class CommandSerializer implements Serializer<IdentifyCommand>{
 
         @NonNull
         @Override

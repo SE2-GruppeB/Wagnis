@@ -27,7 +27,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
-import at.aau.wagnis.server.communication.command.IdentifyCommand;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -124,8 +123,6 @@ public class MenuActivity extends AppCompatActivity {
             GlobalVariables.setIsClient(true);
             getHostIp();
         }
-
-        getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
     }
     public void getHostIp() {
         try {

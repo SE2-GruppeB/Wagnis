@@ -36,7 +36,7 @@ public class LobbyState extends GameLogicState{
     public GameData getGameData() {
         GameData gameData = new GameData();
         gameData.setSeed(seed);
-        gameData.setHubs(hubs);
+        gameData.setHubs(new ArrayList<>(hubs.values()));
         gameData.setPlayers(players);
 
         return gameData;

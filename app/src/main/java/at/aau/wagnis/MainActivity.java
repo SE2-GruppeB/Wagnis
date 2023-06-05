@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
 
         for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {
-            int pxWidth = dpToPx(21);
+            int pxWidth = dpToPx(60);
             int pxHeight = dpToPx(60);
 
             int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
@@ -234,7 +234,12 @@ public class MainActivity extends AppCompatActivity {
 
         MultiFormatWriter mWriter = new MultiFormatWriter();
         try {
-            BitMatrix mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            BitMatrix mMatrix;
+            if(GlobalVariables.getIsClient()){
+                mMatrix = mWriter.encode(GlobalVariables.getHostIP(), BarcodeFormat.QR_CODE, 500,500);
+            }else{
+                mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            }
             BarcodeEncoder mEncoder = new BarcodeEncoder();
             Bitmap mBitmap = mEncoder.createBitmap(mMatrix);
             qrCode.setImageBitmap(mBitmap);

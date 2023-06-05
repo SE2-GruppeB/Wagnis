@@ -33,6 +33,14 @@ public class GlobalVariables {
         return null;
     }
 
+    public static String getHostIP() {
+        return hostIP;
+    }
+
+    public static void setHostIP(String hostIP) {
+        GlobalVariables.hostIP = hostIP;
+    }
+
     public static ArrayList<Player> getPlayers() {
         return players;
     }
@@ -152,20 +160,6 @@ public class GlobalVariables {
             adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
         }
     }
-
-    public static void seedGenerator() {
-        SecureRandom secureRandom = new SecureRandom();
-        String seed = "";
-        for (int i = 0; i < 42; i++) {
-            int s = 0;
-            while (s <= 10) {
-                s = secureRandom.nextInt(100);
-            }
-            seed = seed + s;
-        }
-        GlobalVariables.setSeed(seed);
-    }
-
 
     public static String getIpAddress() {
         WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);

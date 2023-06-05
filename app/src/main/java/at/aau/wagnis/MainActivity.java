@@ -33,6 +33,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.concurrent.atomic.AtomicInteger;
 
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.gamestate.StartGameState;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         btnSettings = findViewById(R.id.btn_Settings);
         btnChat = findViewById(R.id.btn_Chat);
 
+        btnCards.setVisibility(View.GONE);
+
         setDisplayMetrics();
         /*if(!GlobalVariables.getIsClient()){
 
@@ -76,15 +80,13 @@ public class MainActivity extends AppCompatActivity {
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popupCards();
-                return;
-            }
+                popupCards(new Player());
+            }//TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupSettings();
-                return;
             }
         });
 
@@ -92,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 popupChat();
-                return;
             }
         });
 
@@ -359,62 +360,95 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-    public  void popupCards(){
+    public  void popupCards(Player player){
         PopupWindow popupWindow= createPopUp(R.layout.popup_cards);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
 
+        Button btnPlay = popupWindow.getContentView().findViewById(R.id.btn_play);
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-                return;
-            }
-        });
+        btnBack.setOnClickListener(view -> popupWindow.dismiss());
 
-        Cards c1 = new Cards(4000,Troops.INFANTRY,null);
-        Cards c2 = new Cards(4001,Troops.ARTILLERY,null);
-        Cards c3 = new Cards(4002,Troops.CAVALRY,null);
-        Cards[] cards = {c1,c2,c3};
+        Cards[] cards = player.getHand();
 
-        Button btn0 = popupWindow.getContentView().findViewById(R.id.btn_Card0);
-        Button btn1 = popupWindow.getContentView().findViewById(R.id.btn_Card1);
-        Button btn2 = popupWindow.getContentView().findViewById(R.id.btn_Card2);
-        Button btn3 = popupWindow.getContentView().findViewById(R.id.btn_Card3);
-        Button btn4 = popupWindow.getContentView().findViewById(R.id.btn_Card4);
-        Button[] btns = {btn0,btn1,btn2,btn3,btn4};
+        Button[] btns = new Button[5];
+        btns[0] = popupWindow.getContentView().findViewById(R.id.btn_Card0);
+        btns[1] = popupWindow.getContentView().findViewById(R.id.btn_Card1);
+        btns[2] = popupWindow.getContentView().findViewById(R.id.btn_Card2);
+        btns[3] = popupWindow.getContentView().findViewById(R.id.btn_Card3);
+        btns[4] = popupWindow.getContentView().findViewById(R.id.btn_Card4);
+
+        boolean[] btnsPressed = new boolean[5];
+        AtomicInteger countOfBtnsPressed = new AtomicInteger();
+
+        updateCards(btns , cards);
 
         for(int i = 0;i<btns.length;i++){
-
-            try {
-                switch (cards[i].getType()) {
-                    case INFANTRY:
-                        btns[i].setText("Infantry");
-                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.infantry, 0, 0);
-
-                        break;
-                    case CAVALRY:
-                        btns[i].setText("Cavallary");
-                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.cavalry, 0, 0);
-
-                        break;
-                    case ARTILLERY:
-                        btns[i].setText("Artillery");
-                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.artillery, 0, 0);
-
-                        break;
-                    default:
-                        btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
-                        break;
+            int index = i;
+            btns[i].setOnClickListener(view ->  {
+                if(Boolean.TRUE.equals(btnsPressed[index])){
+                    btnsPressed[index] = false;
+                    countOfBtnsPressed.getAndDecrement();
                 }
-            }catch(Exception e ){
-                btns[i].setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
-            }
-
+                else {
+                    if(countOfBtnsPressed.get() < 4){
+                        btnsPressed[index] = true;
+                        countOfBtnsPressed.getAndIncrement();
+                    }
+                }
+            });
         }
 
+
+        btnPlay.setOnClickListener(view ->  {
+            if (countOfBtnsPressed.get() < 4){
+                int[] chosenBtns = new int[3];
+                int counter = 0;
+                for (int i = 0; i < chosenBtns.length; i++){
+                    for (; counter < btns.length; counter++){
+                        if (btnsPressed[counter]){
+                            chosenBtns[i] = counter;
+                            break;
+                        }
+                    }
+                }
+                player.useCards(chosenBtns[0],chosenBtns[1],chosenBtns[2]);
+                updateCards(btns , cards);
+            }
+        });
     }
 
+    public void updateCards(Button[] btns , Cards[] cards){
+        for (int i = 0; i < btns.length; i++) {
+            drawCards(cards[i],btns[i]);
+        }
+    }
+    public void drawCards(Cards card, Button btn) {
+        try {
+            switch (card.getType()) {
+                case INFANTRY:
+                    btn.setText("Infantry");
+                    btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.infantry, 0, 0);
+
+                    break;
+                case CAVALRY:
+                    btn.setText("Cavallary");
+                    btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.cavalry, 0, 0);
+
+                    break;
+                case ARTILLERY:
+                    btn.setText("Artillery");
+                    btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.artillery, 0, 0);
+
+                    break;
+                default:
+                    btn.setText("Empty");
+                    btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
+                    break;
+            }
+        }catch(Exception e ){
+            btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
+        }
+    }
     public  void popupDiceRoll(int[] values) {
         PopupWindow popupWindow= createPopUp(R.layout.popup_diceroll);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
@@ -425,7 +459,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
-                return;
             }
         });
 
@@ -465,7 +498,6 @@ public class MainActivity extends AppCompatActivity {
                 //selected.setText(selected.getHubButton().getText().toString()+troops);
                 //selected.setAmountTroops(selected.getAmmountTroops+troops);   //set new troop count
                 popupWindow.dismiss();
-                return;
             }
         });
     }

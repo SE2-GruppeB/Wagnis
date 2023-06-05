@@ -18,10 +18,9 @@ public class ChooseAttackGameState extends GameLogicState {
 }
     @Override
     public void chooseAttack(int playerId, int sourceHubId, int targetHubId) {
-        Hub sHub = new Hub(targetHubId);
+        Hub sHub = new Hub(sourceHubId);
         Hub tHub = new Hub(targetHubId);
         if(areHubsAdjacent(sHub, tHub) == true) {
-            this.gameServer.getGameData();
             this.gameServer.setGameLogicState(new AttackGameState(sourceHubId, targetHubId));
             //Erstellt zwei neue Hubs, mit übergebner ID von Source und Target prüft auf adjacency
         }

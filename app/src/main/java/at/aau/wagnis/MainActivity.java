@@ -43,7 +43,7 @@ import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.gamestate.StartGameState;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
-
+import at.aau.wagnis.server.communication.command.StartGameCommand;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO:startNewGame
+                getGameManager().postCommand(new StartGameCommand());
 
                 popupWindow.dismiss();
                 return;

@@ -41,7 +41,7 @@ import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
-import at.aau.wagnis.gamestate.StartGameState;
+import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
 
@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
+
         setContentView(R.layout.activity_main);
         GlobalVariables.baseContext = this;
 

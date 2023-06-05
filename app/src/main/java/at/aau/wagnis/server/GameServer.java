@@ -45,7 +45,7 @@ public class GameServer implements Runnable {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
-                if(gameLogicState instanceof LobbyState) {
+                if(gameData == null && gameLogicState instanceof LobbyState) {
                     gameData = ((LobbyState) gameLogicState).getGameData();
                 }
 
@@ -63,6 +63,7 @@ public class GameServer implements Runnable {
 
     public void setGameLogicState(@NonNull GameLogicState gameLogicState) {
         this.gameLogicState = Objects.requireNonNull(gameLogicState);
+        gameLogicState.setGameServer(this);
     }
 
     public void broadcastCommand(@NonNull ClientCommand command) {

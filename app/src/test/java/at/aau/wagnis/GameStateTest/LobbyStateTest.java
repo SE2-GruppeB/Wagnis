@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.gamestate.LobbyState;
 import at.aau.wagnis.server.GameServer;
 
@@ -15,15 +16,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class LobbyStateTest {
     LobbyState lobbyState;
     @Mock
     Player player;
 
+    GameServer gameServer;
+
     @BeforeEach
     void setUp() {
+        gameServer = mock(GameServer.class);
+
         lobbyState=new LobbyState();
+        lobbyState.setGameServer(gameServer);
     }
 
     @Test
@@ -93,8 +100,12 @@ class LobbyStateTest {
     }
     @Test
     void testPlayer(){
+        GameData mockGameData = mock(GameData.class);
+        when(gameServer.getGameData()).thenReturn(mockGameData);
         assertEquals(0,lobbyState.getPlayers().size());
-        lobbyState.addPlayer(player);
+        lobbyState.addPlayer("10.0.0.1");
         assertEquals(1,lobbyState.getPlayers().size());
+
+        verify(gameServer).getGameData();
     }
 }

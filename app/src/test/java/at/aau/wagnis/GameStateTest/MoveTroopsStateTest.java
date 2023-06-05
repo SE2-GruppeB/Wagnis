@@ -25,13 +25,11 @@ public class MoveTroopsStateTest {
     private int targetHubId;
     private MoveTroopsState moveTroopsState;
 
-
-
     @BeforeEach
     public void setUp() {
         sourceHub = new Hub(Mockito.mock(Button.class));
         targetHub = new Hub(Mockito.mock(Button.class));
-        Adjacency adjacency = new Adjacency(sourceHub,targetHub);
+        Adjacency adjacency = new Adjacency(sourceHub, targetHub);
         moveTroopsState = new MoveTroopsState(sourceHub, targetHub);
         Player player = new Player(1);
         sourceHub.setOwner(player);
@@ -39,9 +37,11 @@ public class MoveTroopsStateTest {
         GlobalVariables.adjacencies.add(adjacency);
     }
 
+    /**
+     * Testet eine gültige Truppenbewegung, indem  `move()` aufgerufen wird und überprüft ob die Anzahl der Truppen in den Hubs korrekt aktualisiert wurde.
+     */
     @Test
     public void testValidMove() {
-
         sourceHub.setAmountTroops(5);
         targetHub.setAmountTroops(0);
 
@@ -51,10 +51,11 @@ public class MoveTroopsStateTest {
         assertEquals(3, targetHub.getAmountTroops());
     }
 
-
+    /**
+     * Testet eine ungültige Truppenbewegung, indem die Methode `move()` mit einer ungültigen Anzahl von Truppen aufgerufen wird .
+     */
     @Test
     public void testInvalidMove() {
-
         sourceHub.setAmountTroops(0);
         targetHub.setAmountTroops(1);
 
@@ -63,10 +64,11 @@ public class MoveTroopsStateTest {
         });
     }
 
-
+    /**
+     * Testet eine Truppenbewegung zwischen Hubs.
+     */
     @Test
     public void testDifferentPlayersMove() {
-
         sourceHub.setOwner(new Player(1));
         targetHub.setOwner(new Player(2));
 
@@ -76,7 +78,5 @@ public class MoveTroopsStateTest {
         assertThrows(IllegalArgumentException.class, () -> {
             moveTroopsState.move(1);
         });
-
     }
-
 }

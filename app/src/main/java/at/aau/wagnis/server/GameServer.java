@@ -45,7 +45,7 @@ public class GameServer implements Runnable {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
                 command.execute(gameLogicState);
-                if(gameLogicState instanceof LobbyState) {
+                if(gameData == null && gameLogicState instanceof LobbyState) {
                     gameData = ((LobbyState) gameLogicState).getGameData();
                 }
 

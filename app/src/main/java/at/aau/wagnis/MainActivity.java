@@ -112,10 +112,11 @@ public class MainActivity extends AppCompatActivity {
             currentState = newGameState;
             if(newGameState != null){
                 System.out.println(currentState.getMessages());
-
-                if(startpopup.isShowing()) {
-                    playerCount.setText(currentState.getPlayers().size());
+                if(startpopup!=null&&startpopup.isShowing()){
+                    updatePlayerCount();
+                   //playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
                 }
+
                 /*if(currentState.getCurrentGameState() instanceof StartGameState){
                     if(startpopup.isShowing()){
                          startpopup.dismiss();
@@ -293,6 +294,12 @@ public class MainActivity extends AppCompatActivity {
 
         adjacencyView.setImageBitmap(bitmap);
     }
+
+    private void updatePlayerCount(){
+        if(startpopup!=null&&startpopup.isShowing()){
+            playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
+        }
+    }
     public void popupStart(View view){
         LayoutInflater inflater = this.getLayoutInflater();
         final View layout = inflater.inflate(R.layout.popup_start, null);
@@ -301,7 +308,11 @@ public class MainActivity extends AppCompatActivity {
         playerCount = startpopup.getContentView().findViewById(R.id.txtPlayerCount);
         ImageView qrCode = startpopup.getContentView().findViewById(R.id.qrCode);
 
-       view.post(() -> startpopup.showAtLocation(view,Gravity.CENTER, 0, 0));//Call popUp after setup has finished
+
+      if(view.post(() -> startpopup.showAtLocation(view,Gravity.CENTER, 0, 0))){ //Call popUp after setup has finished
+         updatePlayerCount();
+
+        }
 
         if(GlobalVariables.isClient){
             btnClose.setEnabled(false);

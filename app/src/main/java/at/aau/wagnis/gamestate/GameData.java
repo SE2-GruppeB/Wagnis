@@ -59,6 +59,7 @@ public class GameData {
 
     public void addPlayerIdentifier(int playerId, String ipAddress) {
         playerIdentifier.put(playerId, ipAddress);
+        players.add(new Player(playerId));
     }
 
     public String serialize() {

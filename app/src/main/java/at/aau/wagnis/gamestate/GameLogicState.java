@@ -33,11 +33,12 @@ public abstract class GameLogicState {
     public void chooseAttack(int playerId, int sourceHubId, int targetHubId) {
     }
 
-    public void move() {
+    public void move(int numTroops) {
     }
 
     public void chooseMove(int playerId, int sourceHubId, int targetHubId, int numTroops) {
     }
+
 
     public void handleConnectionBusClosed() {
         Thread.currentThread().interrupt();

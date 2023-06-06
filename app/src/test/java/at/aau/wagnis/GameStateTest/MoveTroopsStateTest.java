@@ -1,6 +1,7 @@
 package at.aau.wagnis.GameStateTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import android.content.Context;
@@ -59,10 +60,9 @@ public class MoveTroopsStateTest {
         sourceHub.setAmountTroops(0);
         targetHub.setAmountTroops(1);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            moveTroopsState.move(1);
-        });
+        assertFalse(moveTroopsState.move(1));
     }
+
 
     /**
      * Testet eine Truppenbewegung zwischen Hubs.
@@ -75,8 +75,6 @@ public class MoveTroopsStateTest {
         sourceHub.setAmountTroops(0);
         targetHub.setAmountTroops(2);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            moveTroopsState.move(1);
-        });
+        assertFalse(moveTroopsState.move(1));
     }
 }

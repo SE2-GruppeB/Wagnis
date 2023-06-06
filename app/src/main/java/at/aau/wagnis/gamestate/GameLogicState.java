@@ -33,7 +33,8 @@ public abstract class GameLogicState {
     public void chooseAttack(int playerId, int sourceHubId, int targetHubId) {
     }
 
-    public void move(int numTroops) {
+    public boolean move(int numTroops) {
+        return false;
     }
 
     public void chooseMove(int playerId, int sourceHubId, int targetHubId, int numTroops) {

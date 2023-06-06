@@ -1,9 +1,6 @@
 package at.aau.wagnis.gamestate;
 
 import static at.aau.wagnis.GlobalVariables.adjacencies;
-import static at.aau.wagnis.GlobalVariables.findHubById;
-
-import android.content.Context;
 
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Hub;
@@ -14,8 +11,6 @@ public class MoveTroopsState extends GameLogicState {
     private int sourceHubId;
     private int targetHubId;
 
-    private int numTroops;
-
     public MoveTroopsState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
@@ -25,15 +20,14 @@ public class MoveTroopsState extends GameLogicState {
     public MoveTroopsState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
-
     }
 
-    public void move(int numTroops) {
+    public boolean move(int numTroops) {
         if (isMoveValid(numTroops)) {
             moveTroopsBetweenHubs(numTroops);
-        } else {
-            throw new IllegalArgumentException("Invalid move.");
+            return true;
         }
+        return false;
     }
 
     private boolean isMoveValid(int numTroops) {

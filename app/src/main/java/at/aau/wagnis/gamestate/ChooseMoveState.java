@@ -7,6 +7,5 @@ public class ChooseMoveState extends GameLogicState {
         this.gameServer.getGameData();
         this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId));
         this.move(numTroops);
-
     }
 }

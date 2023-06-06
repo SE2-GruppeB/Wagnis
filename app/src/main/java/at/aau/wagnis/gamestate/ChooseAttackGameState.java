@@ -6,9 +6,9 @@ import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Hub;
 
 public class ChooseAttackGameState extends GameLogicState {
-   Hub sourcehub;
+   Hub sourceHub;
    //  Hub Angriff
-   Hub targethub;
+   Hub targetHub;
    // Hub Verteidiger
 
    @Override
@@ -21,18 +21,18 @@ public class ChooseAttackGameState extends GameLogicState {
       // Durchlaufen aller Knoten
       for(Hub h :hubs){
          if(h.getId()==sourceHubId){
-            sourcehub=h;
-            // Findet den Hub welcher übereinstimmt und weise ihn sourcehub zu
+            sourceHub=h;
+            // Findet den Hub welcher übereinstimmt und weise ihn sourceHub zu
          }
          if(h.getId()==sourceHubId){
-            sourcehub=h;
-            // Findet den Hub welcher übereinstimmt und weise ihn targethub zu
+            sourceHub=h;
+            // Findet den Hub welcher übereinstimmt und weise ihn targetHub zu
          }
       }
       // Durchlaufe alle benachbarten Hubpaare in der Liste
       for(Adjacency a : adj){
-         // Überprüfe, ob das aktuelle Hubpaar entweder den sourcehub und targethub und andersrum
-         if(a.getHub1().equals(sourcehub)&& a.getHub2().equals(targethub)||a.getHub1().equals(targethub)&& a.getHub2().equals(sourcehub)){
+         // Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum
+         if(a.getHub1().equals(sourceHub)&& a.getHub2().equals(targetHub)||a.getHub1().equals(targetHub)&& a.getHub2().equals(sourceHub)){
             this.gameServer.setGameLogicState(new AttackGameState(sourceHubId, targetHubId));
             // Spielzustand auf AttackGameState mit den übergebenen Angreifer-Hub und Verteidiger Hub
          }

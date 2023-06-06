@@ -9,7 +9,6 @@ import at.aau.wagnis.Player;
 /**
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
  */
-
 public class AttackGameState extends GameLogicState {
     private boolean attacker = false;
     private boolean defender = false;
@@ -22,13 +21,23 @@ public class AttackGameState extends GameLogicState {
 
     public int testDefenderDiceRoll;
 
-
-
+    /**
+     * Konstruktor für AttackGameState mit Hub-ID als Parameter.
+     *
+     * @param sourceHubId Die ID des angreifenden Hubs.
+     * @param targetHubId Die ID des verteidigenden Hubs.
+     */
     public AttackGameState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
     }
 
+    /**
+     * Konstruktor für AttackGameState mit Hubs als Parameter.
+     *
+     * @param sourceHub Der angreifende Hub.
+     * @param targetHub Der verteidigende Hub.
+     */
     public AttackGameState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
@@ -36,16 +45,18 @@ public class AttackGameState extends GameLogicState {
 
     @Override
     public void attack() {
-
+        // Anzahl der Würfe und Truppen berechnen
         int attackerDiceRolls;
         int defenderDiceRolls;
         int attackerTroops = sourceHub.getAmountTroops();
         int defenderTroops = targetHub.getAmountTroops();
 
+        // Überprüfen, ob der Angriff gültig ist
         if (this.sourceHub.getAmountTroops() == 1 || this.targetHub.getAmountTroops() <= 0) {
             throw new IllegalArgumentException("Illegal attack");
         }
 
+        // Würfe für den Angreifer basierend auf Truppenzahl festlegen
         switch (attackerTroops){
             case 2:{
                 attackerDiceRolls = diceRoll();
@@ -67,6 +78,7 @@ public class AttackGameState extends GameLogicState {
             }
         }
 
+        // Würfe für den Verteidiger basierend auf Truppenzahl festlegen
         switch (defenderTroops){
             case 1:{
                 defenderDiceRolls = diceRoll();
@@ -82,16 +94,19 @@ public class AttackGameState extends GameLogicState {
             }
         }
 
+        // Truppen aktualisieren basierend auf den Würfen
         if (attackerDiceRolls > defenderDiceRolls) {
             this.targetHub.setAmountTroops(this.targetHub.getAmountTroops() - 1);
         } else {
             this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - 1);
         }
 
+        // Überprüfen, ob der Angriff fehlgeschlagen ist
         if (this.sourceHub.getAmountTroops() == 1 && this.targetHub.getAmountTroops() >= 1) {
             throw new IllegalArgumentException("Attack failed");
         }
 
+        // Überprüfen, ob der Verteidiger besiegt wurde
         if (this.targetHub.getAmountTroops() <= 0) {
             Player attackingPlayer = this.sourceHub.getOwner();
             attackingPlayer.addHub(this.targetHub);
@@ -112,16 +127,32 @@ public class AttackGameState extends GameLogicState {
         }
     }
 
+    /**
+     * Überprüft, ob ein Spieler das Spiel gewonnen hat.
+     *
+     * @param player Der Spieler, der überprüft werden soll.
+     * @return true, wenn der Spieler alle Hubs besitzt, sonst false.
+     */
     public boolean gameWon(Player player) {
         return player.getOwnedHubs().size() == 42;
     }
 
+    /**
+     * Führt einen Würfelwurf aus und gibt das Ergebnis zurück.
+     *
+     * @return Das Ergebnis des Würfelwurfs.
+     */
     private int diceRoll() {
         Random randomGen = new Random();
         int diceValue = randomGen.nextInt(6) + 1;
         //Log.d("Info :","" + diceValue);
         return diceValue;
     }
+
+    // Getter und Setter
+
+
+
 
     public Hub getSourceHub() {
         return sourceHub;

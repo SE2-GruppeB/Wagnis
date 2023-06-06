@@ -7,19 +7,34 @@ import at.aau.wagnis.Player;
 import at.aau.wagnis.VictoryScreen;
 
 /**
- * Die ViktoryState Klasse soll den Zustand repräsentieren, wenn ein Spieler alle Hubs erobert hat.
+ * Die VictoryState-Klasse repräsentiert den Zustand, wenn ein Spieler alle Hubs erobert hat.
  */
 public class VictoryState extends GameLogicState {
     private Player winner;
 
+    /**
+     * Konstruktor für VictoryState.
+     *
+     * @param winner Spieler, welcher das Spiel gewonnen hat.
+     */
     public VictoryState(Player winner) {
         this.winner = winner;
     }
 
+    /**
+     * Gibt den Gewinner des Spiels zurück.
+     *
+     * @return Der Gewinner des Spiels.
+     */
     public Player getWinner() {
         return winner;
     }
 
+    /**
+     * Öffnet das VictoryScreen-Activity, um den Gewinner anzuzeigen.
+     *
+     * @param context Der Kontext der Aufrufenden Aktivität.
+     */
     public void toVictoryScreen(Context context) {
         Intent intent = new Intent(context, VictoryScreen.class);
         //intent.putExtra("player", this.winner);

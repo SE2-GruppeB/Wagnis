@@ -30,6 +30,9 @@ public class ChooseMoveGameStateTest {
 
     }
 
+    /**
+     * Testet, ob `chooseMove()` einen neuen `MoveTroopsState` festlegt, wenn`gameServer.setGameLogicState()` aufgerufen wird.
+     */
     @Test
     public void chooseMove_shouldSetNewMoveGameState() {
         int playerId = 1;
@@ -44,6 +47,9 @@ public class ChooseMoveGameStateTest {
     }
 
 
+    /**
+     * Testet, ob `chooseMove()` den richtigen `MoveTroopsState` festlegt, wen `gameServer.setGameLogicState()` aufgerufen wird.
+     */
     @Test
     public void chooseMove_shouldSetCorrectMoveGameState() {
         int playerId = 1;

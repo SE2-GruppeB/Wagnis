@@ -31,7 +31,8 @@ public class MoveTroopsState extends GameLogicState {
             return true; // Successful move
 
         } else {
-            throw new IllegalArgumentException("Illegal move"); // unsuccessful
+            return false;
+            //throw new IllegalArgumentException("Illegal move"); // unsuccessful
 
         }
     }

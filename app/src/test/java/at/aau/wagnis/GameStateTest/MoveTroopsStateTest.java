@@ -20,6 +20,7 @@ import at.aau.wagnis.gamestate.MoveTroopsState;
 public class MoveTroopsStateTest {
     private Hub sourceHub;
     private Hub targetHub;
+    private MoveTroopsState moveTroopsState;
 
     @BeforeEach
     public void setUp() {

@@ -27,7 +27,7 @@ public class SendGameDataCommand implements ClientCommand{
 
     @Override
     public void execute(@NonNull ClientLogic clientLogic) {
-        clientLogic.updateGameState(gameData);
+        clientLogic.updateGameData(gameData);
     }
 
     public static class CommandSerializer implements Serializer<SendGameDataCommand>{

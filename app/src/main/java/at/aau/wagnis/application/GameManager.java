@@ -123,7 +123,7 @@ public class GameManager {
             if (gameClient == null) {
                 throw new IllegalStateException("Game client is not ready");
             } else {
-                gameClient.setGameStateListener(listener);
+                gameClient.setGameDataListener(listener);
             }
         }
     }

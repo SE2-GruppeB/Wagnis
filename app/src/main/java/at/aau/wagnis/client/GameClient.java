@@ -16,7 +16,7 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
     private ServerConnection serverConnection = null;
 
     private GameData currentGameData = null;
-    private Consumer<GameData> gameStateListener = null;
+    private Consumer<GameData> gameDataListener = null;
 
     public synchronized void setServerConnection(@NonNull ServerConnection serverConnection) {
         this.serverConnection = serverConnection;
@@ -29,11 +29,11 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
     }
 
     @Override
-    public synchronized void updateGameState(@NonNull GameData gameData) {
+    public synchronized void updateGameData(@NonNull GameData gameData) {
         this.currentGameData = Objects.requireNonNull(gameData);
 
-        if (this.gameStateListener != null) {
-            this.gameStateListener.accept(currentGameData);
+        if (this.gameDataListener != null) {
+            this.gameDataListener.accept(currentGameData);
         }
     }
 
@@ -43,11 +43,11 @@ public class GameClient implements Consumer<ClientCommand>, ClientLogic {
      * <p>
      * If no state has been received yet, the value of the notification will be null.
      */
-    public synchronized void setGameStateListener(@Nullable Consumer<GameData> listener) {
-        this.gameStateListener = listener;
+    public synchronized void setGameDataListener(@Nullable Consumer<GameData> listener) {
+        this.gameDataListener = listener;
 
-        if (this.gameStateListener != null) {
-            this.gameStateListener.accept(currentGameData);
+        if (this.gameDataListener != null) {
+            this.gameDataListener.accept(currentGameData);
         }
     }
 

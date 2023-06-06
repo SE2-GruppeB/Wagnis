@@ -14,6 +14,7 @@ import at.aau.wagnis.Troops;
 
 public class GameData {
 
+    private static final String IDENTIFIER_STRING  = "IDENTIFIER";
     private static final String SEED_STRING  = "SEED";
     private static final String PLAYER_STRING  = "PLAYER";
     private static final String CARD_STRING  = "CARD";
@@ -25,7 +26,7 @@ public class GameData {
     private List<Player> players;
     private List<Adjacency> adjacencies;
     private List<ChatMessage> messages;
-    Map<Integer, String> playerIdentifier;
+    private Map<Integer, String> playerIdentifier;
 
     public GameData() {
         super();
@@ -52,6 +53,11 @@ public class GameData {
         this.adjacencies = adjacencies;
     }
 
+    public void addPlayerIdentifier(int playerId, String ipAddress) {
+        playerIdentifier.put(playerId, ipAddress);
+        players.add(new Player(playerId));
+    }
+
     public String getSeed() {
         return seed;
     }
@@ -68,15 +74,23 @@ public class GameData {
         return adjacencies;
     }
 
-    public void addPlayerIdentifier(int playerId, String ipAddress) {
-        playerIdentifier.put(playerId, ipAddress);
-        players.add(new Player(playerId));
+    public Map<Integer, String> getPlayerIdentifier() {
+        return playerIdentifier;
     }
 
     public String serialize() {
         // TYPE1<VALUE1>TYPE1TYPE2<VALUE2>TYPE2...
         // SEED(string), PLAYER[i](id, unassigned, cards[i](type)), HUB[i](hubID, ownerID, troops)
         StringBuilder builder = new StringBuilder();
+
+        // Player identification
+        builder.append(IDENTIFIER_STRING);
+        for(Map.Entry<Integer, String> i : playerIdentifier.entrySet()) {
+            builder.append(i.getKey()).append(";");
+            builder.append(i.getValue());
+            builder.append(IDENTIFIER_STRING);
+        }
+
         // Seed
         builder.append(SEED_STRING);
         builder.append(this.getSeed());
@@ -114,6 +128,15 @@ public class GameData {
     }
 
     public void deserialize(String input){
+        // Player identification
+        String[] identifiingData = input.split(IDENTIFIER_STRING);
+        for(int i = 1; i < identifiingData.length -1; i++) {
+            String[] data = identifiingData[i].split(";");
+            int key = Integer.parseInt(data[0]);
+            String value = data[1];
+            playerIdentifier.put(key, value);
+        }
+
         // Seed
         String[] seedData = input.split(SEED_STRING);
         setSeed(seedData[1]);

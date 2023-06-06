@@ -36,6 +36,10 @@ android {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs += '-Xlint:deprecation'
+}
+
 task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     reports {

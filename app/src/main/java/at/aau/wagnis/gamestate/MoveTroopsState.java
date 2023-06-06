@@ -30,11 +30,8 @@ public class MoveTroopsState extends GameLogicState {
 
             return true; // Successful move
 
-        } else {
-            return false;
-            //throw new IllegalArgumentException("Illegal move"); // unsuccessful
-
         }
+        return false;
     }
 
     private boolean isMoveValid(int numTroops) {

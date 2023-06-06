@@ -20,11 +20,8 @@ import at.aau.wagnis.gamestate.MoveTroopsState;
 public class MoveTroopsStateTest {
     private Hub sourceHub;
     private Hub targetHub;
+
     private MoveTroopsState moveTroopsState;
-
-    private int sourceHubId;
-
-    private int targetHubId;
 
     @BeforeEach
     public void setUp() {

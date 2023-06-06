@@ -25,7 +25,6 @@ public class MoveTroopsStateTest {
     private int sourceHubId;
 
     private int targetHubId;
-    private MoveTroopsState moveTroopsState;
 
     @BeforeEach
     public void setUp() {

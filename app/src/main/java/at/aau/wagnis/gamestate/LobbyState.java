@@ -135,8 +135,11 @@ public class LobbyState extends GameLogicState{
         return hubsPerLine;
     }
 
-    public void addPlayer(Player player){
+    public void addPlayer(String playerAddress){
+        int playerID = this.players.size() + 1;
+        Player player = new Player(playerID);
         players.add(player);
+        gameServer.getGameData().addPlayerIdentifier(playerID, playerAddress);
     }
 
     public void next(){

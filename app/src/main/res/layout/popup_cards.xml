@@ -7,12 +7,24 @@
 
     <Button
         android:id="@+id/btn_Close"
-        android:layout_width="420dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="260dp"
+        android:layout_marginBottom="50dp"
+        android:text="Close" />
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="false"
+        android:layout_marginStart="230dp"
         android:layout_marginTop="260dp"
         android:layout_marginBottom="50dp"
         android:text="Play" />
@@ -50,7 +62,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
         android:layout_marginTop="50dp"
-
         android:autoLink="web"
         android:clickable="true"
 

@@ -1,6 +1,7 @@
 package at.aau.wagnis.GameStateTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import android.content.Context;
@@ -19,9 +20,6 @@ import at.aau.wagnis.gamestate.MoveTroopsState;
 public class MoveTroopsStateTest {
     private Hub sourceHub;
     private Hub targetHub;
-    private MoveTroopsState moveTroopsState;
-
-
 
     @BeforeEach
     public void setUp() {
@@ -35,9 +33,11 @@ public class MoveTroopsStateTest {
         GlobalVariables.adjacencies.add(adjacency);
     }
 
+    /**
+     * Testet eine gültige Truppenbewegung, indem  `move()` aufgerufen wird und überprüft ob die Anzahl der Truppen in den Hubs korrekt aktualisiert wurde.
+     */
     @Test
     public void testValidMove() {
-
         sourceHub.setAmountTroops(5);
         targetHub.setAmountTroops(0);
 
@@ -47,32 +47,29 @@ public class MoveTroopsStateTest {
         assertEquals(3, targetHub.getAmountTroops());
     }
 
-
+    /**
+     * Testet eine ungültige Truppenbewegung, indem die Methode `move()` mit einer ungültigen Anzahl von Truppen aufgerufen wird .
+     */
     @Test
     public void testInvalidMove() {
-
         sourceHub.setAmountTroops(0);
         targetHub.setAmountTroops(1);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            moveTroopsState.move(1);
-        });
+        assertFalse(moveTroopsState.move(1));
     }
 
 
+    /**
+     * Testet eine Truppenbewegung zwischen Hubs.
+     */
     @Test
     public void testDifferentPlayersMove() {
-
         sourceHub.setOwner(new Player(1));
         targetHub.setOwner(new Player(2));
 
         sourceHub.setAmountTroops(0);
         targetHub.setAmountTroops(2);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            moveTroopsState.move(1);
-        });
-
+        assertFalse(moveTroopsState.move(1));
     }
-
 }

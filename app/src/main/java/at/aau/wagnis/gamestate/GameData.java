@@ -1,7 +1,9 @@
 package at.aau.wagnis.gamestate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Cards;
@@ -22,11 +24,13 @@ public class GameData {
     private List<Hub> hubs;
     private List<Player> players;
     private List<ChatMessage> messages;
+    Map<Integer, String> playerIdentifier;
 
     public GameData() {
         super();
         hubs = new ArrayList<>();
         players = new ArrayList<>();
+        playerIdentifier = new HashMap<>();
         messages = new ArrayList<>();
     }
 
@@ -52,6 +56,11 @@ public class GameData {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public void addPlayerIdentifier(int playerId, String ipAddress) {
+        playerIdentifier.put(playerId, ipAddress);
+        players.add(new Player(playerId));
     }
 
     public String serialize() {
@@ -106,8 +115,7 @@ public class GameData {
             String[] data = playerData[i].split(";");
             Player player;
             if((player = getPlayerById(Integer.parseInt(data[0]))) == null){
-                player = new Player();
-                player.setPlayerId(Integer.parseInt(data[0]));
+                player = new Player(Integer.parseInt(data[0]));
             }
             player.setUnassignedAvailableTroops(Integer.parseInt(data[1]));
 

@@ -37,6 +37,9 @@ public class ChooseAttackGameStateTest {
         gameState.setGameServer(gameServer);
     }
 
+    /**
+     * Testet, ob `chooseAttack()` einen neuen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
+     */
     @Test
     public void testChooseAttack_ValidAttack() {
         //Hubs für einen gültigen Angriff
@@ -58,6 +61,9 @@ public class ChooseAttackGameStateTest {
         verify(gameServer).setGameLogicState(any(AttackGameState.class));
     }
 
+    /**
+     * Testet, ob `chooseAttack()` den richtigen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
+     */
     @Test
     public void testChooseAttack_InvalidAttack() {
         // Hubs für einen ungültigen Angriff

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
-import android.util.Log;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -25,6 +24,9 @@ public class GlobalVariables {
     public static int hubsPerLine;
     public static MediaPlayer mediaPlayer;
     static int displayWidthPx, displayHeightPx;
+    private static String localIpAddress;
+
+    //public static Deck mainDeck = new Deck(hubs.size());
 
     public static Hub findHubById(int id) {
         for (Hub h : hubs) {
@@ -93,6 +95,14 @@ public class GlobalVariables {
 
     public static ArrayList<Hub> getHubs() {
         return hubs;
+    }
+
+    public static String getLocalIpAddress() {
+        return localIpAddress;
+    }
+
+    public static void setLocalIpAddress(String localIpAddress) {
+        GlobalVariables.localIpAddress = localIpAddress;
     }
 
 

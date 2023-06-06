@@ -3,7 +3,9 @@ package at.aau.wagnis.gamestate;
 import static at.aau.wagnis.GlobalVariables.adjacencies;
 
 import at.aau.wagnis.Adjacency;
+
 import at.aau.wagnis.GlobalVariables;
+
 import at.aau.wagnis.Hub;
 
 public class MoveTroopsState extends GameLogicState {
@@ -11,27 +13,28 @@ public class MoveTroopsState extends GameLogicState {
     private Hub targetHub;
     private int sourceHubId;
     private int targetHubId;
-    private int numTroops;
 
     public MoveTroopsState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
     }
 
-    public MoveTroopsState(int sourceHubId, int targetHubId, int numTroops) {
+    public MoveTroopsState(int sourceHubId, int targetHubId) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
-        this.numTroops = numTroops;
     }
 
     public boolean move(int numTroops) {
         if (isMoveValid(numTroops)) {
             moveTroopsBetweenHubs(numTroops);
+
             return true; // Successful move
 
         } else {
             throw new IllegalArgumentException("Illegal move"); // unsuccessful
+
         }
+        return false;
     }
 
     private boolean isMoveValid(int numTroops) {

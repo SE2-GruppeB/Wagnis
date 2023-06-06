@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Deck;
 import at.aau.wagnis.Hub;
@@ -22,6 +23,7 @@ public class GameData {
     private String seed;
     private List<Hub> hubs;
     private List<Player> players;
+    private List<Adjacency> adjacencies;
     private List<ChatMessage> messages;
     Map<Integer, String> playerIdentifier;
 
@@ -29,6 +31,7 @@ public class GameData {
         super();
         hubs = new ArrayList<>();
         players = new ArrayList<>();
+        adjacencies = new ArrayList<>();
         playerIdentifier = new HashMap<>();
         messages = new ArrayList<>();
     }
@@ -45,6 +48,10 @@ public class GameData {
         this.hubs = new ArrayList<>(hubs);
     }
 
+    public void setAdjacencies(List<Adjacency> adjacencies) {
+        this.adjacencies = adjacencies;
+    }
+
     public String getSeed() {
         return seed;
     }
@@ -55,6 +62,10 @@ public class GameData {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public List<Adjacency> getAdjacencies() {
+        return adjacencies;
     }
 
     public void addPlayerIdentifier(int playerId, String ipAddress) {

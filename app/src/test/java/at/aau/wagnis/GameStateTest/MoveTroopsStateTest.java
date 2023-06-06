@@ -21,6 +21,11 @@ public class MoveTroopsStateTest {
     private Hub sourceHub;
     private Hub targetHub;
 
+    private int sourceHubId;
+
+    private int targetHubId;
+    private MoveTroopsState moveTroopsState;
+
     @BeforeEach
     public void setUp() {
         sourceHub = new Hub(Mockito.mock(Button.class));

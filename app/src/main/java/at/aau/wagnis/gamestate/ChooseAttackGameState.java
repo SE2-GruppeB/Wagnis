@@ -1,32 +1,41 @@
 package at.aau.wagnis.gamestate;
 
-import static at.aau.wagnis.GlobalVariables.adjacencies;
+import java.util.List;
 
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Hub;
-import at.aau.wagnis.Player;
 
 public class ChooseAttackGameState extends GameLogicState {
-    private boolean areHubsAdjacent(Hub sourceHub, Hub targetHub) {
-    for (Adjacency adjacency : adjacencies) {
-        if ((adjacency.getHub1() == sourceHub && adjacency.getHub2() == targetHub) ||
-                (adjacency.getHub1() == targetHub && adjacency.getHub2() == sourceHub)) {
-            return true;
-        }
-    }
-    return false;
-}
-    @Override
-    public void chooseAttack(int playerId, int sourceHubId, int targetHubId) {
-        Hub sHub = new Hub(sourceHubId);
-        Hub tHub = new Hub(targetHubId);
-        if(areHubsAdjacent(sHub, tHub) == true) {
-            this.gameServer.setGameLogicState(new AttackGameState(sourceHubId, targetHubId));
-            //Erstellt zwei neue Hubs, mit übergebner ID von Source und Target prüft auf adjacency
-        }
-        else{
-            throw new IllegalArgumentException("Nur angrenzende Hubs können Angegriffen werden!");
-        }
-    }
+    Hub sourceHub;
+    //  Hub Angriff
+    Hub targetHub;
+    // Hub Verteidiger
 
+    @Override
+    public void chooseAttack(int playerId, int sourceHubId, int targetHubId){
+        List<Hub> hubs = this.gameServer.getGameData().getHubs();
+        // Liste aller Hubs im Spiel
+        List<Adjacency> adj = this.gameServer.getGameData().getAdjacencies();
+        //Liste aller benachbarten Hubpaare
+
+        // Durchlaufen aller Knoten
+        for(Hub h :hubs){
+            if(h.getId()==sourceHubId){
+                sourceHub=h;
+                // Findet den Hub welcher übereinstimmt und weise ihn sourceHub zu
+            }
+            if(h.getId()==sourceHubId){
+                sourceHub=h;
+                // Findet den Hub welcher übereinstimmt und weise ihn targetHub zu
+            }
+        }
+        // Durchlaufe alle benachbarten Hubpaare in der Liste
+        for(Adjacency a : adj){
+            // Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum
+            if(a.getHub1().equals(sourceHub)&& a.getHub2().equals(targetHub)||a.getHub1().equals(targetHub)&& a.getHub2().equals(sourceHub)){
+                this.gameServer.setGameLogicState(new AttackGameState(sourceHubId, targetHubId));
+                // Spielzustand auf AttackGameState mit den übergebenen Angreifer-Hub und Verteidiger Hub
+            }
+        }
+    }
 }

@@ -3,6 +3,7 @@ package at.aau.wagnis.gamestate;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Deck;
 import at.aau.wagnis.Hub;
@@ -187,5 +188,9 @@ public class GameData {
 
     public List<ChatMessage> getMessages() {
         return this.messages;
+    }
+
+    public List<Adjacency> getAdjacencies() {
+        return null;
     }
 }

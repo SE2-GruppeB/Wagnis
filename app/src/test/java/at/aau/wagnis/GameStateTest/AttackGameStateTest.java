@@ -18,7 +18,7 @@ import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.AttackGameState;
 
-public class AttackGameStateTest {
+class AttackGameStateTest {
 
     @Mock
     private Hub sourceHub;
@@ -39,7 +39,7 @@ public class AttackGameStateTest {
     private Player defender2;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         Button sourceButtonMock = Mockito.mock(Button.class);
         Button targetButtonMock = Mockito.mock(Button.class);
 
@@ -82,7 +82,7 @@ public class AttackGameStateTest {
     }
 
     @Test
-    public void testAttack() {
+    void testAttack() {
         gameState.attack();
         assertTrue(sourceHub.getAmountTroops() < 3 || targetHub.getAmountTroops() < 2);
 
@@ -90,21 +90,21 @@ public class AttackGameStateTest {
     }
 
     @Test
-    public void testIllegalAttack() {
+    void testIllegalAttack() {
         sourceHub.setAmountTroops(1);
 
         assertThrows(IllegalArgumentException.class, () -> gameState.attack());
     }
 
     @Test
-    public void testAttackFailed() {
+    void testAttackFailed() {
         targetHub.setAmountTroops(0);
 
         assertThrows(IllegalArgumentException.class, () -> gameState.attack());
     }
 
     @Test
-    public void testGameWon() {
+    void testGameWon() {
         Player player = new Player(1);
         for (int i = 0; i < 42; i++) {
             player.addHub(new Hub(Mockito.mock(Button.class)));

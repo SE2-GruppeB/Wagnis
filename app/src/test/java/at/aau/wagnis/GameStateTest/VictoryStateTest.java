@@ -14,7 +14,7 @@ import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.gamestate.VictoryState;
 
 
-public class VictoryStateTest {
+class VictoryStateTest {
 
     private Hub sourceHub;
     private Hub targetHub;
@@ -29,7 +29,7 @@ public class VictoryStateTest {
 
 
     @Test
-    public void testGetWinner() {
+    void testGetWinner() {
         VictoryState state = new VictoryState(mockedWinner);
         assertEquals(mockedWinner, state.getWinner());
     }

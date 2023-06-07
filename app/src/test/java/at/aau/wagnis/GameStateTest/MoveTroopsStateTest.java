@@ -14,7 +14,7 @@ import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.MoveTroopsState;
 
-public class MoveTroopsStateTest {
+class MoveTroopsStateTest {
     private Hub sourceHub;
     private Hub targetHub;
     private MoveTroopsState moveTroopsState;
@@ -22,7 +22,7 @@ public class MoveTroopsStateTest {
     private Context context;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         sourceHub = new Hub(Mockito.mock(Button.class));
         targetHub = new Hub(Mockito.mock(Button.class));
         moveTroopsState = new MoveTroopsState(sourceHub, targetHub,context );
@@ -32,7 +32,7 @@ public class MoveTroopsStateTest {
     }
 
     @Test
-    public void testValidMove() {
+    void testValidMove() {
 
         sourceHub.setAmountTroops(5);
         targetHub.setAmountTroops(0);
@@ -45,7 +45,7 @@ public class MoveTroopsStateTest {
 
 
     @Test
-    public void testInvalidMove() {
+    void testInvalidMove() {
 
         sourceHub.setAmountTroops(0);
         targetHub.setAmountTroops(1);
@@ -57,7 +57,7 @@ public class MoveTroopsStateTest {
 
 
     @Test
-    public void testDifferentPlayersMove() {
+    void testDifferentPlayersMove() {
 
         sourceHub.setOwner(new Player(1));
         targetHub.setOwner(new Player(2));

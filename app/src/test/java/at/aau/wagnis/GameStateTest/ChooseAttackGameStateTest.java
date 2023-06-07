@@ -14,7 +14,7 @@ import at.aau.wagnis.gamestate.ChooseAttackGameState;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.GameServer;
 
-public class ChooseAttackGameStateTest {
+class ChooseAttackGameStateTest {
     @Mock
     private GameServer gameServer;
     @Mock
@@ -23,14 +23,14 @@ public class ChooseAttackGameStateTest {
     private ChooseAttackGameState chooseAttackGameState;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
         chooseAttackGameState = new ChooseAttackGameState();
         chooseAttackGameState.setGameServer(gameServer);
     }
 
     @Test
-    public void chooseAttack_shouldSetNewAttackGameState() {
+    void chooseAttack_shouldSetNewAttackGameState() {
         int playerId = 1;
         int sourceHubId = 2;
         int targetHubId = 3;
@@ -42,7 +42,7 @@ public class ChooseAttackGameStateTest {
     }
 
     @Test
-    public void chooseAttack_shouldSetCorrectAttackGameState() {
+    void chooseAttack_shouldSetCorrectAttackGameState() {
         int playerId = 1;
         int sourceHubId = 2;
         int targetHubId = 3;

@@ -64,6 +64,7 @@ public class GameServer implements Runnable {
     public void setGameLogicState(@NonNull GameLogicState gameLogicState) {
         this.gameLogicState = Objects.requireNonNull(gameLogicState);
         gameLogicState.setGameServer(this);
+        gameLogicState.onEntry();
     }
 
     public void broadcastCommand(@NonNull ClientCommand command) {

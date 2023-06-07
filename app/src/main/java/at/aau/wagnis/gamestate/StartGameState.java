@@ -12,15 +12,20 @@ public class StartGameState extends GameLogicState {
     private final List<Hub> hubs;
     private final List<Player> players;
 
+    @Override
+    public void onEntry() {
+
+        this.players.add(new Player(0));
+        this.players.add(new Player(1));
+
+        assignCountries();
+        assignTroopsToHubs();
+        this.gameServer.setGameLogicState(new ChooseAttackGameState());
+    }
+
     public StartGameState(GameData gameData) {
         this.hubs = gameData.getHubs();
         this.players = gameData.getPlayers();
-        assignCountries();
-    }
-
-    @Override
-    public void start() {
-        assignTroopsToHubs();
     }
 
     public void assignCountries() {
@@ -45,7 +50,6 @@ public class StartGameState extends GameLogicState {
                 placeTroopsOnHub(player, hub, troopsToPlace);
             }
         }
-        updateHubText();
     }
 
     private Hub getRandomHub(Player player, Random ran) {
@@ -76,13 +80,6 @@ public class StartGameState extends GameLogicState {
         return player.getUnassignedAvailableTroops() > 0;
     }
 
-    private void updateHubText() {
-        for (Player player : players) {
-            for (Hub hub : player.getOwnedHubs()) {
-                hub.setText("Troops: " + hub.getAmountTroops());
-            }
-        }
-    }
 
     public List<Hub> getHubs() {
         return hubs;

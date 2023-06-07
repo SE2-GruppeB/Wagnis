@@ -40,6 +40,7 @@ import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.server.communication.command.ChooseAttackCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 for (Hub h : currentState.getHubs()) {
                     Hub uiHub = GlobalVariables.findHubById(h.getId());
-                    uiHub.setText(h.getAmountTroops() + "");
+                    uiHub.setText(h.getAmountTroops() + ", "+h.getId());
                     if (h.getOwner()!=null)// TODO check why this is null sometimes
                         uiHub.setHubImage(h.getOwner().getPlayerId() == 0 ? "ESA" : "NASA");
                 }
@@ -196,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         return ((WagnisApplication) getApplication()).getGameManager();
     }
 
+    private Button lastClickedHub = null;
 
     public void drawHubs(String seed) {
 
@@ -229,26 +231,12 @@ public class MainActivity extends AppCompatActivity {
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-
-                    /*switch(currentState){
-                        case ReinforceGameState:
-                            reinforceTroops(hub);
-                            break;
-                        case AttackGameState:
-                            moveTroops();
-                            break;
+                    if (lastClickedHub != null){
+                        getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
+                        lastClickedHub = null;
+                    }else{
+                        lastClickedHub = hub;
                     }
-
-                 -------------*/
-
-
-                    /* Testing Grounds;*/
-                    int[] v = {1, 2, 3, 4, 5};
-                    popupDiceRoll(v);
-                    GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
-
-                    System.out.println("Hub:" + hub.getId());
 
                 }
             });

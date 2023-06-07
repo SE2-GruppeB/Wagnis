@@ -2,6 +2,8 @@ package at.aau.wagnis;
 
 import android.widget.Button;
 
+import java.util.Objects;
+
 public class Hub {
 
     private final int id;
@@ -21,6 +23,14 @@ public class Hub {
         this.id = id;
         this.amountTroops = 0;
         this.owner = new Player();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hub hub = (Hub) o;
+        return id == hub.id && amountTroops == hub.amountTroops && Objects.equals(owner, hub.owner);
     }
 
     public Button getHubButton() {

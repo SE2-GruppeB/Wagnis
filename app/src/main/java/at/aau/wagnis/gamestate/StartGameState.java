@@ -102,4 +102,3 @@ public class StartGameState extends GameLogicState {
         return players;
     }
 }
-}

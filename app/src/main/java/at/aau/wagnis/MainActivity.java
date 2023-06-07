@@ -173,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
     }
 
-    public static int dpToPx(int dp){
-        return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
+    public  int dpToPx(int dp){
+        return dp *getResources().getDisplayMetrics().densityDpi/160;
     }
     public PopupWindow createPopUp(int popupId){
 
@@ -280,13 +280,13 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
 
         for (Adjacency adjacency : GlobalVariables.adjacencies) {
-            int pxWidth = dpToPx(21);
-            int pxHeight = dpToPx(60);
+            int pxWidth = dpToPx(40);
+            int pxHeight = dpToPx(40);
 
-            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
+            int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin+pxWidth;
             int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;
-            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin + pxWidth;
-            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin + pxHeight;
+            int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin+pxWidth;
+            int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin+pxHeight;
             // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
             canvas.drawLine(startX, startY, endX, endY, paint);
 

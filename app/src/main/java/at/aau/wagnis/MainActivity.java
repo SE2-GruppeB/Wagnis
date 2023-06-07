@@ -39,7 +39,6 @@ import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
-import at.aau.wagnis.gamestate.StartGameState;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 
 
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton btnSettings;
     FloatingActionButton btnChat;
     ImageView adjacencyView;
-    GameData currentState;
+    GameData currentGameData;
     boolean wasDrawn = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
 
         btnChat.setOnClickListener(view -> popupChat());
 
-        ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
-            if(newGameState != null && currentState != null && !(currentState.getMessages().equals(newGameState.getMessages()))) {
+        ((WagnisApplication)getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
+            if(newGameData != null && currentGameData != null && !(currentGameData.getMessages().equals(newGameData.getMessages()))) {
                 btnChat.setCustomSize(300);
             }
 
             // code to be executed on the UI thread
-            currentState = newGameState;
-            if(newGameState != null && !wasDrawn){
-                    generateMap(newGameState.getSeed());
+            currentGameData = newGameData;
+            if(newGameData != null && !wasDrawn){
+                    generateMap(newGameData.getSeed());
                     wasDrawn = true;
             }
         }));
@@ -400,8 +399,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnSend = popupWindow.getContentView().findViewById(R.id.btn_Send);
 
         TextView msg = popupWindow.getContentView().findViewById(R.id.chatMsg);
-        if(currentState != null) {
-            String messages = currentState.getMessages()
+        if(currentGameData != null) {
+            String messages = currentGameData.getMessages()
                     .stream()
                     .map(ChatMessage::toString)
                     .collect(Collectors.joining("\n"));

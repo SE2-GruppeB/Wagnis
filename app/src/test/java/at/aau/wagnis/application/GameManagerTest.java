@@ -183,7 +183,7 @@ class GameManagerTest {
     void setGameStateListenerFailsWhenNotConnected() {
         IllegalStateException ex = assertThrows(
                 IllegalStateException.class,
-                () -> subject.setGameStateListener(gameDataConsumer)
+                () -> subject.setGameDataListener(gameDataConsumer)
         );
 
         assertEquals("Game client is not ready", ex.getMessage());
@@ -197,7 +197,7 @@ class GameManagerTest {
 
         // when
         subject.startNewGame();
-        subject.setGameStateListener(gameDataConsumer);
+        subject.setGameDataListener(gameDataConsumer);
 
         // then
         verify(gameClient1).setGameDataListener(gameDataConsumer);

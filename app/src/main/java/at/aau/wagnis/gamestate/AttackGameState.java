@@ -119,6 +119,7 @@ public class AttackGameState extends GameLogicState {
             this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - 1);
         }
 
+
         // Überprüfen, ob der Angriff fehlgeschlagen ist
         if (this.sourceHub.getAmountTroops() == 1 && this.targetHub.getAmountTroops() >= 1) {
             throw new IllegalArgumentException("Attack failed");
@@ -126,10 +127,14 @@ public class AttackGameState extends GameLogicState {
 
         // Überprüfen, ob der Verteidiger besiegt wurde
         if (this.targetHub.getAmountTroops() <= 0) {
+
             Player attackingPlayer = this.sourceHub.getOwner();
             attackingPlayer.addHub(this.targetHub);
-            Player defendingPlayer = targetHub.getOwner();
+            Player defendingPlayer = this.targetHub.getOwner();
             defendingPlayer.removeHub(this.targetHub);
+            // Die Hälfte der Hubs, des Angreifer-Hubs werden dem Verteidiger-Hub bei einer Übernahmen zugewiesen
+            this.targetHub.setAmountTroops(this.sourceHub.getAmountTroops()/2);
+            this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - (this.sourceHub.getAmountTroops()/2));
             if (gameWon(attackingPlayer)) {
                 this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
                 //Send winner id via broadcast to all clients

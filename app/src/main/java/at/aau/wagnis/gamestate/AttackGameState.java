@@ -1,6 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 import at.aau.wagnis.Hub;
@@ -10,14 +9,14 @@ import at.aau.wagnis.Player;
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
  */
 public class AttackGameState extends GameLogicState {
+    public int testAttackerDiceRoll;
+    public int testDefenderDiceRoll;
     private boolean attacker = false;
     private boolean defender = false;
     private Hub sourceHub;
     private Hub targetHub;
     private int sourceHubId;
     private int targetHubId;
-    public int testAttackerDiceRoll;
-    public int testDefenderDiceRoll;
 
     /**
      * Konstruktor für AttackGameState mit Hub-ID als Parameter.
@@ -43,18 +42,17 @@ public class AttackGameState extends GameLogicState {
 
     @Override
     public void onEntry() {
-    if (sourceHub == null) {
-        this.sourceHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == sourceHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
-    }
+        if (sourceHub == null) {
+            this.sourceHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == sourceHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
+        }
         if (targetHub == null) {
             this.targetHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == targetHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
         }
         try {
-        attack();
+            attack();
+        } finally {
+            this.gameServer.setGameLogicState(new ChooseAttackGameState());
         }
-        finally {
-        this.gameServer.setGameLogicState(new ChooseAttackGameState());}
-
     }
 
     @Override
@@ -75,20 +73,20 @@ public class AttackGameState extends GameLogicState {
         }
 
         // Würfe für den Angreifer basierend auf Truppenzahl festlegen
-        switch (attackerTroops){
-            case 2:{
+        switch (attackerTroops) {
+            case 2: {
                 attackerDiceRolls = diceRoll();
                 testAttackerDiceRoll = 1;
                 break;
                 // Attacker greift mit einer Truppe an
             }
-            case 3:{
+            case 3: {
                 attackerDiceRolls = diceRoll() + diceRoll();
                 testAttackerDiceRoll = 2;
                 break;
                 //Attacker greift mit zwei Truppen an
             }
-            default:{
+            default: {
                 attackerDiceRolls = diceRoll() + diceRoll() + diceRoll();
                 testAttackerDiceRoll = 3;
                 break;
@@ -97,14 +95,14 @@ public class AttackGameState extends GameLogicState {
         }
 
         // Würfe für den Verteidiger basierend auf Truppenzahl festlegen
-        switch (defenderTroops){
-            case 1:{
+        switch (defenderTroops) {
+            case 1: {
                 defenderDiceRolls = diceRoll();
                 testDefenderDiceRoll = 1;
                 break;
                 //Verteidiger besitzt nur eine Truppe am Feld
             }
-            default:{
+            default: {
                 defenderDiceRolls = diceRoll() + diceRoll();
                 testDefenderDiceRoll = 2;
                 break;
@@ -173,8 +171,6 @@ public class AttackGameState extends GameLogicState {
     }
 
     // Getter und Setter
-
-
 
 
     public Hub getSourceHub() {

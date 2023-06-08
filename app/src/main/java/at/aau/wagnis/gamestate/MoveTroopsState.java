@@ -14,14 +14,17 @@ public class MoveTroopsState extends GameLogicState {
     private int sourceHubId;
     private int targetHubId;
 
+    private int numTroops;
+
     public MoveTroopsState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
     }
 
-    public MoveTroopsState(int sourceHubId, int targetHubId) {
+    public MoveTroopsState(int sourceHubId, int targetHubId, int numTroops) {
         this.sourceHubId = sourceHubId;
         this.targetHubId = targetHubId;
+        this.numTroops = numTroops;
     }
 
     @Override

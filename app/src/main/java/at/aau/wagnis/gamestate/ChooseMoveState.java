@@ -17,8 +17,6 @@ public class ChooseMoveState extends GameLogicState {
         List<Hub> hubs = this.gameServer.getGameData().getHubs();
         List<Adjacency> adj = this.gameServer.getGameData().getAdjacencies();
 
-
-
         for(Hub h : hubs){
             if(h.getId()==sourceHubId){
                 sourceHub=h;
@@ -33,8 +31,7 @@ public class ChooseMoveState extends GameLogicState {
         for(Adjacency a : adj){
             // Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum
             if(a.isInPair(sourceHub, targetHub)){
-                this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId));
-                // Spielzustand auf AttackGameState mit den übergebenen Angreifer-Hub und Verteidiger Hub
+                this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId, numTroops));
                 return;
             }
         }

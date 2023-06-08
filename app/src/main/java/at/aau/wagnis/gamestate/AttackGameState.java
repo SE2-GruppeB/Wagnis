@@ -68,10 +68,6 @@ public class AttackGameState extends GameLogicState {
             throw new IllegalArgumentException("Illegal attack");
         }
 
-        if (sourceHub.getOwner() != targetHub.getOwner()) {
-            throw new IllegalArgumentException("Hubs are owned by the same player   ");
-        }
-
         // Würfe für den Angreifer basierend auf Truppenzahl festlegen
         switch (attackerTroops) {
             case 2: {

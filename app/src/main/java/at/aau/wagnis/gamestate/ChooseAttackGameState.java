@@ -26,6 +26,8 @@ public class ChooseAttackGameState extends GameLogicState {
         if (sourceHubId == targetHubId) {
             throw new IllegalArgumentException("Der Quell-Hub und der Ziel-Hub dürfen nicht identisch sein!");
         }
+
+
         //Prüft ob source und target nicht der gleiche Hub sind
         List<Hub> hubs = this.gameServer.getGameData().getHubs();
         // Liste aller Hubs im Spiel
@@ -44,6 +46,12 @@ public class ChooseAttackGameState extends GameLogicState {
 
             }
         }
+
+        // Überprüfen, ob der Spieler den Angriff auf den eigenen Hub startet
+        if (sourceHub.getOwner()== targetHub.getOwner()) {
+            throw new IllegalArgumentException("Du kannst deinen eigenen Hub nicht angreifen!");
+        }
+
         // Durchlaufe alle benachbarten Hubpaare in der Liste
         for(Adjacency a : adj){
             //Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum

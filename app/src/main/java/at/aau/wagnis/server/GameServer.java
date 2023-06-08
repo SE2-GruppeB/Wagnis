@@ -1,5 +1,7 @@
 package at.aau.wagnis.server;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
@@ -44,7 +46,12 @@ public class GameServer implements Runnable {
         try {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
-                command.execute(gameLogicState);
+                try {
+                    command.execute(gameLogicState);
+                }
+                catch (IllegalArgumentException e){
+                    Log.e("Server","Ignored Illegal Command"+e.getMessage());
+                }
                 if(gameData == null && gameLogicState instanceof LobbyState) {
                     gameData = ((LobbyState) gameLogicState).getGameData();
                 }
@@ -64,6 +71,7 @@ public class GameServer implements Runnable {
     public void setGameLogicState(@NonNull GameLogicState gameLogicState) {
         this.gameLogicState = Objects.requireNonNull(gameLogicState);
         gameLogicState.setGameServer(this);
+        gameLogicState.onEntry();
     }
 
     public void broadcastCommand(@NonNull ClientCommand command) {

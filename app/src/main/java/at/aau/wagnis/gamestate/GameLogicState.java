@@ -56,4 +56,6 @@ public abstract class GameLogicState {
     public void checkForVictory() {
     }
 
+    public void onEntry() {
+    }
 }

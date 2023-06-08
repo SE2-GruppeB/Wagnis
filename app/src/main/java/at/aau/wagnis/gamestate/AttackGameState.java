@@ -44,6 +44,21 @@ public class AttackGameState extends GameLogicState {
     }
 
     @Override
+    public void onEntry() {
+    if (sourceHub == null) {
+        this.sourceHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == sourceHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
+    }
+        if (targetHub == null) {
+            this.targetHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == targetHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
+        }
+        try {
+        attack();}
+        finally {
+        this.gameServer.setGameLogicState(new ChooseAttackGameState());}
+
+    }
+
+    @Override
     public void attack() {
         // Anzahl der Würfe und Truppen berechnen
         int attackerDiceRolls;

@@ -46,18 +46,20 @@ public class GameServer implements Runnable {
         try {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
-                try {
-                    command.execute(gameLogicState);
-                }
-                catch (IllegalArgumentException e){
-                    Log.e("Server","Ignored Illegal Command"+e.getMessage());
-                }
+                command.execute(gameLogicState);
+
                 if(gameData == null && gameLogicState instanceof LobbyState) {
                     gameData = ((LobbyState) gameLogicState).getGameData();
                 }
 
+                if(gameData != null) {  // without this condition some tests would fail
+                    gameData.setCurrentGameLogicState(gameLogicState.getClass().getSimpleName());
+                }
+
                 broadcastCommand(new SendGameDataCommand(gameData));
             }
+        } catch (IllegalArgumentException e){
+            Log.e("Server","Ignored Illegal Command"+e.getMessage());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

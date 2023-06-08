@@ -4,9 +4,13 @@ public class ChooseMoveState extends GameLogicState {
 
     @Override
     public void chooseMove(int playerId, int sourceHubId, int targetHubId, int numTroops) {
+        // Holt die Spieldaten vom GameServer
         this.gameServer.getGameData();
-        this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId));
-        this.move(numTroops);
 
+        // Setzt den Spielzustand auf MoveTroopsState und übergibt die Hub-IDs
+        this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId));
+
+        // Verschiebt die Truppen
+        this.move(numTroops);
     }
 }

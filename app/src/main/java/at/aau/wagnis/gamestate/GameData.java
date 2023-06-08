@@ -1,5 +1,7 @@
 package at.aau.wagnis.gamestate;
 
+import static at.aau.wagnis.GlobalVariables.hubsPerLine;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Map;
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Deck;
+import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.Troops;
@@ -16,6 +19,7 @@ public class GameData {
 
     private static final String IDENTIFIER_STRING  = "IDENTIFIER";
     private static final String SEED_STRING  = "SEED";
+    private static final String GAMESTATE_STRING  = "STATE";
     private static final String PLAYER_STRING  = "PLAYER";
     private static final String CARD_STRING  = "CARD";
     private static final String HUB_STRING  = "HUB";
@@ -26,7 +30,8 @@ public class GameData {
     private List<Player> players;
     private List<Adjacency> adjacencies;
     private List<ChatMessage> messages;
-    private Map<Integer, String> playerIdentifier;
+    Map<Integer, String> playerIdentifier;
+    private String currentGameLogicState;
 
     public GameData() {
         super();
@@ -35,6 +40,15 @@ public class GameData {
         adjacencies = new ArrayList<>();
         playerIdentifier = new HashMap<>();
         messages = new ArrayList<>();
+        currentGameLogicState = "LobbyState";
+    }
+
+    public String getCurrentGameLogicState() {
+        return currentGameLogicState;
+    }
+
+    public void setCurrentGameLogicState(String currentGameLogicState) {
+        this.currentGameLogicState = currentGameLogicState;
     }
 
     public void setSeed(String seed) {
@@ -91,6 +105,11 @@ public class GameData {
             builder.append(IDENTIFIER_STRING);
         }
 
+        // current GameLogicState
+        builder.append(GAMESTATE_STRING);
+        builder.append(this.currentGameLogicState);
+        builder.append(GAMESTATE_STRING);
+
         // Seed
         builder.append(SEED_STRING);
         builder.append(this.getSeed());
@@ -136,6 +155,9 @@ public class GameData {
             String value = data[1];
             playerIdentifier.put(key, value);
         }
+
+        // current GameLocigState
+        setCurrentGameLogicState(input.split(GAMESTATE_STRING)[1]);
 
         // Seed
         String[] seedData = input.split(SEED_STRING);
@@ -229,5 +251,9 @@ public class GameData {
 
     public List<ChatMessage> getMessages() {
         return this.messages;
+    }
+
+    public List<Adjacency> getAdjacencies() { //TODO Do not use UI-Classes in ServerCode
+        return GlobalVariables.adjacencies;
     }
 }

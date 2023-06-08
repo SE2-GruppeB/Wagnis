@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import at.aau.wagnis.gamestate.ChooseMoveState;
@@ -24,12 +25,14 @@ public class ChooseMoveGameStateTest {
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         chooseMoveGameState = new ChooseMoveState();
         chooseMoveGameState.setGameServer(gameServer);
-
     }
 
+    /**
+     * Testet, ob `chooseMove()` einen neuen `MoveTroopsState` festlegt, wenn `gameServer.setGameLogicState()` aufgerufen wird.
+     */
     @Test
     public void chooseMove_shouldSetNewMoveGameState() {
         int playerId = 1;
@@ -43,7 +46,9 @@ public class ChooseMoveGameStateTest {
         verify(gameServer).setGameLogicState(any(MoveTroopsState.class));
     }
 
-
+    /**
+     * Testet, ob `chooseMove()` den richtigen `MoveTroopsState` festlegt, wenn `gameServer.setGameLogicState()` aufgerufen wird.
+     */
     @Test
     public void chooseMove_shouldSetCorrectMoveGameState() {
         int playerId = 1;
@@ -55,8 +60,8 @@ public class ChooseMoveGameStateTest {
 
         verify(gameServer).setGameLogicState(argThat(argument ->
                 argument instanceof MoveTroopsState &&
-                        ((MoveTroopsState ) argument).getSourceHubId() == sourceHubId &&
-                        ((MoveTroopsState ) argument).getTargetHubId() == targetHubId
+                        ((MoveTroopsState) argument).getSourceHubId() == sourceHubId &&
+                        ((MoveTroopsState) argument).getTargetHubId() == targetHubId
         ));
     }
 

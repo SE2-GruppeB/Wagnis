@@ -1,7 +1,4 @@
 package at.aau.wagnis.gamestate;
-
-import static at.aau.wagnis.GlobalVariables.hubsPerLine;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +7,6 @@ import java.util.Map;
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Deck;
-import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.Troops;
@@ -251,9 +247,5 @@ public class GameData {
 
     public List<ChatMessage> getMessages() {
         return this.messages;
-    }
-
-    public List<Adjacency> getAdjacencies() { //TODO Do not use UI-Classes in ServerCode
-        return GlobalVariables.adjacencies;
     }
 }

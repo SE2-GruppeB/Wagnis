@@ -18,6 +18,7 @@ import at.aau.wagnis.Troops;
 public class GameData {
 
     private static final String SEED_STRING  = "SEED";
+    private static final String GAMESTATE_STRING  = "STATE";
     private static final String PLAYER_STRING  = "PLAYER";
     private static final String CARD_STRING  = "CARD";
     private static final String HUB_STRING  = "HUB";
@@ -28,6 +29,7 @@ public class GameData {
     private List<Player> players;
     private List<ChatMessage> messages;
     Map<Integer, String> playerIdentifier;
+    private String currentGameLogicState;
 
     public GameData() {
         super();
@@ -35,6 +37,15 @@ public class GameData {
         players = new ArrayList<>();
         playerIdentifier = new HashMap<>();
         messages = new ArrayList<>();
+        currentGameLogicState = "LobbyState";
+    }
+
+    public String getCurrentGameLogicState() {
+        return currentGameLogicState;
+    }
+
+    public void setCurrentGameLogicState(String currentGameLogicState) {
+        this.currentGameLogicState = currentGameLogicState;
     }
 
     public void setSeed(String seed) {
@@ -71,6 +82,11 @@ public class GameData {
         // SEED(string), PLAYER[i](id, unassigned, cards[i](type)), HUB[i](hubID, ownerID, troops)
         StringBuilder builder = new StringBuilder();
         // Seed
+
+        builder.append(GAMESTATE_STRING);
+        builder.append(this.currentGameLogicState);
+        builder.append(GAMESTATE_STRING);
+
         builder.append(SEED_STRING);
         builder.append(this.getSeed());
         builder.append(SEED_STRING);
@@ -107,6 +123,8 @@ public class GameData {
     }
 
     public void deserialize(String input){
+
+        setCurrentGameLogicState(input.split(GAMESTATE_STRING)[1]);
         // Seed
         String[] seedData = input.split(SEED_STRING);
         setSeed(seedData[1]);

@@ -15,7 +15,7 @@ public class ReinforceGameState {
             throw new IllegalArgumentException("Hubs cannot be null");
         }
         if (troopsToDeploy == null) {
-            throw new IllegalArgumentException("TroopstoDeploy cannot be null");
+            throw new IllegalArgumentException("Troops to Deploy cannot be null");
         }
         this.hubs = hubs;
         this.troopsToDeploy = troopsToDeploy;
@@ -38,14 +38,14 @@ public class ReinforceGameState {
 
     public void setTroopsToDeploy(List<Integer> troopsToDeploy) {
         if (troopsToDeploy == null) {
-            throw new IllegalArgumentException("TroopstoDeploy cannot be null");
+            throw new IllegalArgumentException("Troops to Deploy cannot be null");
         }
         this.troopsToDeploy = troopsToDeploy;
     }
 
     public void reinforce() {
         if (hubs.size() != troopsToDeploy.size()) {
-            throw new IllegalArgumentException("Hubs and troopsToDeploy must have the same size");
+            throw new IllegalArgumentException("Hubs and troops To Deploy must have the same size");
         }
         if (hubs.isEmpty()) {
             throw new IllegalArgumentException("There must be at least one");

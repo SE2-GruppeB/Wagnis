@@ -16,9 +16,7 @@ public class AttackGameState extends GameLogicState {
     private Hub targetHub;
     private int sourceHubId;
     private int targetHubId;
-
     public int testAttackerDiceRoll;
-
     public int testDefenderDiceRoll;
 
     /**
@@ -52,7 +50,8 @@ public class AttackGameState extends GameLogicState {
             this.targetHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == targetHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
         }
         try {
-        attack();}
+        attack();
+        }
         finally {
         this.gameServer.setGameLogicState(new ChooseAttackGameState());}
 
@@ -69,6 +68,10 @@ public class AttackGameState extends GameLogicState {
         // Überprüfen, ob der Angriff gültig ist
         if (this.sourceHub.getAmountTroops() == 1 || this.targetHub.getAmountTroops() <= 0) {
             throw new IllegalArgumentException("Illegal attack");
+        }
+
+        if (sourceHub.getOwner() != targetHub.getOwner()) {
+            throw new IllegalArgumentException("Hubs are owned by the same player   ");
         }
 
         // Würfe für den Angreifer basierend auf Truppenzahl festlegen

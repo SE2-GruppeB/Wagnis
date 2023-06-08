@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 popupCards(new Player());
-            }//TODO: irgendwoher brauch ma den Player der den Button geklickt hat
+            }// TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override

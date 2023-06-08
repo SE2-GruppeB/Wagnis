@@ -111,14 +111,21 @@ public class MainActivity extends AppCompatActivity {
             // code to be executed on the UI thread
             currentState = newGameState;
             if (newGameState != null) {
-                System.out.println(currentState.getMessages());
-                if (startpopup != null && startpopup.isShowing()) {
-                    updatePlayerCount();
-                    //playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
-                }
+                //System.out.println(currentState.getMessages());
 
-                if (startpopup != null && startpopup.isShowing() && !currentState.getHubs().isEmpty()) {
-                    startpopup.dismiss();
+                try {
+
+                    System.out.println("Main"+currentState.getCurrentGameLogicState());
+                    if (startpopup.isShowing()) {
+                        updatePlayerCount();
+                        //playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
+                    }
+
+                    if (!(currentState.getCurrentGameLogicState().equals("LobbyState"))&&startpopup.isShowing()) {
+                        startpopup.dismiss();
+                    }
+                }catch (Exception e){
+                    /**StartPopup already dismissed*/
                 }
             }
 
@@ -319,9 +326,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getGameManager().postCommand(new StartGameCommand());
-
+                btnClose.setEnabled(false);
                 //popupWindow.dismiss();
-                return;
             }
         });
 

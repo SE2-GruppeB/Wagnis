@@ -53,7 +53,7 @@ public class StartGameCommand implements ClientOriginatedServerCommand{
         @NonNull
         @Override
         public StartGameCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
-            String s = stream.readUTF();
+            stream.readUTF();
             return new StartGameCommand();
         }
     }

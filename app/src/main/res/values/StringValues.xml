@@ -3,4 +3,7 @@
     <string name="infantry">Infantry</string>
     <string name="cavalry">Cavalry</string>
     <string name="artillery">Artillery</string>
+    <string name="empty">Empty</string>
+    <string name="playerCount">Player Count</string>
+    <string name="music">Music</string>
 </resources>

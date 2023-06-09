@@ -15,10 +15,10 @@ import java.io.IOException;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
 
-public class SerializationIntegrationTest {
+class SerializationIntegrationTest {
 
     @Test
-    public void serializedCommandCanBeDeserialized() throws SerializationException, IOException {
+    void serializedCommandCanBeDeserialized() throws SerializationException, IOException {
         // given
         ServerCommand command = new ProcessChatMessageCommand("Hello, World!");
         SerializerLoader serializerLoader = new SerializerLoader();
@@ -38,7 +38,7 @@ public class SerializationIntegrationTest {
     }
 
     @Test
-    public void commandIsNotDeserializedToIncompatibleClass() throws SerializationException, IOException {
+    void commandIsNotDeserializedToIncompatibleClass() throws SerializationException, IOException {
         // given
         ServerCommand command = new ProcessChatMessageCommand("Hello, World!");
         SerializerLoader serializerLoader = new SerializerLoader();
@@ -56,7 +56,7 @@ public class SerializationIntegrationTest {
     }
 
     @Test
-    public void plainObjectCausesSerializationException() {
+    void plainObjectCausesSerializationException() {
         // given
         Object input = new Object();
 

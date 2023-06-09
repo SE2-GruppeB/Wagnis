@@ -1,7 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-import at.aau.wagnis.server.GameServer;
-
 public class EndGameState extends GameLogicState {
 
 

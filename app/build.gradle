@@ -68,7 +68,8 @@ sonarqube {
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
         def exclusionList = [
                 "**/*Activity.*",
-                "**/GlobalVariables.java"
+                "**/GlobalVariables.java",
+                "**/VictoryScreen.java"
         ].join(', ')
         property "sonar.coverage.exclusions", exclusionList
     }

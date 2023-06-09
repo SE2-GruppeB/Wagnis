@@ -21,13 +21,14 @@ import at.aau.wagnis.gamestate.ChooseAttackGameState;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.GameServer;
 
-public class ChooseAttackGameStateTest {
+class ChooseAttackGameStateTest {
 
     private ChooseAttackGameState gameState;
     private GameServer gameServer;
     private GameData gameData;
 
     @BeforeEach
+
     public void setUp() {
         // Initialisierung der Testumgebung
         gameState = new ChooseAttackGameState();
@@ -41,7 +42,13 @@ public class ChooseAttackGameStateTest {
      * Testet, ob `chooseAttack()` einen neuen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
-    public void testChooseAttack_ValidAttack() {
+    void chooseAttack_shouldSetNewAttackGameState() {
+        int playerId = 1;
+        int sourceHubId = 2;
+        int targetHubId = 3;
+    }
+    @Test
+    void testChooseAttack_ValidAttack() {
         //Hubs für einen gültigen Angriff
         Hub sourceHub = new Hub(1);
         Hub targetHub = new Hub(2);
@@ -54,6 +61,7 @@ public class ChooseAttackGameStateTest {
         when(gameData.getAdjacencies()).thenReturn(adjacencies);
         when(gameData.getHubs()).thenReturn(hubs);
 
+
         // Durchführung des Angriffs
         gameState.chooseAttack(1, 1, 2);
 
@@ -65,6 +73,7 @@ public class ChooseAttackGameStateTest {
      * Testet, ob `chooseAttack()` den richtigen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
+
     public void testChooseAttack_InvalidAttack() {
         // Hubs für einen ungültigen Angriff
         Hub sourceHub = new Hub(1);
@@ -73,6 +82,7 @@ public class ChooseAttackGameStateTest {
         hubs.add(sourceHub);
         hubs.add(targetHub);
         when(gameData.getHubs()).thenReturn(hubs);
+
 
         // Angriff, von nicht benachbarten Hubs
         assertThrows(IllegalArgumentException.class, () -> gameState.chooseAttack(1, 1, 3));

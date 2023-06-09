@@ -45,7 +45,7 @@ public class MenuActivity extends AppCompatActivity {
         GlobalVariables.getMediaPlayer().setLooping(true);
 
         sourcesBtn = findViewById(R.id.btn_sources);
-        sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));
+        sourcesBtn.setOnClickListener(view -> showSources());
 
         hostBtn = findViewById(R.id.btn_start);
         hostBtn.setOnClickListener(view -> handleNetwork(true));
@@ -96,6 +96,10 @@ public class MenuActivity extends AppCompatActivity {
         getGameManager().setConnectionStateListener(null);
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -152,6 +156,12 @@ public class MenuActivity extends AppCompatActivity {
         ig11.setPrompt("Scan a QR Code");
         ig11.initiateScan();
     }
+
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -173,8 +183,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
 
-    public void showSources(View view) {
-
+    public void showSources() {
         PopupWindow popupWindow= createPopUp(R.layout.popup_sources);
         popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
     }
@@ -189,16 +198,16 @@ public class MenuActivity extends AppCompatActivity {
         return ((WagnisApplication) getApplication()).getGameManager();
     }
 
-    public void goToAppIcon (View view) {
+    public void goToAppIcon (View view) {       /*View required because Method is called from XML*/
         goToUrl ( "https://icons8.de");
     }
-    public void goToBackground (View view) {
+    public void goToBackground (View view) {    /*View required because Method is called from XML*/
         goToUrl ( "https://www.vecteezy.com/vector-art/17535964-mars-landscape-with-craters-and-red-rocky-surface");
     }
-    public void goToSurface (View view) {
+    public void goToSurface (View view) {       /*View required because Method is called from XML*/
         goToUrl ( "https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
     }
-    public void goToUI (View view) {
+    public void goToUI (View view) {            /*View required because Method is called from XML*/
         goToUrl ( "https://www.vecteezy.com/vector-art/21604946-futuristic-vector-hud-interface-screen-design-digital-callouts-titles-hud-ui-gui-futuristic-user");
     }
 
@@ -206,8 +215,7 @@ public class MenuActivity extends AppCompatActivity {
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
-        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
-        return popupWindow;
+        return new PopupWindow(popUp, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, true);
     }
 
 

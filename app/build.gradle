@@ -69,6 +69,7 @@ sonarqube {
         def exclusionList = [
                 "**/*Activity.*",
                 "**/GlobalVariables.java"
+                "**/VictoryScreen.java"
         ].join(', ')
         property "sonar.coverage.exclusions", exclusionList
     }

@@ -93,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
-
-
+            System.out.println("PLAYERSIZE NEW: "+newGameData.getPlayers().size());
             if (newGameData != null && currentGameData != null && !(currentGameData.getMessages().equals(newGameData.getMessages()))) {
                 btnChat.setCustomSize(300);
             }
@@ -115,12 +114,13 @@ public class MainActivity extends AppCompatActivity {
                         startpopup.dismiss();
                     }
                 }catch (Exception e){
-                    /**StartPopup already dismissed*/
+                    /*StartPopup already dismissed*/
                 }
             }
 
             if (!wasDrawn) {
                 generateMap(newGameData.getSeed());
+                popupStart(btnCards);
                 wasDrawn = true;
             } else {
                 for (Hub h : currentGameData.getHubs()) {
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         }));
 
-        popupStart(btnCards);
+        //popupStart(btnCards);
 
     }
 
@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     public void drawAdjacencies() {
         int height = GlobalVariables.getDisplayHeightPx();
         int width = GlobalVariables.getDisplayWidthPx();
@@ -296,9 +297,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePlayerCount() {
-        if (startpopup != null && startpopup.isShowing()) {
             playerCount.setText("PlayerCount: " + currentGameData.getPlayers().size());
-        }
+
     }
 
     public void popupStart(View view) {
@@ -310,29 +310,23 @@ public class MainActivity extends AppCompatActivity {
         ImageView qrCode = startpopup.getContentView().findViewById(R.id.qrCode);
 
 
-        if (view.post(() -> startpopup.showAtLocation(view, Gravity.CENTER, 0, 0))) { //Call popUp after setup has finished
+        if (view.post(() -> startpopup.showAtLocation(new View(this), Gravity.CENTER, 0, 0))) { //Call popUp after setup has finished
             updatePlayerCount();
-
         }
 
-        if (GlobalVariables.getIsClient()) {
+        if (Boolean.TRUE.equals(GlobalVariables.getIsClient())) {
             btnClose.setEnabled(false);
         }
 
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getGameManager().postCommand(new StartGameCommand());
-                btnClose.setEnabled(false);
-                //popupWindow.dismiss();
-            }
-
+        btnClose.setOnClickListener(view1 -> {
+            getGameManager().postCommand(new StartGameCommand());
+            btnClose.setEnabled(false);
         });
 
         MultiFormatWriter mWriter = new MultiFormatWriter();
         try {
             BitMatrix mMatrix;
-            if(GlobalVariables.getIsClient()){
+            if(Boolean.TRUE.equals(GlobalVariables.getIsClient())){
                 mMatrix = mWriter.encode(GlobalVariables.getHostIP(), BarcodeFormat.QR_CODE, 500,500);
             }else{
                 mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);

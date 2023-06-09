@@ -81,6 +81,9 @@ class AttackGameStateTest {
         gameState2 = new AttackGameState(sourceHub2, targetHub2);
     }
 
+    /**
+     * Testet den Angriff, wo die `attack()`-Methode aufgerufen wird.
+     */
     @Test
     void testAttack() {
         gameState.attack();
@@ -89,6 +92,9 @@ class AttackGameStateTest {
         //assertTrue(attacker.getOwnedHubs().contains(targetHub) || defender.getOwnedHubs().contains(sourceHub));
     }
 
+    /**
+     * Testet einen ungültigen Angriff, wo die Quell-Hub-Truppenanzahl 1 beträgt.
+     */
     @Test
     void testIllegalAttack() {
         sourceHub.setAmountTroops(1);
@@ -96,6 +102,9 @@ class AttackGameStateTest {
         assertThrows(IllegalArgumentException.class, () -> gameState.attack());
     }
 
+    /**
+     * Testet einen fehlgeschlagenen Angriff, wobei die Ziel-Hub-Truppenanzahl 0 beträgt.
+     */
     @Test
     void testAttackFailed() {
         targetHub.setAmountTroops(0);
@@ -103,6 +112,9 @@ class AttackGameStateTest {
         assertThrows(IllegalArgumentException.class, () -> gameState.attack());
     }
 
+    /**
+     * Testet, ob das Spiel gewonnen wurde, wen ein Spieler alle 42 Hubs besitzt.
+     */
     @Test
     void testGameWon() {
         Player player = new Player(1);
@@ -112,6 +124,9 @@ class AttackGameStateTest {
         assertTrue(gameState.gameWon(player));
     }
 
+    /**
+     * Testet, ob das Spiel nicht gewonnen wurde, wenn ein Spieler weniger als 42 Hubs besitzt.
+     */
     @Test
     void testGameWonFalse() {
         Player player = new Player(1);
@@ -121,41 +136,57 @@ class AttackGameStateTest {
         assertFalse(gameState.gameWon(player));
     }
 
+    /**
+     * Testet die Anzahl der  Würfe des Angreifers bei einem Angriff mit 2 Truppen.
+     */
     @Test
     void testAttackerDiceRoll(){
         gameState.attack();
         assertEquals(2,gameState.testAttackerDiceRoll);
     }
 
+    /**
+     * Testet den Würfelwert des Angreifers bei einem Angriff mit 3 Truppen.
+     */
     @Test
     void testAttackerDiceRoll2(){
         gameState2.attack();
         assertEquals(3,gameState2.testAttackerDiceRoll);
     }
 
-
+    /**
+     * Testet den Würfelwert des Verteidigers bei einem Angriff wenn der Verteidiger 2 Truppen am Hub hat.
+     */
     @Test
     void testDefenderDiceRoll(){
         gameState.attack();
         assertEquals(2,gameState.testDefenderDiceRoll);
     }
 
+    /**
+     * Testet den Würfelwert des Verteidigers bei einem Angriff wenn der Verteidiger 2 Truppe hat .
+     */
     @Test
     void testDefenderDiceRoll2(){
         gameState2.attack();
         assertEquals(2,gameState2.testDefenderDiceRoll);
     }
 
+    /**
+     * Testet, ob der Spieler ein Angreifer ist.
+     */
     @Test
     void testIsAttacker(){
         gameState.setAttacker(true);
         assertTrue(gameState.isAttacker());
     }
 
+    /**
+     * Testet, ob der Spieler ein Verteidiger ist.
+     */
     @Test
     void testIsDefender(){
         gameState.setDefender(true);
         assertTrue(gameState.isDefender());
     }
-
 }

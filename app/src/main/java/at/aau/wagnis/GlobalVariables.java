@@ -23,6 +23,7 @@ public class GlobalVariables {
     private static MediaPlayer mediaPlayer;
     private static int displayWidthPx;
     private static int displayHeightPx;
+    private static String localIpAddress;
 
     public static Hub findHubById(int id) {
         for (Hub h : hubs) {
@@ -125,6 +126,14 @@ public class GlobalVariables {
         return hubs;
     }
 
+    public static String getLocalIpAddress() {
+        return localIpAddress;
+    }
+
+    public static void setLocalIpAddress(String localIpAddress) {
+        GlobalVariables.localIpAddress = localIpAddress;
+    }
+
 
     private static int setAdjacenciesChanceModTwoEqualsZero(int lineHubCount, int i){
         if (lineHubCount % hubsPerLine == 0) {
@@ -137,40 +146,56 @@ public class GlobalVariables {
     }
 
     public static void setAdjacencies() {
-        int lineHubCount = 1;
-        int chance = 0;
+        int lineHubCount = 0;
+        int chance;
+        boolean isConnected;
+        int flag=0;
 
         for (int i = 0; i < hubs.size() - hubsPerLine; i++) {
-
+            isConnected=false;
+            lineHubCount++;
             chance = Integer.parseInt(seeds.get(i));
 
             if (chance % 2 == 0) {
-               /* if (lineHubCount % hubsPerLine == 0) {
-                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
+
+                isConnected=true;
+                if (lineHubCount != hubsPerLine) {
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));                  /*Neighbour right if not last in row*/
                 } else {
-                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
-                    lineHubCount = 1;
-                }*/
-               lineHubCount = setAdjacenciesChanceModTwoEqualsZero(lineHubCount, i);
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));        /*Neighbour bottom for last hub of row*/
+                    lineHubCount = 0;
+                }
+
             }
 
             if (chance % 3 == 0) {
-                adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
-            } else if (chance % 5 == 0) {
-                if (lineHubCount == hubsPerLine) {
-                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
-                } else {
-                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine - 1)));
+                isConnected=true;
+                adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));            /*Neighbour bottom*/
+            }
+
+            if(!isConnected){
+                if(lineHubCount>1){
+                    if(flag!=hubs.get(i).getId()-1){                                                                    /*check if previous connection wont intercept new one*/
+                        adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine-1)));  /*Neighbour bottom left*/
+                        flag=hubs.get(i).getId();
+                    }else{
+                        adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));    /*Neighbour bottom*/
+                        flag=0;
+                    }
+                }else{
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine + 1)));    /*Neighbour bottom right*/
+                    flag = hubs.get(i).getId();
                 }
-            } else {
-                adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine - 1)));
 
             }
-            lineHubCount++;
+            if(lineHubCount==hubsPerLine){
+                lineHubCount=0;
+            }
         }
-        for (int i = hubs.size() - hubsPerLine; i < hubs.size() - 1; i++) {
+        for (int i = hubs.size() - hubsPerLine; i < hubs.size() - 1; i++) {                                             /*Connect last row with respective neighbour*/
             adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
         }
+
     }
 
     public static String getIpAddress() {

@@ -38,7 +38,7 @@ public class LobbyState extends GameLogicState{
         gameData.setSeed(seed);
         gameData.setHubs(new ArrayList<>(hubs.values()));
         gameData.setPlayers(players);
-
+        gameData.setAdjacencies(adjacencies);
         return gameData;
     }
 
@@ -57,38 +57,54 @@ public class LobbyState extends GameLogicState{
 
     @VisibleForTesting
     public void setAdjacencies(String seed){
-        adjacencies = new ArrayList<>();
-        int lineHubCount=1;
-        int chance = 0;
+        int lineHubCount = 0;
+        int chance;
+        boolean isConnected;
+        int flag=0;
+        List<String> seeds =splitSeed(seed);
 
-        List<String> seeds = splitSeed(seed);
+
 
         for(int i =MIN_HUB_ID;i<MAX_HUB_ID-hubsPerLine;i++){
+            isConnected=false;
+            lineHubCount++;
+
             chance = Integer.parseInt(seeds.get(i));
 
-            if(chance%2==0){
-                if(lineHubCount%hubsPerLine==0) {
-                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
-                }else{
-                    adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
-                    lineHubCount=1;
+            if (chance % 2 == 0) {
+                isConnected=true;
+                if (lineHubCount != hubsPerLine) {
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));                  /*Neighbour right if not last in row*/
+                } else {
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));        /*Neighbour bottom for last hub of row*/
+                    lineHubCount = 0;
                 }
             }
-            if (chance %3==0){
-                adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
-            }else if (chance % 5==0) {
-                if(lineHubCount == hubsPerLine){
-                    adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine)));
+            if (chance % 3 == 0) {
+                isConnected=true;
+                adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));            /*Neighbour bottom*/
+            }
+
+            if(!isConnected){
+                if(lineHubCount>1){
+                    if(flag!=hubs.get(i).getId()-1){                                                                    /*check if previous connection wont intercept new one*/
+                        adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine-1)));  /*Neighbour bottom left*/
+                        flag=hubs.get(i).getId();
+                    }else{
+                        adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));    /*Neighbour bottom*/
+                        flag=0;
+                    }
                 }else{
-                    adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine-1)));
+                    adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine + 1)));    /*Neighbour bottom right*/
+                    flag = hubs.get(i).getId();
                 }
-            }else{
-                adjacencies.add(new Adjacency(hubs.get(i),findHubById(hubs.get(i).getId()+hubsPerLine-1)));
 
             }
-            lineHubCount++;
+            if(lineHubCount==hubsPerLine){
+                lineHubCount=0;
+            }
         }
-        for(int i=hubs.size()-hubsPerLine;i<hubs.size()-1;i++){
+        for (int i = hubs.size() - hubsPerLine; i < hubs.size() - 1; i++) {                                             /*Connect last row with respective neighbour*/
             adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
         }
     }
@@ -140,8 +156,11 @@ public class LobbyState extends GameLogicState{
         return hubsPerLine;
     }
 
-    public void addPlayer(Player player){
+    public void addPlayer(String playerAddress){
+        int playerID = this.players.size() + 1;
+        Player player = new Player(playerID);
         players.add(player);
+        gameServer.getGameData().addPlayerIdentifier(playerID, playerAddress);
     }
 
     public void next(){
@@ -149,6 +168,7 @@ public class LobbyState extends GameLogicState{
         gameData.setSeed(seed);
         gameData.setHubs(new ArrayList<>(hubs.values()));
         gameData.setPlayers(players);
+        gameServer.getGameData().setCurrentGameLogicState("StartGameState");
         gameServer.setGameLogicState(new StartGameState(gameData));
     }
 }

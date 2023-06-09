@@ -2,6 +2,12 @@ package at.aau.wagnis;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.Network;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -46,6 +52,22 @@ public class MenuActivity extends AppCompatActivity {
 
         joinBtn = findViewById(R.id.btn_join);
         joinBtn.setOnClickListener(view -> handleNetwork(false));
+
+        GlobalVariables.setLocalIpAddress(getIpAddress());
+    }
+
+    private String getIpAddress() {
+        ConnectivityManager manager = getSystemService(ConnectivityManager.class);
+        Network network = manager.getActiveNetwork();
+        LinkProperties prop = manager.getLinkProperties(network);
+        for (LinkAddress linkAddress : prop.getLinkAddresses()){
+            InetAddress inetAddress = linkAddress.getAddress();
+            if(inetAddress instanceof Inet4Address){
+                return inetAddress.getHostAddress();
+
+            }
+        }
+        return "wrong";
     }
 
     @Override

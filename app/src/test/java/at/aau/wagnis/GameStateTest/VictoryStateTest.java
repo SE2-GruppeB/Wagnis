@@ -27,12 +27,12 @@ class VictoryStateTest {
     @Mock
     private Player mockedWinner;
 
-
+    /**
+     * Überprüft, ob der Gewinner korrekt zurückgegeben wird.
+     */
     @Test
     void testGetWinner() {
         VictoryState state = new VictoryState(mockedWinner);
         assertEquals(mockedWinner, state.getWinner());
     }
-
-
 }

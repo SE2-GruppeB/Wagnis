@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
+import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.gamestate.LobbyState;
 import at.aau.wagnis.server.GameServer;
 
@@ -15,15 +16,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class LobbyStateTest {
     LobbyState lobbyState;
     @Mock
     Player player;
 
+    GameServer gameServer;
+
     @BeforeEach
     void setUp() {
+        gameServer = mock(GameServer.class);
+
         lobbyState=new LobbyState();
+        lobbyState.setGameServer(gameServer);
     }
 
     @Test
@@ -60,7 +67,7 @@ class LobbyStateTest {
     @Test
     void testAdjacencies() {
         lobbyState.getAdjacencies().clear();
-        lobbyState.setAdjacencies("123455103456123456123456123456123456123456123456123456123456123456123456123456123456");
+        lobbyState.setAdjacencies("171015121717101717123456123456123456123456123456123456123456123456123456123456123456");
         assertNotEquals(null,lobbyState.getAdjacencies());
         for(Adjacency a :lobbyState.getAdjacencies()){
             assertNotEquals(null,a.getHub1());
@@ -69,32 +76,43 @@ class LobbyStateTest {
         }
         assertTrue(lobbyState.getAdjacencies().size()>42);
 
-        assertEquals(0,lobbyState.getAdjacencies().get(0).getHub1().getId());
-        assertEquals(7,lobbyState.getAdjacencies().get(0).getHub2().getId());
+        assertEquals(100,lobbyState.getAdjacencies().get(0).getHub1().getId());
+        assertEquals(108,lobbyState.getAdjacencies().get(0).getHub2().getId());
 
-        assertEquals(0,lobbyState.getAdjacencies().get(1).getHub1().getId());
-        assertEquals(7,lobbyState.getAdjacencies().get(1).getHub2().getId());
+        assertEquals(101,lobbyState.getAdjacencies().get(1).getHub1().getId());
+        assertEquals(102,lobbyState.getAdjacencies().get(1).getHub2().getId());
 
-        assertEquals(1,lobbyState.getAdjacencies().get(2).getHub1().getId());
-        assertEquals(8,lobbyState.getAdjacencies().get(2).getHub2().getId());
+        assertEquals(102,lobbyState.getAdjacencies().get(2).getHub1().getId());
+        assertEquals(109,lobbyState.getAdjacencies().get(2).getHub2().getId());
 
-        assertEquals(1,lobbyState.getAdjacencies().get(3).getHub1().getId());
-        assertEquals(7,lobbyState.getAdjacencies().get(3).getHub2().getId());
+        assertEquals(103,lobbyState.getAdjacencies().get(3).getHub1().getId());
+        assertEquals(104,lobbyState.getAdjacencies().get(3).getHub2().getId());
 
-        assertEquals(2,lobbyState.getAdjacencies().get(4).getHub1().getId());
-        assertEquals(8,lobbyState.getAdjacencies().get(4).getHub2().getId());
+        assertEquals(103,lobbyState.getAdjacencies().get(4).getHub1().getId());
+        assertEquals(110,lobbyState.getAdjacencies().get(4).getHub2().getId());
 
-        assertEquals(3,lobbyState.getAdjacencies().get(5).getHub1().getId());
-        assertEquals(10,lobbyState.getAdjacencies().get(5).getHub2().getId());
+        assertEquals(104,lobbyState.getAdjacencies().get(5).getHub1().getId());
+        assertEquals(110,lobbyState.getAdjacencies().get(5).getHub2().getId());
 
-        assertEquals(3,lobbyState.getAdjacencies().get(6).getHub1().getId());
-        assertEquals(9,lobbyState.getAdjacencies().get(6).getHub2().getId());
+        assertEquals(106,lobbyState.getAdjacencies().get(7).getHub1().getId());
+        assertEquals(113,lobbyState.getAdjacencies().get(7).getHub2().getId());
+
+        assertEquals(107,lobbyState.getAdjacencies().get(8).getHub1().getId());
+        assertEquals(115,lobbyState.getAdjacencies().get(8).getHub2().getId());
+
+        assertEquals(108,lobbyState.getAdjacencies().get(9).getHub1().getId());
+        assertEquals(115,lobbyState.getAdjacencies().get(9).getHub2().getId());
+
 
     }
     @Test
     void testPlayer(){
+        GameData mockGameData = mock(GameData.class);
+        when(gameServer.getGameData()).thenReturn(mockGameData);
         assertEquals(0,lobbyState.getPlayers().size());
-        lobbyState.addPlayer(player);
+        lobbyState.addPlayer("10.0.0.1");
         assertEquals(1,lobbyState.getPlayers().size());
+
+        verify(gameServer).getGameData();
     }
 }

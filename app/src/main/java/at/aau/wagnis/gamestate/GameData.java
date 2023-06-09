@@ -1,8 +1,10 @@
 package at.aau.wagnis.gamestate;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Deck;
 import at.aau.wagnis.Hub;
@@ -11,7 +13,9 @@ import at.aau.wagnis.Troops;
 
 public class GameData {
 
+    private static final String IDENTIFIER_STRING  = "IDENTIFIER";
     private static final String SEED_STRING  = "SEED";
+    private static final String GAMESTATE_STRING  = "STATE";
     private static final String PLAYER_STRING  = "PLAYER";
     private static final String CARD_STRING  = "CARD";
     private static final String HUB_STRING  = "HUB";
@@ -20,13 +24,27 @@ public class GameData {
     private String seed;
     private List<Hub> hubs;
     private List<Player> players;
+    private List<Adjacency> adjacencies;
     private List<ChatMessage> messages;
+    Map<Integer, String> playerIdentifier;
+    private String currentGameLogicState;
 
     public GameData() {
         super();
         hubs = new ArrayList<>();
         players = new ArrayList<>();
+        adjacencies = new ArrayList<>();
+        playerIdentifier = new HashMap<>();
         messages = new ArrayList<>();
+        currentGameLogicState = "LobbyState";
+    }
+
+    public String getCurrentGameLogicState() {
+        return currentGameLogicState;
+    }
+
+    public void setCurrentGameLogicState(String currentGameLogicState) {
+        this.currentGameLogicState = currentGameLogicState;
     }
 
     public void setSeed(String seed) {
@@ -41,6 +59,15 @@ public class GameData {
         this.hubs = new ArrayList<>(hubs);
     }
 
+    public void setAdjacencies(List<Adjacency> adjacencies) {
+        this.adjacencies = adjacencies;
+    }
+
+    public void addPlayerIdentifier(int playerId, String ipAddress) {
+        playerIdentifier.put(playerId, ipAddress);
+        players.add(new Player(playerId));
+    }
+
     public String getSeed() {
         return seed;
     }
@@ -53,10 +80,32 @@ public class GameData {
         return players;
     }
 
+    public List<Adjacency> getAdjacencies() {
+        return adjacencies;
+    }
+
+    public Map<Integer, String> getPlayerIdentifier() {
+        return playerIdentifier;
+    }
+
     public String serialize() {
         // TYPE1<VALUE1>TYPE1TYPE2<VALUE2>TYPE2...
         // SEED(string), PLAYER[i](id, unassigned, cards[i](type)), HUB[i](hubID, ownerID, troops)
         StringBuilder builder = new StringBuilder();
+
+        // Player identification
+        builder.append(IDENTIFIER_STRING);
+        for(Map.Entry<Integer, String> i : playerIdentifier.entrySet()) {
+            builder.append(i.getKey()).append(";");
+            builder.append(i.getValue());
+            builder.append(IDENTIFIER_STRING);
+        }
+
+        // current GameLogicState
+        builder.append(GAMESTATE_STRING);
+        builder.append(this.currentGameLogicState);
+        builder.append(GAMESTATE_STRING);
+
         // Seed
         builder.append(SEED_STRING);
         builder.append(this.getSeed());
@@ -94,6 +143,18 @@ public class GameData {
     }
 
     public void deserialize(String input){
+        // Player identification
+        String[] identifiingData = input.split(IDENTIFIER_STRING);
+        for(int i = 1; i < identifiingData.length -1; i++) {
+            String[] data = identifiingData[i].split(";");
+            int key = Integer.parseInt(data[0]);
+            String value = data[1];
+            playerIdentifier.put(key, value);
+        }
+
+        // current GameLocigState
+        setCurrentGameLogicState(input.split(GAMESTATE_STRING)[1]);
+
         // Seed
         String[] seedData = input.split(SEED_STRING);
         setSeed(seedData[1]);
@@ -105,8 +166,7 @@ public class GameData {
             String[] data = playerData[i].split(";");
             Player player;
             if((player = getPlayerById(Integer.parseInt(data[0]))) == null){
-                player = new Player();
-                player.setPlayerId(Integer.parseInt(data[0]));
+                player = new Player(Integer.parseInt(data[0]));
             }
             player.setUnassignedAvailableTroops(Integer.parseInt(data[1]));
 

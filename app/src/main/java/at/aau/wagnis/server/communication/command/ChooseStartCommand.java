@@ -28,6 +28,7 @@ public class ChooseStartCommand implements ClientOriginatedServerCommand {
 
     @Override
     public void setClientId(int clientId) {
+        /*Empty because useless, existing because of interface*/
     }
 
     @Override

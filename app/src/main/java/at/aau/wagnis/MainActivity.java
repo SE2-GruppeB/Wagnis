@@ -26,6 +26,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -273,8 +274,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePlayerCount() {
-            playerCount.setText(R.string.playerCount + currentGameData.getPlayers().size());
-
+        playerCount.setText("PlayerCount: "+ currentGameData.getPlayers().size());
     }
 
     public void popupStart(View view) {
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnClose.setOnClickListener(view -> popupWindow.dismiss());
 
-        Switch switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
+        SwitchCompat switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
         switchMusic.setText(R.string.music);
 
         switchMusic.setChecked(GlobalVariables.getMediaPlayer().isPlaying());
@@ -431,22 +431,22 @@ public class MainActivity extends AppCompatActivity {
         try {
             switch (card.getType()) {
                 case INFANTRY:
-                    btn.setText("Infantry");
+                    btn.setText(R.string.infantry);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.infantry, 0, 0);
 
                     break;
                 case CAVALRY:
-                    btn.setText("Cavallary");
+                    btn.setText(R.string.cavalry);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.cavalry, 0, 0);
 
                     break;
                 case ARTILLERY:
-                    btn.setText("Artillery");
+                    btn.setText(R.string.artillery);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.artillery, 0, 0);
 
                     break;
                 default:
-                    btn.setText("Empty");
+                    btn.setText(R.string.empty);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
                     break;
             }

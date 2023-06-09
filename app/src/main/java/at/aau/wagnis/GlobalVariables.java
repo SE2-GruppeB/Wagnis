@@ -57,8 +57,8 @@ public class GlobalVariables {
         return seeds;
     }
 
-    public static void setHubs(ArrayList<Hub> hubs) {
-        GlobalVariables.hubs = hubs;
+    public static void setHubs(List<Hub> hubs) {
+        GlobalVariables.hubs = (ArrayList<Hub>) hubs;
     }
 
     public static List<Adjacency> getAdjacencies() {

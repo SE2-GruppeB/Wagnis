@@ -42,12 +42,6 @@ class ChooseAttackGameStateTest {
      * Testet, ob `chooseAttack()` einen neuen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
-    void chooseAttack_shouldSetNewAttackGameState() {
-        int playerId = 1;
-        int sourceHubId = 2;
-        int targetHubId = 3;
-    }
-    @Test
     void testChooseAttack_ValidAttack() {
         //Hubs für einen gültigen Angriff
         Hub sourceHub = new Hub(1);

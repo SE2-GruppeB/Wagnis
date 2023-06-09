@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePlayerCount() {
-            playerCount.setText("PlayerCount: " + currentGameData.getPlayers().size());
+            playerCount.setText(R.string.playerCount + currentGameData.getPlayers().size());
 
     }
 
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
         btnClose.setOnClickListener(view -> popupWindow.dismiss());
 
         Switch switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
-        switchMusic.setText("Music");
+        switchMusic.setText(R.string.music);
 
         switchMusic.setChecked(GlobalVariables.getMediaPlayer().isPlaying());
 

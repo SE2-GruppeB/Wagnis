@@ -97,11 +97,11 @@ class LobbyStateTest {
         assertEquals(106,lobbyState.getAdjacencies().get(7).getHub1().getId());
         assertEquals(113,lobbyState.getAdjacencies().get(7).getHub2().getId());
 
-        assertEquals(107,lobbyState.getAdjacencies().get(7).getHub1().getId());
-        assertEquals(115,lobbyState.getAdjacencies().get(7).getHub2().getId());
+        assertEquals(107,lobbyState.getAdjacencies().get(8).getHub1().getId());
+        assertEquals(115,lobbyState.getAdjacencies().get(8).getHub2().getId());
 
-        assertEquals(108,lobbyState.getAdjacencies().get(7).getHub1().getId());
-        assertEquals(115,lobbyState.getAdjacencies().get(7).getHub2().getId());
+        assertEquals(108,lobbyState.getAdjacencies().get(9).getHub1().getId());
+        assertEquals(115,lobbyState.getAdjacencies().get(9).getHub2().getId());
 
     }
     @Test

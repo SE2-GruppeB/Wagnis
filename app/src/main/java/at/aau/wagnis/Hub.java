@@ -4,7 +4,7 @@ import android.widget.Button;
 
 import java.util.Objects;
 
-public class Hub {
+public class Hub implements Comparable{
 
     private final int id;
     private final Button hubButton;
@@ -104,6 +104,16 @@ public class Hub {
     }
 
 
+    @Override
+    public int compareTo(Object o) {
+        Hub compartor = (Hub)o;
+        if(this.getId()>compartor.getId()){
+            return 1;
+        } else if (this.getId()<compartor.getId()) {
+            return -1;
+        }
+        return 0;
+    }
 }
 
 

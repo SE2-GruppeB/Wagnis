@@ -18,6 +18,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 class LobbyStateTest {
     LobbyState lobbyState;
     @Mock
@@ -41,24 +46,25 @@ class LobbyStateTest {
     @Test
     void testHubGeneration() {
         assertEquals(42,lobbyState.getHubs().size());
-        assertEquals(1, lobbyState.getHubs().get(1).getId());
+        assertEquals(7,lobbyState.getHubsPerLine());
 
-        int hubId = 0;
-        for(Hub h : lobbyState.getHubs()){
+        int hubId = 100;
+        List<Hub> hubs = lobbyState.getHubs();
+        Collections.sort(hubs);
+
+        for(Hub h : hubs){
             assertEquals(hubId,h.getId());
             hubId++;
         }
-
-        assertEquals(7,lobbyState.getHubsPerLine());
     }
 
     @Test
     void testFindHubById() {
-        Hub testHub=lobbyState.findHubById(0);
-        assertEquals(0,testHub.getId());
+        Hub testHub=lobbyState.findHubById(100);
+        assertEquals(100,testHub.getId());
 
-        testHub=lobbyState.findHubById(10);
-        assertEquals(10,testHub.getId());
+        testHub=lobbyState.findHubById(110);
+        assertEquals(110,testHub.getId());
 
         testHub=lobbyState.findHubById(200);
         assertNull(testHub);

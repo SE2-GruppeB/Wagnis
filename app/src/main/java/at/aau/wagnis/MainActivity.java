@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,18 +93,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
-            currentGameData = newGameData;
+
+
             if (newGameData != null && currentGameData != null && !(currentGameData.getMessages().equals(newGameData.getMessages()))) {
                 btnChat.setCustomSize(300);
             }
 
             // code to be executed on the UI thread
-
+            currentGameData = newGameData;
             if (newGameData != null) {
                 //System.out.println(currentState.getMessages());
 
                 try {
-
                     System.out.println("Main"+currentGameData.getCurrentGameLogicState());
                     if (startpopup.isShowing()) {
                         updatePlayerCount();
@@ -223,9 +224,6 @@ public class MainActivity extends AppCompatActivity {
                 popupDiceRoll(v);
                 GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
 
-                System.out.println("Hub:" +hub.getId());
-
-
                    /* System.out.println("CLICKER: "+hub.getId());
                     clicked.add(new Hub(hub));
 
@@ -284,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         paint.setAntiAlias(true);
 
         for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {
-            int pxWidth = dpToPx(60);
+            int pxWidth = dpToPx(21);
             int pxHeight = dpToPx(60);
 
             int startX = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).leftMargin + pxWidth;
@@ -367,9 +365,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnClose.setOnClickListener(view -> popupWindow.dismiss());
 
-        SwitchCompat switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
-        switchMusic.setTextOn("On");
-        switchMusic.setTextOff("Off");
+        Switch switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
+        switchMusic.setText("Music");
 
         switchMusic.setChecked(GlobalVariables.getMediaPlayer().isPlaying());
 

@@ -14,7 +14,7 @@ import at.aau.wagnis.Player;
 public class LobbyState extends GameLogicState{
     static final int NUMBER_OF_HUBS=42;
     static final int MIN_SEEDVALUE_PER_HUB=10;
-    static final int MIN_HUB_ID=0;
+    static final int MIN_HUB_ID=100;                        /*0-indexing would mess up map generation badly*/
     static final int MAX_HUB_ID=MIN_HUB_ID+NUMBER_OF_HUBS;
     private int hubsPerLine;
     private List<Player> players;
@@ -69,7 +69,7 @@ public class LobbyState extends GameLogicState{
             isConnected=false;
             lineHubCount++;
 
-            chance = Integer.parseInt(seeds.get(i));
+            chance = Integer.parseInt(seeds.get(i-100));
 
             if (chance % 2 == 0) {
                 isConnected=true;
@@ -105,7 +105,7 @@ public class LobbyState extends GameLogicState{
             }
         }
         for (int i = hubs.size() - hubsPerLine; i < hubs.size() - 1; i++) {                                             /*Connect last row with respective neighbour*/
-            adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
+            adjacencies.add(new Adjacency(hubs.get(i+100), findHubById(hubs.get(i+100).getId() + 1)));                  /* +100 because of map*/
         }
     }
 

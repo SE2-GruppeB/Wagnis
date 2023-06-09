@@ -41,7 +41,7 @@ public class ReinforceGameState extends GameLogicState{
         this.troopsToDeploy = troopsToDeploy;
     }
 
-    @Override
+
     public void reinforce() {
         if (hubs.size() != troopsToDeploy.size()) {
             throw new IllegalArgumentException("Hubs and troopsToDeploy must have the same size");
@@ -51,6 +51,19 @@ public class ReinforceGameState extends GameLogicState{
         }
         for (int i = 0; i < hubs.size(); i++) {
             reinforceSingle(hubs.get(i),troopsToDeploy.get(i));
+        }
+    }
+
+    @Override
+    public void reinforce(List<Integer> hubsId , List<Integer> troops) {
+        if (hubs.size() != troops.size()) {
+            throw new IllegalArgumentException("Hubs and troopsToDeploy must have the same size");
+        }
+        if (hubs.isEmpty()) {
+            throw new IllegalArgumentException("There must be at least one");
+        }
+        for (int i = 0; i < hubs.size(); i++) {
+            reinforceSingle(hubs.get(i),troops.get(i));
         }
     }
 

@@ -8,17 +8,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.aau.wagnis.Hub;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.gamestate.ReinforceGameState;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
 public class ReinforceCommand implements ClientOriginatedServerCommand{
 
-    private final List<Hub> hubs;
+    private final List<Integer> hubs;
     private final List<Integer> troopsToDeploy;
 
-    public ReinforceCommand(List<Hub> hubs, List<Integer> troopsToDeploy) {
+    public ReinforceCommand(List<Integer> hubs, List<Integer> troopsToDeploy) {
         this.hubs = hubs;
         this.troopsToDeploy = troopsToDeploy;
     }
@@ -37,7 +36,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
 
     @Override
     public void execute(@NonNull GameLogicState gameLogicState) {
-        gameLogicState.reinforce();
+        gameLogicState.reinforce(hubs, troopsToDeploy);
     }
 
     public static class CommandSerializer implements Serializer<ReinforceGameState> {

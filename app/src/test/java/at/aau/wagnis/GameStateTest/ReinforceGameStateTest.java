@@ -14,7 +14,7 @@ import at.aau.wagnis.gamestate.ReinforceGameState;
 
 class ReinforceGameStateTest {
 
-    List<Hub> hubsNull;
+    List<Integer> hubsNull;
     List<Integer> troopsNull;
     List<Hub> hubs;
     List<Integer> troops;

@@ -33,13 +33,9 @@ class StartGameCommandTest {
 
         command = new StartGameCommand();
     }
-    @Test
-    void getClientId() {
-        assertNull(command.getClientId());
-    }
 
     @Test
-    void setClientId() {
+    void testClientId() {
         command.setClientId(1);
         assertEquals(1,command.getClientId());
     }

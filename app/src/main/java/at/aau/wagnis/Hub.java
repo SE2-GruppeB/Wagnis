@@ -33,6 +33,11 @@ public class Hub {
         return id == hub.id && amountTroops == hub.amountTroops && Objects.equals(owner, hub.owner);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, hubButton, owner, amountTroops);
+    }
+
     public Button getHubButton() {
         return this.hubButton;
     }

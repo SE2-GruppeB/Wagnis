@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
@@ -27,7 +26,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -54,7 +52,6 @@ import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 
 
 public class MainActivity extends AppCompatActivity {

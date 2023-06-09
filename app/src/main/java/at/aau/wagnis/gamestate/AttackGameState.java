@@ -1,6 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 import at.aau.wagnis.Hub;

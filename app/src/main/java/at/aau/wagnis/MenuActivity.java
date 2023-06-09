@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -33,7 +32,6 @@ public class MenuActivity extends AppCompatActivity {
     Button hostBtn;
     Button sourcesBtn;
     Button joinBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

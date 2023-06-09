@@ -33,6 +33,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     boolean wasDrawn = false;
     PopupWindow startpopup;
     TextView playerCount;
+    ArrayList<Hub> clicked= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,7 +240,25 @@ public class MainActivity extends AppCompatActivity {
             hub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (lastClickedHub != null){
+
+                   /* System.out.println("CLICKER: "+hub.getId());
+                    clicked.add(new Hub(hub));
+
+
+                    if(clicked.size()==2){
+                        System.out.println("TESTING: "+clicked.get(0)+", "+clicked.get(1));
+
+                        for(Adjacency a :GlobalVariables.adjacencies){
+                            if(a.getHub1().getId()==clicked.get(0).getId()&&a.getHub2().getId()==clicked.get(1).getId()||
+                                    a.getHub1().getId()==clicked.get(1).getId()&&a.getHub2().getId()==clicked.get(0).getId()){
+                                System.out.println("CONNECTION: "+ a.getHub1().getId()+", "+a.getHub2().getId());
+                            }
+                        }
+
+                        clicked.clear();
+                    }*/
+
+                   if (lastClickedHub != null){
                         getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
                         lastClickedHub = null;
                     }else{

@@ -67,7 +67,7 @@ class LobbyStateTest {
     @Test
     void testAdjacencies() {
         lobbyState.getAdjacencies().clear();
-        lobbyState.setAdjacencies("123455103456123456123456123456123456123456123456123456123456123456123456123456123456");
+        lobbyState.setAdjacencies("171015121717101717123456123456123456123456123456123456123456123456123456123456123456");
         assertNotEquals(null,lobbyState.getAdjacencies());
         for(Adjacency a :lobbyState.getAdjacencies()){
             assertNotEquals(null,a.getHub1());
@@ -77,25 +77,31 @@ class LobbyStateTest {
         assertTrue(lobbyState.getAdjacencies().size()>42);
 
         assertEquals(100,lobbyState.getAdjacencies().get(0).getHub1().getId());
-        assertEquals(107,lobbyState.getAdjacencies().get(0).getHub2().getId());
+        assertEquals(108,lobbyState.getAdjacencies().get(0).getHub2().getId());
 
-        assertEquals(100,lobbyState.getAdjacencies().get(1).getHub1().getId());
-        assertEquals(107,lobbyState.getAdjacencies().get(1).getHub2().getId());
+        assertEquals(101,lobbyState.getAdjacencies().get(1).getHub1().getId());
+        assertEquals(102,lobbyState.getAdjacencies().get(1).getHub2().getId());
 
-        assertEquals(101,lobbyState.getAdjacencies().get(2).getHub1().getId());
-        assertEquals(108,lobbyState.getAdjacencies().get(2).getHub2().getId());
+        assertEquals(102,lobbyState.getAdjacencies().get(2).getHub1().getId());
+        assertEquals(109,lobbyState.getAdjacencies().get(2).getHub2().getId());
 
-        assertEquals(101,lobbyState.getAdjacencies().get(3).getHub1().getId());
-        assertEquals(107,lobbyState.getAdjacencies().get(3).getHub2().getId());
+        assertEquals(103,lobbyState.getAdjacencies().get(3).getHub1().getId());
+        assertEquals(104,lobbyState.getAdjacencies().get(3).getHub2().getId());
 
-        assertEquals(102,lobbyState.getAdjacencies().get(4).getHub1().getId());
-        assertEquals(108,lobbyState.getAdjacencies().get(4).getHub2().getId());
+        assertEquals(103,lobbyState.getAdjacencies().get(4).getHub1().getId());
+        assertEquals(110,lobbyState.getAdjacencies().get(4).getHub2().getId());
 
-        assertEquals(103,lobbyState.getAdjacencies().get(5).getHub1().getId());
+        assertEquals(104,lobbyState.getAdjacencies().get(5).getHub1().getId());
         assertEquals(110,lobbyState.getAdjacencies().get(5).getHub2().getId());
 
-        assertEquals(103,lobbyState.getAdjacencies().get(6).getHub1().getId());
-        assertEquals(109,lobbyState.getAdjacencies().get(6).getHub2().getId());
+        assertEquals(106,lobbyState.getAdjacencies().get(7).getHub1().getId());
+        assertEquals(113,lobbyState.getAdjacencies().get(7).getHub2().getId());
+
+        assertEquals(107,lobbyState.getAdjacencies().get(8).getHub1().getId());
+        assertEquals(115,lobbyState.getAdjacencies().get(8).getHub2().getId());
+
+        assertEquals(108,lobbyState.getAdjacencies().get(9).getHub1().getId());
+        assertEquals(115,lobbyState.getAdjacencies().get(9).getHub2().getId());
 
     }
     @Test

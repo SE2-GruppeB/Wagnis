@@ -201,4 +201,6 @@ public class GameData {
     public List<Adjacency> getAdjacencies() {
         return null;
     }
+
+
 }

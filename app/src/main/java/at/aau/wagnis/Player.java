@@ -152,7 +152,12 @@ public class Player {
     }
 
     public int calcTroopsToDeploy() {
-        //TODO implement Method waiting
+        double ownedhubs = ownedHubs.size();
+        double oneTenth = ownedhubs / 10;
+            while (ownedhubs - oneTenth > 0){
+                allTroopsPerRound++;
+                ownedhubs-= oneTenth;
+            }
 
 
         return allTroopsPerRound;

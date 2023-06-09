@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalVariables {
+    private GlobalVariables(){
+        /*Private Constructor to hide implicit one -> SonarCloud*/
+    }
     private static String agency = "";
 
     private static ArrayList<Player> players = new ArrayList<>();
@@ -50,7 +53,7 @@ public class GlobalVariables {
         GlobalVariables.players = (ArrayList<Player>) players;
     }
 
-    public static ArrayList<String> getSeeds() {
+    public static List<String> getSeeds() {
         return seeds;
     }
 
@@ -58,7 +61,7 @@ public class GlobalVariables {
         GlobalVariables.hubs = hubs;
     }
 
-    public static ArrayList<Adjacency> getAdjacencies() {
+    public static List<Adjacency> getAdjacencies() {
         return adjacencies;
     }
 
@@ -134,17 +137,6 @@ public class GlobalVariables {
         GlobalVariables.localIpAddress = localIpAddress;
     }
 
-
-    private static int setAdjacenciesChanceModTwoEqualsZero(int lineHubCount, int i){
-        if (lineHubCount % hubsPerLine == 0) {
-            adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
-            return lineHubCount;
-        } else {
-            adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + hubsPerLine)));
-            return 1;
-        }
-    }
-
     public static void setAdjacencies() {
         int lineHubCount = 0;
         int chance;
@@ -198,6 +190,11 @@ public class GlobalVariables {
 
     }
 
+
+    /**
+     * @deprecated Moved to MainActivity, only kept for backup
+     */
+    @Deprecated
     public static String getIpAddress() {
         WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());

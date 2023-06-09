@@ -7,6 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.Network;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
@@ -33,6 +37,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -47,6 +53,8 @@ import at.aau.wagnis.server.communication.command.IdentifyCommand;
 
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -300,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
             if(Boolean.TRUE.equals(GlobalVariables.getIsClient())){
                 mMatrix = mWriter.encode(GlobalVariables.getHostIP(), BarcodeFormat.QR_CODE, 500,500);
             }else{
-                mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+                mMatrix = mWriter.encode(getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
             }
 
             BarcodeEncoder mEncoder = new BarcodeEncoder();
@@ -310,6 +318,18 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             restart();
         }
+    }
+    private String getIpAddress() {
+        ConnectivityManager manager = getSystemService(ConnectivityManager.class);
+        Network network = manager.getActiveNetwork();
+        LinkProperties prop = manager.getLinkProperties(network);
+        for (LinkAddress linkAddress : prop.getLinkAddresses()){
+            InetAddress inetAddress = linkAddress.getAddress();
+            if(inetAddress instanceof Inet4Address){
+                return inetAddress.getHostAddress();
+            }
+        }
+        return "no fitting ip address found";
     }
 
     public void restart() {

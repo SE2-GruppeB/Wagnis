@@ -1,34 +1,40 @@
 package at.aau.wagnis;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowMetrics;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
-import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.BarcodeFormat;
@@ -38,7 +44,6 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -66,11 +71,17 @@ public class MainActivity extends AppCompatActivity {
     boolean wasDrawn = false;
     PopupWindow startpopup;
     TextView playerCount;
-    ArrayList<Hub> clicked= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                moveTaskToBack(true);
+            }
+        });
+
         getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
 
         setContentView(R.layout.activity_main);
@@ -125,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
                 }
         }));
 
+
+
     }
 
     private void generateMap(String seed) {
@@ -136,27 +149,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
+        /*System Bars appearing when focusable popups are opened appears to be a bug*/
+        WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        windowInsetsController.setSystemBarsBehavior( WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
 
     @Override
     public void onResume() {
@@ -164,20 +162,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setDisplayMetrics() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        GlobalVariables.setDisplayWidthPx(displayMetrics.widthPixels);
-        GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
+        WindowMetrics windowMetrics = getWindowManager().getCurrentWindowMetrics();
+        Insets insets = windowMetrics.getWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+        GlobalVariables.setDisplayWidthPx(windowMetrics.getBounds().width()-insets.top-insets.bottom);          /*width & height swapped because landscape mode*/
+        GlobalVariables.setDisplayHeightPx(windowMetrics.getBounds().height()-insets.left-insets.right);
     }
 
 
     private int dpToPx(int dp){
-        return dp *(getResources().getDisplayMetrics().densityDpi/160);
-
+       return dp *(getResources().getDisplayMetrics().densityDpi/160);
     }
 
     public PopupWindow createPopUp(int popupId) {
-
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
         return new PopupWindow(popUp, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -332,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
     public void restart() {
         Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
         int pendingIntent = 123456;
-        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager manager = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
 
         manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);

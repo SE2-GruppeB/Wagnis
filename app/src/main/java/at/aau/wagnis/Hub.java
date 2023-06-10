@@ -35,7 +35,7 @@ public class Hub implements Comparable<Hub>{
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, hubButton, owner, amountTroops);
+        return Objects.hash(id, owner);
     }
 
     public Button getHubButton() {

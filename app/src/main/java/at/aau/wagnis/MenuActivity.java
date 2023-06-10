@@ -20,6 +20,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -94,22 +97,11 @@ public class MenuActivity extends AppCompatActivity {
         getGameManager().setConnectionStateListener(null);
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus) {
-           getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
+            WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+            windowInsetsController.setSystemBarsBehavior( WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
     private void changeActivity() {
@@ -154,8 +146,6 @@ public class MenuActivity extends AppCompatActivity {
         ig11.setPrompt("Scan a QR Code");
         ig11.initiateScan();
     }
-
-
     /**
      * @deprecated
      */
@@ -184,6 +174,16 @@ public class MenuActivity extends AppCompatActivity {
     public void showSources() {
         PopupWindow popupWindow= createPopUp(R.layout.popup_sources);
         popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
+        Button appIcon = popupWindow.getContentView().findViewById(R.id.btn_AppIcon);
+        appIcon.setOnClickListener(view -> goToAppIcon());
+        Button dome = popupWindow.getContentView().findViewById(R.id.btn_dome);
+        dome.setOnClickListener(view -> goToAppIcon());
+        Button background = popupWindow.getContentView().findViewById(R.id.btn_background);
+        background.setOnClickListener(view -> goToBackground());
+        Button surface = popupWindow.getContentView().findViewById(R.id.btn_surfaceBackground);
+        surface.setOnClickListener(view -> goToSurface());
+        Button ui = popupWindow.getContentView().findViewById(R.id.btn_surfaceBackground2);
+        ui.setOnClickListener(view -> goToUI());
     }
 
     private void goToUrl (String url) {
@@ -196,26 +196,23 @@ public class MenuActivity extends AppCompatActivity {
         return ((WagnisApplication) getApplication()).getGameManager();
     }
 
-    public void goToAppIcon (View view) {       /*View required because Method is called from XML*/
+    public void goToAppIcon () {
         goToUrl ( "https://icons8.de");
     }
-    public void goToBackground (View view) {    /*View required because Method is called from XML*/
+    public void goToBackground () {
         goToUrl ( "https://www.vecteezy.com/vector-art/17535964-mars-landscape-with-craters-and-red-rocky-surface");
     }
-    public void goToSurface (View view) {       /*View required because Method is called from XML*/
+    public void goToSurface () {
         goToUrl ( "https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
     }
-    public void goToUI (View view) {            /*View required because Method is called from XML*/
+    public void goToUI () {
         goToUrl ( "https://www.vecteezy.com/vector-art/21604946-futuristic-vector-hud-interface-screen-design-digital-callouts-titles-hud-ui-gui-futuristic-user");
     }
 
     public PopupWindow createPopUp(int popupId){
-
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
         return new PopupWindow(popUp, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, true);
     }
-
-
 }
 

@@ -21,7 +21,6 @@
     <Button
         android:id="@+id/btn_AppIcon"
         android:text="@string/icons8App"
-        android:onClick="goToAppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -37,48 +36,34 @@
     <Button
         android:id="@+id/btn_dome"
         android:text="@string/icons8Dome"
-        android:onClick="goToAppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="100dp"
-        android:clickable="true"
-        android:autoLink="web"
-        android:cursorVisible="true"
-        android:linksClickable="true"
         tools:ignore="TextViewEdits" />
 
     <Button
         android:id="@+id/btn_background"
         android:text="@string/background"
-        android:onClick="goToBackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="150dp"
-        android:clickable="true"
-        android:autoLink="web"
-        android:cursorVisible="true"
-        android:linksClickable="true"
         tools:ignore="TextViewEdits" />
     <Button
         android:id="@+id/btn_surfaceBackground"
         android:text="@string/surface"
-        android:onClick="goToSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="200dp"
-        android:clickable="true"
-        android:autoLink="web"
         android:cursorVisible="true"
-        android:linksClickable="true"
         tools:ignore="TextViewEdits" />
 
     <Button
@@ -89,11 +74,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="250dp"
-        android:autoLink="web"
-        android:clickable="true"
-        android:cursorVisible="true"
-        android:linksClickable="true"
-        android:onClick="goToUI"
         android:text="@string/backgroundUi"
         tools:ignore="TextViewEdits" />
 </RelativeLayout>

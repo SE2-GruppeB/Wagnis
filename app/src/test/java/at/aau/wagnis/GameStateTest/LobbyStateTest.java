@@ -33,7 +33,6 @@ class LobbyStateTest {
     @BeforeEach
     void setUp() {
         gameServer = mock(GameServer.class);
-
         lobbyState=new LobbyState();
         lobbyState.setGameServer(gameServer);
     }
@@ -66,7 +65,7 @@ class LobbyStateTest {
         testHub=lobbyState.findHubById(110);
         assertEquals(110,testHub.getId());
 
-        testHub=lobbyState.findHubById(200);
+        testHub=lobbyState.findHubById(1000);
         assertNull(testHub);
     }
 
@@ -120,5 +119,37 @@ class LobbyStateTest {
         assertEquals(1,lobbyState.getPlayers().size());
 
         verify(gameServer).getGameData();
+    }
+
+    @Test
+    void testGetGameData(){
+        GameData mockGameData = mock(GameData.class);
+        when(gameServer.getGameData()).thenReturn(mockGameData);
+        assertNotNull(lobbyState.getGameData());
+    }
+    @Test
+    void testGetSeed(){
+        String seed = lobbyState.getSeed();
+        assertNotNull(seed);
+        assertEquals(84,seed.length());
+    }
+
+    @Test
+    void testGetHubs(){
+        List<Hub> hubs = lobbyState.getHubs();
+        assertNotNull(hubs);
+        assertEquals(42,hubs.size());
+        assertEquals(7,lobbyState.getHubsPerLine());
+    }
+
+    @Test
+    void testGetPlayers(){
+        assertNotNull(lobbyState.getPlayers());
+    }
+    @Test
+    void testGetAdjacencies(){
+        assertNotNull(lobbyState.getAdjacencies());
+        assertTrue(lobbyState.getAdjacencies().size()>1);
+        assertTrue(lobbyState.getAdjacencies().size()<85);
     }
 }

@@ -3,6 +3,7 @@ package at.aau.wagnis.ObjectTest;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -94,8 +95,8 @@ class HubTest {
         Hub hub1 = new Hub(10);
         Hub hub2 = new Hub(15);
 
-        assertTrue(hub1.equals(hub1));
-        assertFalse(hub1.equals(hub2));
+        assertEquals(hub1,hub1);
+        assertNotEquals(hub1,hub2);
     }
 
     @Test

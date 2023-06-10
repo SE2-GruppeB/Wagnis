@@ -60,12 +60,10 @@ public class Hub implements Comparable<Hub>{
         this.amountTroops = amountTroops;
     }
 
-    //Todo
     public Player getOwner() {
         return this.owner;
     }
 
-    //to do:
     public void setOwner(Player hubOwner) {
         this.owner = hubOwner;
     }

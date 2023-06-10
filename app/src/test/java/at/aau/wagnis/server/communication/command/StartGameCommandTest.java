@@ -76,6 +76,6 @@ class StartGameCommandTest {
 
         InputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
-        commandSerializer.readFromStream(dataInputStream);
+        assertEquals(StartGameCommand.class,commandSerializer.readFromStream(dataInputStream).getClass());
     }
 }

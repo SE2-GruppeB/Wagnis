@@ -20,7 +20,9 @@ import at.aau.wagnis.gamestate.LobbyState;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -60,5 +62,20 @@ class StartGameCommandTest {
         LobbyState gameLogicState = mock(LobbyState.class);
         command.execute(gameLogicState);
         verify(gameLogicState).next();
+    }
+
+    @Test
+    void testReadWriteToStream() throws IOException {
+        StartGameCommand.CommandSerializer commandSerializer = new StartGameCommand.CommandSerializer();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        commandSerializer.writeToStream(command, dataOutputStream);
+
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+
+        InputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+        commandSerializer.readFromStream(dataInputStream);
     }
 }

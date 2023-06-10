@@ -97,6 +97,7 @@ class HubTest {
 
         assertEquals(hub1,hub1);
         assertNotEquals(hub1,hub2);
+        assertNotEquals(hub1,new Player());
     }
 
     @Test

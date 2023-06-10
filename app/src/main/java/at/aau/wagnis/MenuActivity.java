@@ -120,7 +120,6 @@ public class MenuActivity extends AppCompatActivity {
     }
     public void getHostIp() {
         try {
-            //throw new Exception();
             readQrCode();
 
         } catch (Exception e) {

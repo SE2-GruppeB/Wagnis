@@ -21,7 +21,6 @@
     <Button
         android:id="@+id/btn_AppIcon"
         android:text="@string/icons8App"
-        android:onClick="goToAppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

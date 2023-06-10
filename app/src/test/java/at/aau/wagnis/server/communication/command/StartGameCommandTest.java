@@ -12,19 +12,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 
-import at.aau.wagnis.client.ClientLogic;
-import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.gamestate.LobbyState;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 class StartGameCommandTest {
     private StartGameCommand command;

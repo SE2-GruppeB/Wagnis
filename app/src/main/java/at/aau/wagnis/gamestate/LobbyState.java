@@ -120,11 +120,7 @@ public class LobbyState extends GameLogicState{
     }
 
     public Hub findHubById(int id) {
-        try{
             return hubs.get(id);
-        }catch(Exception e){
-            return null;
-        }
     }
 
     private HashMap<Integer,Hub> generateHubs(){

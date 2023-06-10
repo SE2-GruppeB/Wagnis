@@ -2,7 +2,10 @@ package at.aau.wagnis.ObjectTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -74,15 +77,49 @@ class HubTest {
 
         assertEquals(expectedTroopAmount, hub.getAmountTroops());
     }
+    @Test
+    void testCompareTo() {
+        Hub tester = new Hub(5);
+        Hub bigger = new Hub(6);
+        Hub smaller = new Hub (4);
+        Hub same = new Hub(5);
+
+        assertEquals(-1,tester.compareTo(bigger));
+        assertEquals(1,tester.compareTo(smaller));
+        assertEquals(0,tester.compareTo(same));
+
+    }
+    @Test
+    void testEquals() {
+        Hub hub1 = new Hub(10);
+        Hub hub2 = new Hub(15);
+
+        assertTrue(hub1.equals(hub1));
+        assertFalse(hub1.equals(hub2));
+    }
+
+    @Test
+    void testSetText() {
+        when(hubButton.getText()).thenReturn("Test");
+        hub.setText("Test");
+        verify(hub.getHubButton()).setText("Test");
+        assertEquals("Test",hub.getHubButton().getText());
+    }
+
+    @Test
+    void testHash() {
+        assertNotNull(hub.hashCode());
+    }
+
 
     @Test
     void testGetSetOwner() {
         Player newOwner = mock(Player.class);
-
         hub.setOwner(newOwner);
-
         assertSame(newOwner, hub.getOwner());
     }
+
+
 
     @ParameterizedTest
     @ValueSource(strings = {"ESA", "NASA", "ISRO", "JAXA", "Roskosmos", "China Manned Space Agency", "AAU"})

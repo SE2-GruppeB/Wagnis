@@ -108,7 +108,13 @@ class HubTest {
 
     @Test
     void testHash() {
-        assertNotNull(hub.hashCode());
+        Player owner = new Player(14);
+        Hub hub1 = new Hub(10);
+        hub1.setOwner(owner);
+        Hub hub2 = new Hub(10);
+        hub2.setOwner(owner);
+
+        assertEquals(hub1.hashCode(),hub2.hashCode());
     }
 
 

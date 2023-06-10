@@ -23,6 +23,7 @@ public class MoveTroopsState extends GameLogicState {
         this.targetHubId = targetHubId;
     }
 
+    @Override
     public boolean move(int numTroops) {
         if (isMoveValid(numTroops)) {
             moveTroopsBetweenHubs(numTroops);

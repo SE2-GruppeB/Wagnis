@@ -61,6 +61,7 @@ class AdjacencyTest {
     void isInPair() {
      Hub hub3 = new Hub(15);
      assertTrue(adjacency.isInPair(hub1,hub2));
+     assertTrue(adjacency.isInPair(hub2,hub1));
      assertFalse(adjacency.isInPair(hub1,hub3));
     }
 }

@@ -29,7 +29,7 @@ class ChooseAttackGameStateTest {
 
     @BeforeEach
 
-    public void setUp() {
+    void setUp() {
         // Initialisierung der Testumgebung
         gameState = new ChooseAttackGameState();
         gameServer = mock(GameServer.class);
@@ -68,7 +68,7 @@ class ChooseAttackGameStateTest {
      */
     @Test
 
-    public void testChooseAttack_InvalidAttack() {
+    void testChooseAttack_InvalidAttack() {
         // Hubs für einen ungültigen Angriff
         Hub sourceHub = new Hub(1);
         Hub targetHub = new Hub(2);
@@ -83,7 +83,7 @@ class ChooseAttackGameStateTest {
     }
 
     @Test
-    public void testChooseAttack_SourceHubNotFound() {
+    void testChooseAttack_SourceHubNotFound() {
         // Angriff-Hub nicht gefunden.
         Hub targetHub = new Hub(2);
         List<Hub> hubs = new ArrayList<>();
@@ -95,7 +95,7 @@ class ChooseAttackGameStateTest {
     }
 
     @Test
-    public void testChooseAttack_TargetHubNotFound() {
+    void testChooseAttack_TargetHubNotFound() {
         // Verteidiger Hub nicht vorhanden
         Hub sourceHub = new Hub(1);
         List<Hub> hubs = new ArrayList<>();

@@ -28,9 +28,11 @@ public class Hub implements Comparable<Hub>{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Hub hub = (Hub) o;
-        return id == hub.id && amountTroops == hub.amountTroops && Objects.equals(owner, hub.owner);
+        if(o instanceof Hub){
+            Hub hub = (Hub) o;
+            return id == hub.id && amountTroops == hub.amountTroops && Objects.equals(owner, hub.owner);
+        }
+        return false;
     }
 
     @Override
@@ -58,12 +60,10 @@ public class Hub implements Comparable<Hub>{
         this.amountTroops = amountTroops;
     }
 
-    //Todo
     public Player getOwner() {
         return this.owner;
     }
 
-    //to do:
     public void setOwner(Player hubOwner) {
         this.owner = hubOwner;
     }

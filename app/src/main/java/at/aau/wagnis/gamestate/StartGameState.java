@@ -46,7 +46,6 @@ public class StartGameState extends GameLogicState {
                 placeTroopsOnHub(player, hub, troopsToPlace);
             }
         }
-        updateHubText();
     }
 
     private Hub getRandomHub(Player player, Random ran) {
@@ -75,14 +74,6 @@ public class StartGameState extends GameLogicState {
 
     private boolean hasTroops(Player player) {
         return player.getUnassignedAvailableTroops() > 0;
-    }
-
-    private void updateHubText() {
-        for (Player player : players) {
-            for (Hub hub : player.getOwnedHubs()) {
-                hub.setText("Troops: " + hub.getAmountTroops());
-            }
-        }
     }
 
     public List<Hub> getHubs() {

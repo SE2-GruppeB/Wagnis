@@ -12,11 +12,11 @@ public class UseCardsCommand implements ClientOriginatedServerCommand{
 
     @Override
     public void setClientId(int clientId) {
-
+        // TODO
     }
 
     @Override
     public void execute(@NonNull GameLogicState gameLogicState) {
-
+        // TODO
     }
 }

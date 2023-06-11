@@ -31,7 +31,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
 
     @Override
     public void setClientId(int clientId) {
-
+        // TODO
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
         @NonNull
         @Override
         public String getTypeTag() {
-            return "choose-move";
+            return "reinforce";
         }
 
         @Override

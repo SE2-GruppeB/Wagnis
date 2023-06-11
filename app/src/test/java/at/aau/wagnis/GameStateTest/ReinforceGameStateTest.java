@@ -182,7 +182,7 @@ class ReinforceGameStateTest {
 
         when(gameServer.getGameData()).thenReturn(gameData);
         when(gameData.getHubs()).thenReturn(hubList);
-        
+
         rgstate.reinforceSingle(hubs.get(0),troops.get(0));
         assertEquals(hub.getAmountTroops(),troops.get(0));
         assertEquals(hub1.getAmountTroops(),0);

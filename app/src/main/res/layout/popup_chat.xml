@@ -33,7 +33,7 @@
         android:ems="10"
         android:hint="@string/sendMessage"
         android:inputType="textPersonName"
-        />
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/chatMsg"

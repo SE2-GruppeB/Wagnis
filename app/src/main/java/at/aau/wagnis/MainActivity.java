@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         btnCards = findViewById(R.id.btn_Cards);
         btnSettings = findViewById(R.id.btn_Settings);
         btnChat = findViewById(R.id.btn_Chat);
-        
+
 
         setDisplayMetrics();
         /*if(!GlobalVariables.getIsClient()){

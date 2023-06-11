@@ -1,9 +1,6 @@
 package at.aau.wagnis;
 
-import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.wifi.WifiManager;
-import android.text.format.Formatter;
 
 import java.util.ArrayList;
 import java.util.List;

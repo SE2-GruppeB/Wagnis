@@ -40,7 +40,7 @@ class NetworkServerConnectionTest {
     private NetworkServerConnection subject;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         subject = new NetworkServerConnection(input, output);
     }

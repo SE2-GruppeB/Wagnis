@@ -118,12 +118,12 @@ public class GameManager {
      * <p>
      * If no state has been received yet, the value of the notification will be null.
      */
-    public void setGameStateListener(@Nullable Consumer<GameData> listener) {
+    public void setGameDataListener(@Nullable Consumer<GameData> listener) {
         synchronized (connectionLock) {
             if (gameClient == null) {
                 throw new IllegalStateException("Game client is not ready");
             } else {
-                gameClient.setGameStateListener(listener);
+                gameClient.setGameDataListener(listener);
             }
         }
     }

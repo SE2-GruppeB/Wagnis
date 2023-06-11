@@ -37,6 +37,6 @@ public class Adjacency {
      * @return True, wenn die beiden Hubs ein Paar bilden, ansonsten False.
      */
     public boolean isInPair(Hub hub1, Hub hub2) {
-        return ((this.hub1.equals(hub1) && this.hub2.equals(hub2)) || (this.hub1.equals(hub2) && this.hub2.equals(hub1)));
+        return ((this.hub1.getId()==hub1.getId() && this.hub2.getId()==hub2.getId()) || (this.hub1.getId()==hub2.getId() && this.hub2.getId()==hub1.getId()));
     }
 }

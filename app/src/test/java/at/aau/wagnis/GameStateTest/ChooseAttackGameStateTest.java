@@ -21,14 +21,15 @@ import at.aau.wagnis.gamestate.ChooseAttackGameState;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.GameServer;
 
-public class ChooseAttackGameStateTest {
+class ChooseAttackGameStateTest {
 
     private ChooseAttackGameState gameState;
     private GameServer gameServer;
     private GameData gameData;
 
     @BeforeEach
-    public void setUp() {
+
+    void setUp() {
         // Initialisierung der Testumgebung
         gameState = new ChooseAttackGameState();
         gameServer = mock(GameServer.class);
@@ -41,7 +42,7 @@ public class ChooseAttackGameStateTest {
      * Testet, ob `chooseAttack()` einen neuen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
-    public void testChooseAttack_ValidAttack() {
+    void testChooseAttack_ValidAttack() {
         //Hubs für einen gültigen Angriff
         Hub sourceHub = new Hub(1);
         Hub targetHub = new Hub(2);
@@ -54,6 +55,7 @@ public class ChooseAttackGameStateTest {
         when(gameData.getAdjacencies()).thenReturn(adjacencies);
         when(gameData.getHubs()).thenReturn(hubs);
 
+
         // Durchführung des Angriffs
         gameState.chooseAttack(1, 1, 2);
 
@@ -65,7 +67,8 @@ public class ChooseAttackGameStateTest {
      * Testet, ob `chooseAttack()` den richtigen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
-    public void testChooseAttack_InvalidAttack() {
+
+    void testChooseAttack_InvalidAttack() {
         // Hubs für einen ungültigen Angriff
         Hub sourceHub = new Hub(1);
         Hub targetHub = new Hub(2);
@@ -74,12 +77,13 @@ public class ChooseAttackGameStateTest {
         hubs.add(targetHub);
         when(gameData.getHubs()).thenReturn(hubs);
 
+
         // Angriff, von nicht benachbarten Hubs
         assertThrows(IllegalArgumentException.class, () -> gameState.chooseAttack(1, 1, 3));
     }
 
     @Test
-    public void testChooseAttack_SourceHubNotFound() {
+    void testChooseAttack_SourceHubNotFound() {
         // Angriff-Hub nicht gefunden.
         Hub targetHub = new Hub(2);
         List<Hub> hubs = new ArrayList<>();
@@ -91,7 +95,7 @@ public class ChooseAttackGameStateTest {
     }
 
     @Test
-    public void testChooseAttack_TargetHubNotFound() {
+    void testChooseAttack_TargetHubNotFound() {
         // Verteidiger Hub nicht vorhanden
         Hub sourceHub = new Hub(1);
         List<Hub> hubs = new ArrayList<>();

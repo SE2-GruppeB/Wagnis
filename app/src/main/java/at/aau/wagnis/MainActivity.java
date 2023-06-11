@@ -34,7 +34,6 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import java.util.stream.Collectors;
 
 import at.aau.wagnis.application.GameManager;
@@ -69,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         btnCards = findViewById(R.id.btn_Cards);
         btnSettings = findViewById(R.id.btn_Settings);
         btnChat = findViewById(R.id.btn_Chat);
-
-        btnCards.setVisibility(View.GONE);
+        
 
         setDisplayMetrics();
         /*if(!GlobalVariables.getIsClient()){
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popupCards(new Player());
+                popupCards(currentState.getPlayers().get(0));
             }//TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {

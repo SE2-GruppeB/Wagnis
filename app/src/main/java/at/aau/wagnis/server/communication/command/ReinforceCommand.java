@@ -16,6 +16,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
 
     private final List<Integer> hubs;
     private final List<Integer> troopsToDeploy;
+    private Integer clientId;
 
     public ReinforceCommand(List<Integer> hubs, List<Integer> troopsToDeploy) {
         this.hubs = hubs;
@@ -26,12 +27,16 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
 
     @Override
     public int getClientId() {
-        return 0 ;
+        if (this.clientId != null) {
+            return clientId;
+        } else {
+            throw new IllegalStateException("ClientId has not been set");
+        }
     }
 
     @Override
     public void setClientId(int clientId) {
-        // TODO
+        this.clientId = clientId;
     }
 
     @Override

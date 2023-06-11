@@ -15,7 +15,6 @@ public class GlobalVariables {
     private static String agency = "";
 
     private static ArrayList<Player> players = new ArrayList<>();
-    private static Context baseContext;
     private static String hostIP;
     private static Boolean isClient = false;
     private static String seed= "42";
@@ -109,14 +108,6 @@ public class GlobalVariables {
         GlobalVariables.hubsPerLine = hubsPerLine;
     }
 
-    public static Context getBaseContext() {
-        return baseContext;
-    }
-
-    public static void setBaseContext(Context baseContext) {
-        GlobalVariables.baseContext = baseContext;
-    }
-
     public static int getDisplayHeightPx() {
         return displayHeightPx;
     }
@@ -188,15 +179,5 @@ public class GlobalVariables {
             adjacencies.add(new Adjacency(hubs.get(i), findHubById(hubs.get(i).getId() + 1)));
         }
 
-    }
-
-
-    /**
-     * @deprecated Moved to MainActivity, only kept for backup
-     */
-    @Deprecated
-    public static String getIpAddress() {
-        WifiManager wm = (WifiManager) baseContext.getSystemService(Context.WIFI_SERVICE);
-        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 }

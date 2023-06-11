@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
 
         setContentView(R.layout.activity_main);
-        GlobalVariables.setBaseContext(this);
 
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
@@ -339,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
         PopupWindow popupWindow = createPopUp(R.layout.popup_settings);
 
-        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnClose.setOnClickListener(view -> popupWindow.dismiss());
 
@@ -363,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void popupCards(Player player) {
         PopupWindow popupWindow = createPopUp(R.layout.popup_cards);
-        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
         Button btnPlay = popupWindow.getContentView().findViewById(R.id.btn_play);
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
@@ -453,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void popupDiceRoll(int[] values) {
         PopupWindow popupWindow = createPopUp(R.layout.popup_diceroll);
-        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
 
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Back);
@@ -481,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void popupReinforceTroops(Button hubButton){
         PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops);
-        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
@@ -496,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void popupMovetroops() {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
-        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
@@ -511,7 +510,8 @@ public class MainActivity extends AppCompatActivity {
 
     public  void popupChat(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_chat);
-        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(this
+        ), Gravity.CENTER, 0, 0);
 
         btnChat.clearCustomSize();
 

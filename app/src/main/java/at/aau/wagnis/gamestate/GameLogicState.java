@@ -18,6 +18,9 @@ public abstract class GameLogicState {
     public void start() {
     }
 
+    public void chooseStart(List<Hub> unassignedCountries, List<Player> players) {
+    }
+
     public void reinforce() {
     }
 

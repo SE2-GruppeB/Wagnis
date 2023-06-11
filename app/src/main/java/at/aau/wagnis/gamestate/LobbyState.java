@@ -32,7 +32,7 @@ public class LobbyState extends GameLogicState{
         gameData.setSeed(seed);
         gameData.setHubs(hubs);
         gameData.setPlayers(players);
-
+        gameData.setAdjacencies(adjacencies);
         return gameData;
     }
 
@@ -147,6 +147,7 @@ public class LobbyState extends GameLogicState{
         gameData.setSeed(seed);
         gameData.setHubs(hubs);
         gameData.setPlayers(players);
+        gameServer.getGameData().setCurrentGameLogicState("StartGameState");
         gameServer.setGameLogicState(new StartGameState(gameData));
     }
 }

@@ -2,13 +2,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="240dp"
     android:layout_height="wrap_content"
-    android:background="@color/teal_700">
+    android:background="#62def8">
 
 
     <NumberPicker
         android:id="@+id/np_troops"
         android:layout_width="60dp"
         android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="90dp"
         android:layout_marginTop="30dp" />
 
@@ -16,8 +18,11 @@
         android:id="@+id/btn_Close"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="220dp"
-        android:text="@string/close" />
+        android:text="Accept" />
 
 </FrameLayout>

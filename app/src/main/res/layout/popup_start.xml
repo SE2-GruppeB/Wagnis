@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="100dp"
         android:layout_marginTop="40dp"
-        android:text="@string/playerCount" />
+        android:text="PlayerCount:" />
 
     <ImageView
         android:id="@+id/qrCode"
@@ -24,8 +24,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="28dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="42dp"
-        android:contentDescription="@string/qr" />
+        android:layout_marginEnd="42dp" />
 
     <Button
         android:id="@+id/btn_start"
@@ -35,5 +34,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="100dp"
         android:layout_marginTop="350dp"
-        android:text="@string/start" />
+        android:text="Start" />
+
+
+
 </RelativeLayout>

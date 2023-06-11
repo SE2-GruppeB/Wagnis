@@ -26,7 +26,7 @@ public class ChooseAttackCommand implements ClientOriginatedServerCommand {
 
     @Override
     public void setClientId(int clientId) {
-        /*Empty because useless, required because of implements*/
+
     }
 
     @Override

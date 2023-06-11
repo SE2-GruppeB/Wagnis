@@ -19,8 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_launcher_background"
-        android:contentDescription="@string/map" />
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_EndTurn"
@@ -34,8 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.99"
-        app:srcCompat="@drawable/endturn"
-        android:contentDescription="@string/endTurn" />
+        app:srcCompat="@drawable/endturn" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_Cards"
@@ -49,8 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8"
-        app:srcCompat="@android:drawable/ic_menu_today"
-        android:contentDescription="@string/cards" />
+        app:srcCompat="@android:drawable/ic_menu_today" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_Settings"
@@ -64,8 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.045"
-        app:srcCompat="@android:drawable/ic_menu_manage"
-        android:contentDescription="@string/settings" />
+        app:srcCompat="@android:drawable/ic_menu_manage" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_Chat"
@@ -79,6 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.600"
-        app:srcCompat="@android:drawable/ic_dialog_email"
-        android:contentDescription="@string/chat" />
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

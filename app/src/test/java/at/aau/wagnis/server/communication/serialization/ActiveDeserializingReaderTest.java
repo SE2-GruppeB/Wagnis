@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-class ActiveDeserializingReaderTest {
+public class ActiveDeserializingReaderTest {
 
     @Mock
     private DeserializingReader<Object> reader;
@@ -36,7 +36,7 @@ class ActiveDeserializingReaderTest {
     private ActiveDeserializingReader<Object> subject;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
         when(threadFactory.apply(any())).thenReturn(thread);
 
@@ -44,7 +44,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void startCreatesThread() {
+    public void startCreatesThread() {
         // when
         subject.start(receiveCallback, errorCallback);
 
@@ -55,7 +55,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void callingStartTwiceThrowsIllegalStateException() {
+    public void callingStartTwiceThrowsIllegalStateException() {
         // given
         subject.start(receiveCallback, errorCallback);
 
@@ -73,7 +73,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void closeBeforeStartClosesReader() throws IOException {
+    public void closeBeforeStartClosesReader() throws IOException {
         // when
         subject.close();
 
@@ -83,7 +83,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void closeAfterStartInterruptsThread() throws IOException {
+    public void closeAfterStartInterruptsThread() throws IOException {
         // given
         subject.start(receiveCallback, errorCallback);
 
@@ -97,7 +97,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void closingTwiceDoesNotCloseReaderTwice() throws IOException {
+    public void closingTwiceDoesNotCloseReaderTwice() throws IOException {
         // when
         subject.close();
         subject.close();
@@ -108,7 +108,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void startAfterCloseThrowsIllegalStateException() {
+    public void startAfterCloseThrowsIllegalStateException() {
         // given
         subject.close();
 
@@ -122,7 +122,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void ioExceptionOnCloseDoesNotCauseAnotherException() throws IOException {
+    public void ioExceptionOnCloseDoesNotCauseAnotherException() throws IOException {
         // given
         doThrow(new IOException()).when(reader).close();
 
@@ -135,7 +135,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void readInternalNotifiesOnReceive() throws SerializationException, IOException {
+    public void readInternalNotifiesOnReceive() throws SerializationException, IOException {
         // given
         Object readResult = new Object();
         when(reader.readNext()).thenReturn(readResult);
@@ -149,7 +149,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void readInternalClosesReaderOnIOException() throws SerializationException, IOException {
+    public void readInternalClosesReaderOnIOException() throws SerializationException, IOException {
         // given
         when(reader.readNext()).thenThrow(new IOException());
         subject.start(receiveCallback, errorCallback);
@@ -163,7 +163,7 @@ class ActiveDeserializingReaderTest {
     }
 
     @Test
-    void readInternalClosesReaderOnSerializationException() throws SerializationException, IOException {
+    public void readInternalClosesReaderOnSerializationException() throws SerializationException, IOException {
         // given
         when(reader.readNext()).thenThrow(new SerializationException(""));
         subject.start(receiveCallback, errorCallback);

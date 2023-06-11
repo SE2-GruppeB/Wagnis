@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="240dp"
     android:layout_height="wrap_content"
-    android:background="@color/teal_700">
+    android:background="#92A4A8">
 
 
     <TextView
@@ -13,7 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:gravity="center"
-        android:text="@string/enterIp" />
+        android:text="Enter IP-Address" />
 
     <EditText
         android:id="@+id/txtIP"
@@ -25,9 +24,7 @@
         android:layout_marginEnd="0dp"
         android:ems="10"
         android:gravity="center"
-        android:inputType="text"
-        android:importantForAutofill="no"
-        tools:ignore="LabelFor" />
+        android:inputType="text" />
 
     <Button
         android:id="@+id/btn_connect"
@@ -38,6 +35,6 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="0dp"
         android:gravity="center"
-        android:text="@string/connect" />
+        android:text="Connect" />
 
 </RelativeLayout>

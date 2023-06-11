@@ -11,31 +11,31 @@ import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-class SerializerTest {
+public class SerializerTest {
 
     @Test
-    void noMissingValues() {
+    public void noMissingValues() {
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             assertNotNull(
-                    serializer.getTypeTag(),
-                    String.format("Serializer '%s' has null target class", serializer.getClass().getName())
+                    String.format("Serializer '%s' has null target class", serializer.getClass().getName()),
+                    serializer.getTargetClass().toString()
             );
 
             assertNotNull(
-                    serializer.getTypeTag(),
-                    String.format("Serializer '%s' has null type tag", serializer.getClass().getName())
+                    String.format("Serializer '%s' has null type tag", serializer.getClass().getName()),
+                    serializer.getTypeTag()
             );
 
             assertNotEquals(
+                    String.format("Serializer '%s' has empty type tag", serializer.getClass().getName()),
                     "",
-                    serializer.getTypeTag(),
-                    String.format("Serializer '%s' has empty type tag", serializer.getClass().getName())
+                    serializer.getTypeTag()
             );
         }
     }
 
     @Test
-    void noDuplicateSerializersForClass() {
+    public void noDuplicateSerializersForClass() {
         Set<Class<?>> seenClasses = new HashSet<>();
 
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
@@ -46,7 +46,7 @@ class SerializerTest {
     }
 
     @Test
-    void noDuplicateSerializersForTag() {
+    public void noDuplicateSerializersForTag() {
         Set<String> seenTags = new HashSet<>();
 
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {

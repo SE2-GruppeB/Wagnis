@@ -17,14 +17,14 @@ import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.MoveTroopsState;
 
-class MoveTroopsStateTest {
+public class MoveTroopsStateTest {
     private Hub sourceHub;
     private Hub targetHub;
 
     private MoveTroopsState moveTroopsState;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         sourceHub = new Hub(Mockito.mock(Button.class));
         targetHub = new Hub(Mockito.mock(Button.class));
         Adjacency adjacency = new Adjacency(sourceHub, targetHub);
@@ -32,16 +32,14 @@ class MoveTroopsStateTest {
         Player player = new Player(1);
         sourceHub.setOwner(player);
         targetHub.setOwner(player);
-        GlobalVariables.getAdjacencies().add(adjacency);
+        GlobalVariables.adjacencies.add(adjacency);
     }
 
     /**
      * Testet eine gültige Truppenbewegung, indem  `move()` aufgerufen wird und überprüft ob die Anzahl der Truppen in den Hubs korrekt aktualisiert wurde.
      */
     @Test
-    void testValidMove() {
-
-
+    public void testValidMove() {
         sourceHub.setAmountTroops(5);
         targetHub.setAmountTroops(0);
 
@@ -55,9 +53,7 @@ class MoveTroopsStateTest {
      * Testet eine ungültige Truppenbewegung, indem die Methode `move()` mit einer ungültigen Anzahl von Truppen aufgerufen wird .
      */
     @Test
-    void testInvalidMove() {
-
-
+    public void testInvalidMove() {
         sourceHub.setAmountTroops(0);
         targetHub.setAmountTroops(1);
 
@@ -69,8 +65,7 @@ class MoveTroopsStateTest {
      * Testet eine Truppenbewegung zwischen Hubs.
      */
     @Test
-    void testDifferentPlayersMove() {
-
+    public void testDifferentPlayersMove() {
         sourceHub.setOwner(new Player(1));
         targetHub.setOwner(new Player(2));
 

@@ -49,7 +49,7 @@ class SendGameDataCommandTest {
 
         command.execute(clientLogic);
 
-        verify(clientLogic).updateGameData(any());
+        verify(clientLogic).updateGameState(any());
     }
 
     @Test

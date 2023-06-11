@@ -18,7 +18,7 @@ import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.AttackGameState;
 
-class AttackGameStateTest {
+public class AttackGameStateTest {
 
     @Mock
     private Hub sourceHub;
@@ -39,7 +39,7 @@ class AttackGameStateTest {
     private Player defender2;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         Button sourceButtonMock = Mockito.mock(Button.class);
         Button targetButtonMock = Mockito.mock(Button.class);
 
@@ -85,7 +85,7 @@ class AttackGameStateTest {
      * Testet den Angriff, wo die `attack()`-Methode aufgerufen wird.
      */
     @Test
-    void testAttack() {
+    public void testAttack() {
         gameState.attack();
         assertTrue(sourceHub.getAmountTroops() < 3 || targetHub.getAmountTroops() < 2);
 
@@ -96,7 +96,7 @@ class AttackGameStateTest {
      * Testet einen ungültigen Angriff, wo die Quell-Hub-Truppenanzahl 1 beträgt.
      */
     @Test
-    void testIllegalAttack() {
+    public void testIllegalAttack() {
         sourceHub.setAmountTroops(1);
 
         assertThrows(IllegalArgumentException.class, () -> gameState.attack());
@@ -106,7 +106,7 @@ class AttackGameStateTest {
      * Testet einen fehlgeschlagenen Angriff, wobei die Ziel-Hub-Truppenanzahl 0 beträgt.
      */
     @Test
-    void testAttackFailed() {
+    public void testAttackFailed() {
         targetHub.setAmountTroops(0);
 
         assertThrows(IllegalArgumentException.class, () -> gameState.attack());
@@ -116,7 +116,7 @@ class AttackGameStateTest {
      * Testet, ob das Spiel gewonnen wurde, wen ein Spieler alle 42 Hubs besitzt.
      */
     @Test
-    void testGameWon() {
+    public void testGameWon() {
         Player player = new Player(1);
         for (int i = 0; i < 42; i++) {
             player.addHub(new Hub(Mockito.mock(Button.class)));

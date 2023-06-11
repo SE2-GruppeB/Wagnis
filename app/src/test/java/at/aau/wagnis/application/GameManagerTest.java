@@ -40,7 +40,7 @@ class GameManagerTest {
     @Mock private GameClient gameClient1;
     @Mock private GameClient gameClient2;
     @Mock private Consumer<GameManager.ConnectionState> connectionStateConsumer;
-    @Mock private Consumer<GameData> gameDataConsumer;
+    @Mock private Consumer<GameData> gameStateConsumer;
     @Mock private ClientOriginatedServerCommand serverCommand;
 
     private GameManager subject;
@@ -183,7 +183,7 @@ class GameManagerTest {
     void setGameStateListenerFailsWhenNotConnected() {
         IllegalStateException ex = assertThrows(
                 IllegalStateException.class,
-                () -> subject.setGameDataListener(gameDataConsumer)
+                () -> subject.setGameStateListener(gameStateConsumer)
         );
 
         assertEquals("Game client is not ready", ex.getMessage());
@@ -197,10 +197,10 @@ class GameManagerTest {
 
         // when
         subject.startNewGame();
-        subject.setGameDataListener(gameDataConsumer);
+        subject.setGameStateListener(gameStateConsumer);
 
         // then
-        verify(gameClient1).setGameDataListener(gameDataConsumer);
+        verify(gameClient1).setGameStateListener(gameStateConsumer);
     }
 
     @Test

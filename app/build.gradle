@@ -44,7 +44,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     reports {
         xml {
-            enabled true
             required
             destination file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         }
@@ -68,8 +67,7 @@ sonarqube {
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
         def exclusionList = [
                 "**/*Activity.*",
-                "**/GlobalVariables.java",
-                "**/VictoryScreen.java"
+                "**/GlobalVariables.java"
         ].join(', ')
         property "sonar.coverage.exclusions", exclusionList
     }

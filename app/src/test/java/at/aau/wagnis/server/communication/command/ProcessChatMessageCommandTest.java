@@ -13,17 +13,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ProcessChatMessageCommandTest {
+public class ProcessChatMessageCommandTest {
 
     private ProcessChatMessageCommand command;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         command = new ProcessChatMessageCommand("Hello, World!");
     }
 
     @Test
-    void getClientIdThrowsIfNotSet() {
+    public void getClientIdThrowsIfNotSet() {
         // when & then
         assertThrows(
                 IllegalStateException.class,
@@ -32,7 +32,7 @@ class ProcessChatMessageCommandTest {
     }
 
     @Test
-    void throwsForNullMessage() {
+    public void throwsForNullMessage() {
         // when & then
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -43,7 +43,7 @@ class ProcessChatMessageCommandTest {
     }
 
     @Test
-    void throwsForEmptyMessage() {
+    public void throwsForEmptyMessage() {
         // when & then
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -54,7 +54,7 @@ class ProcessChatMessageCommandTest {
     }
 
     @Test
-    void throwsForNewLine() {
+    public void throwsForNewLine() {
         // when & then
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -65,7 +65,7 @@ class ProcessChatMessageCommandTest {
     }
 
     @Test
-    void throwsForCarriageReturn() {
+    public void throwsForCarriageReturn() {
         // when & then
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -77,7 +77,7 @@ class ProcessChatMessageCommandTest {
 
 
     @Test
-    void throwsForLongMessage() {
+    public void throwsForLongMessage() {
         //given
         StringBuilder sb = new StringBuilder(201);
 
@@ -97,7 +97,7 @@ class ProcessChatMessageCommandTest {
     }
 
     @Test
-    void getClientIdReturnsIdIfSet() {
+    public void getClientIdReturnsIdIfSet() {
         // given
         int clientId = 5;
         command.setClientId(clientId);
@@ -110,7 +110,7 @@ class ProcessChatMessageCommandTest {
     }
 
     @Test
-    void canBeSerializedAndDeserialized() throws IOException {
+    public void canBeSerializedAndDeserialized() throws IOException {
         // given
         ProcessChatMessageCommand.CommandSerializer commandSerializer = new ProcessChatMessageCommand.CommandSerializer();
 

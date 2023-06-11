@@ -34,6 +34,7 @@ public class Player {
     public Player(int playerId) {
         this.ownedHubs = new ArrayList<>();
         this.playerId = playerId;
+        //this.playerColor = Color.valueOf(Color.BLACK);
         this.hand = new Cards[MAX_CARDS_IN_HAND];
         allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;

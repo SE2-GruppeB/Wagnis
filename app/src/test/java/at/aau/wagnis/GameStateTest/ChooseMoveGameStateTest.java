@@ -14,7 +14,8 @@ import at.aau.wagnis.gamestate.ChooseMoveState;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.gamestate.MoveTroopsState;
 import at.aau.wagnis.server.GameServer;
- class ChooseMoveGameStateTest {
+
+public class ChooseMoveGameStateTest {
 
     @Mock
     private GameServer gameServer;
@@ -23,7 +24,7 @@ import at.aau.wagnis.server.GameServer;
     private ChooseMoveState chooseMoveGameState;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
         chooseMoveGameState = new ChooseMoveState();
         chooseMoveGameState.setGameServer(gameServer);
@@ -33,7 +34,7 @@ import at.aau.wagnis.server.GameServer;
      * Testet, ob `chooseMove()` einen neuen `MoveTroopsState` festlegt, wenn `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
-    void chooseMove_shouldSetNewMoveGameState() {
+    public void chooseMove_shouldSetNewMoveGameState() {
         int playerId = 1;
         int sourceHubId = 2;
         int targetHubId = 3;
@@ -49,7 +50,7 @@ import at.aau.wagnis.server.GameServer;
      * Testet, ob `chooseMove()` den richtigen `MoveTroopsState` festlegt, wenn `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
-    void chooseMove_shouldSetCorrectMoveGameState() {
+    public void chooseMove_shouldSetCorrectMoveGameState() {
         int playerId = 1;
         int sourceHubId = 2;
         int targetHubId = 3;

@@ -1,9 +1,7 @@
 package at.aau.wagnis.gamestate;
 
 import android.util.Log;
-
 import java.util.List;
-
 import at.aau.wagnis.Hub;
 
 public class ReinforceGameState {

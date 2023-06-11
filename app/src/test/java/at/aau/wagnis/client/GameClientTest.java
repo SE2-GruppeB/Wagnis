@@ -58,10 +58,10 @@ class GameClientTest {
     @Test
     void updateGameStateNotifiesListener() {
         // given
-        subject.setGameStateListener(gameStateConsumer);
+        subject.setGameDataListener(gameStateConsumer);
 
         // when
-        subject.updateGameState(gameData);
+        subject.updateGameData(gameData);
 
         // then
         InOrder inOrder = Mockito.inOrder(gameStateConsumer);
@@ -73,10 +73,10 @@ class GameClientTest {
     @Test
     void updateGameStateStoresState() {
         // given
-        subject.updateGameState(gameData);
+        subject.updateGameData(gameData);
 
         // when
-        subject.setGameStateListener(gameStateConsumer);
+        subject.setGameDataListener(gameStateConsumer);
 
         // then
         verify(gameStateConsumer).accept(gameData);
@@ -86,11 +86,11 @@ class GameClientTest {
     @Test
     void setGameStateListenerRemovesListener() {
         // given
-        subject.setGameStateListener(gameStateConsumer);
+        subject.setGameDataListener(gameStateConsumer);
 
         // when
-        subject.setGameStateListener(null);
-        subject.updateGameState(gameData);
+        subject.setGameDataListener(null);
+        subject.updateGameData(gameData);
 
         // then
         verify(gameStateConsumer, never()).accept(gameData);

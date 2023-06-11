@@ -2,6 +2,7 @@ package at.aau.wagnis.gamestate;
 
 
 import java.util.List;
+import java.util.Locale;
 
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
@@ -9,6 +10,8 @@ import at.aau.wagnis.server.GameServer;
 
 public abstract class GameLogicState {
 
+    private static final int CHEAT_TROOPS_COUNT = 10;
+    private static final String CHEAT_COMMAND = "/givetroops";
     protected GameServer gameServer;
 
     public void setGameServer(GameServer gameServer) {
@@ -25,6 +28,18 @@ public abstract class GameLogicState {
     }
     public void handleChatMessage(Integer clientId, String message) {
         this.gameServer.getGameData().addMessage(clientId,message);
+        if(message.toLowerCase().trim().equals(CHEAT_COMMAND)) {
+            Player cheatPlayer = this.gameServer.getGameData().getPlayers()
+                    .stream()
+                    .filter(player -> player.getPlayerId() == clientId)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Could not find ClientId!"));
+
+            int troopCount = cheatPlayer.getUnassignedAvailableTroops();
+            troopCount = troopCount+ CHEAT_TROOPS_COUNT ;
+
+            cheatPlayer.setUnassignedAvailableTroops(troopCount);
+        }
     }
 
     public void chooseAttack(int playerId, int sourceHubId, int targetHubId) {

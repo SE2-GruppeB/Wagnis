@@ -16,7 +16,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-public class StartGameStateTest {
+class StartGameStateTest {
 
     private StartGameState startGameState;
     private ArrayList<Player> players;
@@ -26,7 +26,7 @@ public class StartGameStateTest {
     final int num_hubs = 6;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         hubs = new ArrayList<>();
         players = new ArrayList<>();
         gameData = new GameData();
@@ -36,7 +36,7 @@ public class StartGameStateTest {
      * Überprüft, ob jedem Hub ein Besitzer zugewiesen wurde.
      */
     @Test
-    public void testAssignCountries() {
+    void testAssignCountries() {
 
         for (int i = 1; i <= num_players; i++) {
             Player player = new Player(i);
@@ -63,7 +63,7 @@ public class StartGameStateTest {
      * Überprüft, ob jedem Hub eine Truppenanzahl größer als 0 zugewiesen wurde.
      */
     @Test
-    public void testAssignTroopsToHubs() {
+    void testAssignTroopsToHubs() {
 
         for (int i = 1; i <= 6; i++) {
             Hub hub = new Hub(mock(Button.class));

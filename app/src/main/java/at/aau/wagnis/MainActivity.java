@@ -22,6 +22,7 @@ import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -49,7 +50,7 @@ import at.aau.wagnis.server.communication.command.StartGameCommand;
 public class MainActivity extends AppCompatActivity {
 
 
-    FloatingActionButton endTurn, btnCards, btnSettings, btnChat;
+    FloatingActionButton btnEndTurn, btnCards, btnSettings, btnChat;
     ImageView adjacencyView;
     GameData currentState;
     boolean wasDrawn = false;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.baseContext = this;
 
         adjacencyView = findViewById(R.id.adjacenciesView);
-        endTurn = findViewById(R.id.btn_EndTurn);
+        btnEndTurn = findViewById(R.id.btn_EndTurn);
         btnCards = findViewById(R.id.btn_Cards);
         btnSettings = findViewById(R.id.btn_Settings);
         btnChat = findViewById(R.id.btn_Chat);
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         btnCards.setVisibility(View.GONE);
 
         setDisplayMetrics();
+
         /*if(!GlobalVariables.getIsClient()){
 
             GlobalVariables.seedGenerator();
@@ -81,12 +83,20 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setAdjacencies();
         drawAdjacencies();*/
 
+        btnEndTurn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
 
         btnCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupCards(new Player());
-            }//TODO: irgendwoher brauch ma den Player der den Button geklickt hat
+            }
+            // TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         });
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,8 +187,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-
     }
 
     public void setDisplayMetrics() {
@@ -193,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public PopupWindow createPopUp(int popupId) {
-
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
         PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
@@ -241,11 +248,14 @@ public class MainActivity extends AppCompatActivity {
                     if (lastClickedHub != null){
                         getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
                         lastClickedHub = null;
+                        Toast.makeText(MainActivity.this, "Targethub with id "+hub.getId()+" selected!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Attack started...", Toast.LENGTH_SHORT).show();
                     }else{
                         lastClickedHub = hub;
+                        Toast.makeText(MainActivity.this, "Sourcehub with id "+hub.getId()+" selected!\nSelect targethub!", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
                     }
-
-                }
+                  }
             });
 
             GlobalVariables.hubs.add(new Hub(hub));
@@ -337,8 +347,6 @@ public class MainActivity extends AppCompatActivity {
             BarcodeEncoder mEncoder = new BarcodeEncoder();
             Bitmap mBitmap = mEncoder.createBitmap(mMatrix);
             qrCode.setImageBitmap(mBitmap);
-
-
         } catch (Exception e) {
             restart();
         }
@@ -535,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void popupMovetroops() {
+    public void popupMoveTroops() {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);

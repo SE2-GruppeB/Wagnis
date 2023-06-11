@@ -96,7 +96,7 @@ public class AttackGameState extends GameLogicState {
                 defenderDiceRolls = diceRoll();
                 testDefenderDiceRoll = 1;
                 break;
-                //Verteidiger besitzt nur eine Truppe am Feld
+                //Verteidiger besitzt nur eine Truppe am Fe ld
             }
             default: {
                 defenderDiceRolls = diceRoll() + diceRoll();

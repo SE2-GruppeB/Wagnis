@@ -15,12 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -34,18 +36,17 @@ public class MenuActivity extends AppCompatActivity {
     Button sourcesBtn;
     Button joinBtn;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        GlobalVariables.mediaPlayer = MediaPlayer.create(this.getApplicationContext(), R.raw.music1);
-        GlobalVariables.mediaPlayer.start();
-        GlobalVariables.mediaPlayer.setLooping(true);
+        GlobalVariables.setMediaPlayer(MediaPlayer.create(this.getApplicationContext(), R.raw.music1));
+        GlobalVariables.getMediaPlayer().start();
+        GlobalVariables.getMediaPlayer().setLooping(true);
 
         sourcesBtn = findViewById(R.id.btn_sources);
-        sourcesBtn.setOnClickListener(view -> showSources(sourcesBtn));
+        sourcesBtn.setOnClickListener(view -> showSources());
 
         hostBtn = findViewById(R.id.btn_start);
         hostBtn.setOnClickListener(view -> handleNetwork(true));
@@ -98,16 +99,9 @@ public class MenuActivity extends AppCompatActivity {
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus) {
-           getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
+            WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+            windowInsetsController.setSystemBarsBehavior( WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
     private void changeActivity() {
@@ -126,21 +120,24 @@ public class MenuActivity extends AppCompatActivity {
     }
     public void getHostIp() {
         try {
-            throw new Exception();
-            //readQrCode();
+            readQrCode();
 
         } catch (Exception e) {
-
-            PopupWindow popupWindow= createPopUp(R.layout.popup_connect);
-            popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
-
-            Button btnConnect = popupWindow.getContentView().findViewById(R.id.btn_connect);
-            EditText hostIP = popupWindow.getContentView().findViewById(R.id.txtIP);
-            btnConnect.setOnClickListener(view -> {
-                popupWindow.dismiss();
-                new Thread(() -> getGameManager().joinGameByServerAddress(hostIP.getText().toString())).start();
-            });
+            popupIp();
         }
+    }
+
+    private void popupIp(){
+        PopupWindow popupWindow= createPopUp(R.layout.popup_connect);
+        popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
+
+        Button btnConnect = popupWindow.getContentView().findViewById(R.id.btn_connect);
+        EditText hostIP = popupWindow.getContentView().findViewById(R.id.txtIP);
+        btnConnect.setOnClickListener(view -> {
+            GlobalVariables.setHostIP(hostIP.getText().toString());
+            popupWindow.dismiss();
+            new Thread(() -> getGameManager().joinGameByServerAddress(hostIP.getText().toString())).start();
+        });
     }
     private void readQrCode(){
         IntentIntegrator ig11 = new IntentIntegrator(this);
@@ -148,6 +145,10 @@ public class MenuActivity extends AppCompatActivity {
         ig11.setPrompt("Scan a QR Code");
         ig11.initiateScan();
     }
+    /**
+     * @deprecated
+     */
+    @Deprecated
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -156,20 +157,32 @@ public class MenuActivity extends AppCompatActivity {
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
                 Toast.makeText(getBaseContext(), "Invalid Code", Toast.LENGTH_SHORT).show();
+                popupIp();
             } else {
-                new Thread(() -> getGameManager().joinGameByServerAddress(intentResult.getContents())).start();
+                String ip = intentResult.getContents();
+                GlobalVariables.setHostIP(ip);
+                new Thread(() -> getGameManager().joinGameByServerAddress(ip)).start();
             }
         } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            popupIp();
         }
     }
 
 
 
-    public void showSources(View view) {
-
+    public void showSources() {
         PopupWindow popupWindow= createPopUp(R.layout.popup_sources);
         popupWindow.showAtLocation(new View(getApplicationContext()), Gravity.CENTER, 0, 0);
+        Button appIcon = popupWindow.getContentView().findViewById(R.id.btn_AppIcon);
+        appIcon.setOnClickListener(view -> goToAppIcon());
+        Button dome = popupWindow.getContentView().findViewById(R.id.btn_dome);
+        dome.setOnClickListener(view -> goToAppIcon());
+        Button background = popupWindow.getContentView().findViewById(R.id.btn_background);
+        background.setOnClickListener(view -> goToBackground());
+        Button surface = popupWindow.getContentView().findViewById(R.id.btn_surfaceBackground);
+        surface.setOnClickListener(view -> goToSurface());
+        Button ui = popupWindow.getContentView().findViewById(R.id.btn_surfaceBackground2);
+        ui.setOnClickListener(view -> goToUI());
     }
 
     private void goToUrl (String url) {
@@ -182,27 +195,23 @@ public class MenuActivity extends AppCompatActivity {
         return ((WagnisApplication) getApplication()).getGameManager();
     }
 
-    public void goToAppIcon (View view) {
+    public void goToAppIcon () {
         goToUrl ( "https://icons8.de");
     }
-    public void goToBackground (View view) {
+    public void goToBackground () {
         goToUrl ( "https://www.vecteezy.com/vector-art/17535964-mars-landscape-with-craters-and-red-rocky-surface");
     }
-    public void goToSurface (View view) {
+    public void goToSurface () {
         goToUrl ( "https://www.vecteezy.com/vector-art/13280678-moon-surface-seamless-background-with-craters");
     }
-    public void goToUI (View view) {
+    public void goToUI () {
         goToUrl ( "https://www.vecteezy.com/vector-art/21604946-futuristic-vector-hud-interface-screen-design-digital-callouts-titles-hud-ui-gui-futuristic-user");
     }
 
     public PopupWindow createPopUp(int popupId){
-
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
-        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
-        return popupWindow;
+        return new PopupWindow(popUp, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, true);
     }
-
-
 }
 

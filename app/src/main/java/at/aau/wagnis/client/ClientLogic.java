@@ -6,5 +6,5 @@ import at.aau.wagnis.gamestate.GameData;
 
 public interface ClientLogic {
 
-    void updateGameState(@NonNull GameData gameData);
+    void updateGameData(@NonNull GameData gameData);
 }

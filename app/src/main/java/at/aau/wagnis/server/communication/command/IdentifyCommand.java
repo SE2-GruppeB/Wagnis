@@ -13,7 +13,7 @@ import at.aau.wagnis.server.communication.serialization.Serializer;
 public class IdentifyCommand implements ClientOriginatedServerCommand{
 
     private String ipAddress;
-    private int clientId;
+    private Integer clientId;
 
     public IdentifyCommand(String ipAddress) {
         this.ipAddress = ipAddress;
@@ -25,7 +25,11 @@ public class IdentifyCommand implements ClientOriginatedServerCommand{
 
     @Override
     public int getClientId() {
-        return this.clientId;
+        if (this.clientId != null) {
+            return clientId;
+        } else {
+            throw new IllegalStateException("ClientId has not been set");
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 import at.aau.wagnis.Hub;
@@ -41,6 +40,21 @@ public class AttackGameState extends GameLogicState {
     public AttackGameState(Hub sourceHub, Hub targetHub) {
         this.sourceHub = sourceHub;
         this.targetHub = targetHub;
+    }
+
+    @Override
+    public void onEntry() {
+    if (sourceHub == null) {
+        this.sourceHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == sourceHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
+    }
+        if (targetHub == null) {
+            this.targetHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == targetHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
+        }
+        try {
+        attack();}
+        finally {
+        this.gameServer.setGameLogicState(new ChooseAttackGameState());}
+
     }
 
     @Override
@@ -144,9 +158,8 @@ public class AttackGameState extends GameLogicState {
      */
     private int diceRoll() {
         Random randomGen = new Random();
-        int diceValue = randomGen.nextInt(6) + 1;
-        //Log.d("Info :","" + diceValue);
-        return diceValue;
+        return randomGen.nextInt(6) + 1;
+
     }
 
     // Getter und Setter

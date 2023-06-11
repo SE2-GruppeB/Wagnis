@@ -83,7 +83,6 @@ public class ClientConnectionListener {
             socket = serverSocket.accept();
             NetworkClientConnection connection = connectionFactory.apply(socket, threadFactory);
             bus.registerConnection(connection);
-            //connection.start();
         } catch (IOException ex) {
             if (socket != null) {
                 try {

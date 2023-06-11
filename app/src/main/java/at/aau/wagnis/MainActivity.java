@@ -1,31 +1,40 @@
 package at.aau.wagnis;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.Network;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowMetrics;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
-import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.BarcodeFormat;
@@ -33,6 +42,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -40,17 +51,23 @@ import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
+
+import at.aau.wagnis.server.communication.command.ChooseAttackCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
+
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
 
 
+
 public class MainActivity extends AppCompatActivity {
 
-
-    FloatingActionButton endTurn, btnCards, btnSettings, btnChat;
+    FloatingActionButton endTurn;
+    FloatingActionButton btnCards;
+    FloatingActionButton btnSettings;
+    FloatingActionButton btnChat;
     ImageView adjacencyView;
-    GameData currentState;
+    GameData currentGameData;
     boolean wasDrawn = false;
     PopupWindow startpopup;
     TextView playerCount;
@@ -58,10 +75,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                moveTaskToBack(true);
+            }
+        });
+
         getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
 
         setContentView(R.layout.activity_main);
-        GlobalVariables.baseContext = this;
+        GlobalVariables.setBaseContext(this);
 
         adjacencyView = findViewById(R.id.adjacenciesView);
         endTurn = findViewById(R.id.btn_EndTurn);
@@ -71,21 +95,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         setDisplayMetrics();
-        /*if(!GlobalVariables.getIsClient()){
 
-            GlobalVariables.seedGenerator();
-        }
-        drawHubs(GlobalVariables.getSeed());
-        GlobalVariables.setAdjacencies();
-        drawAdjacencies();*/
+        btnSettings.setOnClickListener(view -> popupSettings());
 
+        btnChat.setOnClickListener(view -> popupChat());
 
-        btnCards.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupCards(currentState.getPlayers().get(0));
-            }//TODO: irgendwoher brauch ma den Player der den Button geklickt hat
-        });
+        
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,46 +108,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupChat();
-            }
-        });
+        //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
+        btnCards.setOnClickListener(view -> popupCards(new Player()));
 
 
-        ((WagnisApplication)getApplication()).getGameManager().setGameStateListener(newGameState -> runOnUiThread(() -> {
-            if(newGameState != null && currentState != null && !(currentState.getMessages().equals(newGameState.getMessages()))) {
+
+        ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
+            /*Code to be executed on UI thread*/
+
+            if (newGameData != null && currentGameData != null && !(currentGameData.getMessages().equals(newGameData.getMessages()))) {
                 btnChat.setCustomSize(300);
             }
 
-            // code to be executed on the UI thread
-            currentState = newGameState;
-            if(newGameState != null){
-                System.out.println(currentState.getMessages());
-                if(startpopup!=null&&startpopup.isShowing()){
-                    updatePlayerCount();
-                   //playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
-                }
+            currentGameData = newGameData;
 
-                /*if(currentState.getCurrentGameState() instanceof StartGameState){
-                    if(startpopup.isShowing()){
-                         startpopup.dismiss();
-                    }
-                   }
-                }*/
-                if(!wasDrawn){
-                    generateMap(newGameState.getSeed());
+
+                if (!wasDrawn) {
+                    generateMap(currentGameData.getSeed());
+                    popupStart(btnCards);
                     wasDrawn = true;
+                } else {
+                    for (Hub h : currentGameData.getHubs()) {
+                        Hub uiHub = GlobalVariables.findHubById(h.getId());
+                        uiHub.setText(h.getAmountTroops() + ", "+h.getId());
+                        if (h.getOwner()!=null)// TODO check why this is null sometimes
+                            uiHub.setHubImage(h.getOwner().getPlayerId() == 0 ? "ESA" : "NASA");
+                    }
                 }
 
-            }
-
+                if(startpopup.isShowing()) {
+                    updatePlayerCount();
+                    if (!(currentGameData.getCurrentGameLogicState().equals("LobbyState"))) {
+                        startpopup.dismiss();
+                    }
+                }
         }));
 
-        popupStart(btnCards);
+
 
     }
+
     private void generateMap(String seed) {
         GlobalVariables.setSeed(seed);
         drawHubs(GlobalVariables.getSeed());
@@ -142,116 +157,86 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
+        /*System Bars appearing when focusable popups are opened appears to be a bug*/
+        WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        windowInsetsController.setSystemBarsBehavior( WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
+
 
     @Override
     public void onResume() {
         super.onResume();
-
-
-    }
-    public void setDisplayMetrics(){
-        DisplayMetrics displayMetrics= new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        GlobalVariables.setDisplayWidthPx(displayMetrics.widthPixels);
-        GlobalVariables.setDisplayHeightPx(displayMetrics.heightPixels);
     }
 
-    public static int dpToPx(int dp){
-        return dp *(GlobalVariables.baseContext.getResources().getDisplayMetrics().densityDpi/160);
+    public void setDisplayMetrics() {
+        WindowMetrics windowMetrics = getWindowManager().getCurrentWindowMetrics();
+        Insets insets = windowMetrics.getWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+        GlobalVariables.setDisplayWidthPx(windowMetrics.getBounds().width()-insets.top-insets.bottom);          /*width & height swapped because landscape mode*/
+        GlobalVariables.setDisplayHeightPx(windowMetrics.getBounds().height()-insets.left-insets.right);
     }
-    public PopupWindow createPopUp(int popupId){
 
+
+    private int dpToPx(int dp){
+       return dp *(getResources().getDisplayMetrics().densityDpi/160);
+    }
+
+    public PopupWindow createPopUp(int popupId) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp = inflater.inflate(popupId, null);
-        PopupWindow popupWindow = new PopupWindow(popUp, FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, true);
-        return popupWindow;
+        return new PopupWindow(popUp, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, true);
     }
+
     private GameManager getGameManager() {
         return ((WagnisApplication) getApplication()).getGameManager();
     }
 
 
+    private Button lastClickedHub = null;
 
-    public void drawHubs(String seed){
+    public void drawHubs(String seed) {
 
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
         ConstraintSet cs = new ConstraintSet();
 
         for (int i = 1; i <= seed.length(); i++) {
             if (i % 2 == 0) {
-                GlobalVariables.seeds.add(seed.substring(i - 2, i));
+                GlobalVariables.getSeeds().add(seed.substring(i - 2, i));
             }
         }
 
         int hubs = 0;
-        GlobalVariables.hubsPerLine = (int) Math.ceil(GlobalVariables.seeds.size() / 6f);
+        GlobalVariables.setHubsPerLine((int) Math.ceil(GlobalVariables.getSeeds().size() / 6f));
         int lineHubCount = 0;
 
-        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx() - dpToPx(100)) / GlobalVariables.hubsPerLine;
+        int hubWidthSpace = (GlobalVariables.getDisplayWidthPx() - dpToPx(100)) / GlobalVariables.getHubsPerLine();
         int height = GlobalVariables.getDisplayHeightPx();
         int heightSpace = height / 6;
 
-        //System.out.println("HubsPerLine:" + hubsPerLine);
-        //System.out.println("HubWidthSpace"+hubWidthSpace);
-        //System.out.println("HeightSpace:"+heightSpace);
-
-        for (String s : GlobalVariables.seeds) {
+        for (String s : GlobalVariables.getSeeds()) {
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
             hub.setId(100 + hubs);
 
-            //hub.setText("Hub: " + hub.getId());
+            hub.setOnClickListener(view -> {
+                int[] v = {1,2,3,4,5};
+                popupDiceRoll(v);
+                GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
 
-            hub.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-
-                    /*switch(currentState){
-                        case ReinforceGameState:
-                            reinforceTroops(hub);
-                            break;
-                        case AttackGameState:
-                            moveTroops();
-                            break;
+                   if (lastClickedHub != null){
+                        getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
+                        lastClickedHub = null;
+                    }else{
+                        lastClickedHub = hub;
                     }
 
-                 -------------*/
 
-
-                    /* Testing Grounds;*/
-                    int[] v = {1,2,3,4,5};
-                    popupDiceRoll(v);
-                    GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
-
-                    System.out.println("Hub:" +hub.getId());
-
-                }
             });
-
-            GlobalVariables.hubs.add(new Hub(hub));
-
-
+            GlobalVariables.getHubs().add(new Hub(hub));
             layout.addView(hub);
 
-            int top = (hubs / GlobalVariables.hubsPerLine) * heightSpace;
+            int top = (hubs / GlobalVariables.getHubsPerLine()) * heightSpace;
             int pos = hubWidthSpace / 100 * Integer.parseInt(s);
             int left = hubWidthSpace * lineHubCount + pos;
-            //System.out.println("Position:" + top+","+left);
 
             cs.clone(layout);
             cs.connect(hub.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, top);
@@ -259,11 +244,12 @@ public class MainActivity extends AppCompatActivity {
             cs.applyTo(layout);
             hubs++;
             lineHubCount++;
-            if (lineHubCount == GlobalVariables.hubsPerLine) {
+            if (lineHubCount == GlobalVariables.getHubsPerLine()) {
                 lineHubCount = 0;
             }
         }
     }
+
 
     public void drawAdjacencies() {
         int height = GlobalVariables.getDisplayHeightPx();
@@ -277,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         paint.setStrokeWidth(8);
         paint.setAntiAlias(true);
 
-        for (Adjacency adjacency : GlobalVariables.adjacencies) {
+        for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {
             int pxWidth = dpToPx(21);
             int pxHeight = dpToPx(60);
 
@@ -285,109 +271,107 @@ public class MainActivity extends AppCompatActivity {
             int startY = ((ConstraintLayout.LayoutParams) adjacency.getHub1().getHubButton().getLayoutParams()).topMargin + pxHeight;
             int endX = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).leftMargin + pxWidth;
             int endY = ((ConstraintLayout.LayoutParams) adjacency.getHub2().getHubButton().getLayoutParams()).topMargin + pxHeight;
-            // System.out.println(startX + "," +startY + ","+endX+ ","+endY);
             canvas.drawLine(startX, startY, endX, endY, paint);
 
         }
-
         adjacencyView.setImageBitmap(bitmap);
     }
 
-    private void updatePlayerCount(){
-        if(startpopup!=null&&startpopup.isShowing()){
-            playerCount.setText("PlayerCount: "+currentState.getPlayers().size());
-        }
+    private void updatePlayerCount() {
+        playerCount.setText("PlayerCount: "+ currentGameData.getPlayers().size());
     }
-    public void popupStart(View view){
+
+    public void popupStart(View view) {
         LayoutInflater inflater = this.getLayoutInflater();
         final View layout = inflater.inflate(R.layout.popup_start, null);
-        startpopup = new PopupWindow(layout ,  FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,false);
+        startpopup = new PopupWindow(layout, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
         Button btnClose = startpopup.getContentView().findViewById(R.id.btn_start);
         playerCount = startpopup.getContentView().findViewById(R.id.txtPlayerCount);
         ImageView qrCode = startpopup.getContentView().findViewById(R.id.qrCode);
 
 
-      if(view.post(() -> startpopup.showAtLocation(view,Gravity.CENTER, 0, 0))){ //Call popUp after setup has finished
-         updatePlayerCount();
-
+        if (view.post(() -> startpopup.showAtLocation(new View(this), Gravity.CENTER, 0, 0))) { //Call popUp after setup has finished
+            updatePlayerCount();
         }
 
-        if(GlobalVariables.isClient){
+        if (Boolean.TRUE.equals(GlobalVariables.getIsClient())) {
             btnClose.setEnabled(false);
         }
 
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getGameManager().postCommand(new StartGameCommand());
-
-                //popupWindow.dismiss();
-                return;
-            }
+        btnClose.setOnClickListener(view1 -> {
+            getGameManager().postCommand(new StartGameCommand());
+            btnClose.setEnabled(false);
         });
 
         MultiFormatWriter mWriter = new MultiFormatWriter();
         try {
-            BitMatrix mMatrix = mWriter.encode(GlobalVariables.getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            BitMatrix mMatrix;
+            if(Boolean.TRUE.equals(GlobalVariables.getIsClient())){
+                mMatrix = mWriter.encode(GlobalVariables.getHostIP(), BarcodeFormat.QR_CODE, 500,500);
+            }else{
+                mMatrix = mWriter.encode(getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            }
+
             BarcodeEncoder mEncoder = new BarcodeEncoder();
             Bitmap mBitmap = mEncoder.createBitmap(mMatrix);
             qrCode.setImageBitmap(mBitmap);
-
 
         } catch (Exception e) {
             restart();
         }
     }
+    private String getIpAddress() {
+        ConnectivityManager manager = getSystemService(ConnectivityManager.class);
+        Network network = manager.getActiveNetwork();
+        LinkProperties prop = manager.getLinkProperties(network);
+        for (LinkAddress linkAddress : prop.getLinkAddresses()){
+            InetAddress inetAddress = linkAddress.getAddress();
+            if(inetAddress instanceof Inet4Address){
+                return inetAddress.getHostAddress();
+            }
+        }
+        return "no fitting ip address found";
+    }
 
-    public void restart(){
+    public void restart() {
         Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
         int pendingIntent = 123456;
-        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager manager = (AlarmManager)getApplicationContext().getSystemService(getApplicationContext().ALARM_SERVICE);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager manager = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
+
         manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
     }
-    public void popupSettings(){
 
-        PopupWindow popupWindow= createPopUp(R.layout.popup_settings);
+    public void popupSettings() {
 
-        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+        PopupWindow popupWindow = createPopUp(R.layout.popup_settings);
+
+        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-                return;
-            }
-        });
+        btnClose.setOnClickListener(view -> popupWindow.dismiss());
 
-        Switch switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
-        switchMusic.setTextOn("On");
-        switchMusic.setTextOff("Off");
-        String switchStatus = switchMusic.getText().toString();
+        SwitchCompat switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
+        switchMusic.setText(R.string.music);
 
-        switchMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    GlobalVariables.mediaPlayer.start();
-                }else{
-                    GlobalVariables.mediaPlayer.pause();
-                }
+        switchMusic.setChecked(GlobalVariables.getMediaPlayer().isPlaying());
+
+        switchMusic.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                GlobalVariables.getMediaPlayer().start();
+            }else{
+                GlobalVariables.getMediaPlayer().pause();
             }
         });
 
         FloatingActionButton btnRestart = popupWindow.getContentView().findViewById(R.id.btn_Restart);
-        btnRestart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                restart();
-            }
-        });
+        btnRestart.setOnClickListener(view -> restart());
 
     }
-    public  void popupCards(Player player){
-        PopupWindow popupWindow= createPopUp(R.layout.popup_cards);
-        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+    public void popupCards(Player player) {
+        PopupWindow popupWindow = createPopUp(R.layout.popup_cards);
+        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
 
         Button btnPlay = popupWindow.getContentView().findViewById(R.id.btn_play);
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
@@ -405,17 +389,16 @@ public class MainActivity extends AppCompatActivity {
         boolean[] btnsPressed = new boolean[5];
         AtomicInteger countOfBtnsPressed = new AtomicInteger();
 
-        updateCards(btns , cards);
+        updateCards(btns, cards);
 
-        for(int i = 0;i<btns.length;i++){
+        for (int i = 0; i < btns.length; i++) {
             int index = i;
-            btns[i].setOnClickListener(view ->  {
-                if(Boolean.TRUE.equals(btnsPressed[index])){
+            btns[i].setOnClickListener(view -> {
+                if (Boolean.TRUE.equals(btnsPressed[index])) {
                     btnsPressed[index] = false;
                     countOfBtnsPressed.getAndDecrement();
-                }
-                else {
-                    if(countOfBtnsPressed.get() < 4){
+                } else {
+                    if (countOfBtnsPressed.get() < 4) {
                         btnsPressed[index] = true;
                         countOfBtnsPressed.getAndIncrement();
                     }
@@ -424,68 +407,66 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        btnPlay.setOnClickListener(view ->  {
-            if (countOfBtnsPressed.get() < 4){
+        btnPlay.setOnClickListener(view -> {
+            if (countOfBtnsPressed.get() < 4) {
                 int[] chosenBtns = new int[3];
                 int counter = 0;
-                for (int i = 0; i < chosenBtns.length; i++){
-                    for (; counter < btns.length; counter++){
-                        if (btnsPressed[counter]){
+                for (int i = 0; i < chosenBtns.length; i++) {
+                    for (; counter < btns.length; counter++) {
+                        if (btnsPressed[counter]) {
                             chosenBtns[i] = counter;
                             break;
                         }
                     }
                 }
-                player.useCards(chosenBtns[0],chosenBtns[1],chosenBtns[2]);
-                updateCards(btns , cards);
+                player.useCards(chosenBtns[0], chosenBtns[1], chosenBtns[2]);
+                updateCards(btns, cards);
             }
         });
     }
 
-    public void updateCards(Button[] btns , Cards[] cards){
+    public void updateCards(Button[] btns, Cards[] cards) {
         for (int i = 0; i < btns.length; i++) {
-            drawCards(cards[i],btns[i]);
+            drawCards(cards[i], btns[i]);
         }
     }
+
     public void drawCards(Cards card, Button btn) {
         try {
             switch (card.getType()) {
                 case INFANTRY:
-                    btn.setText("Infantry");
+                    btn.setText(R.string.infantry);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.infantry, 0, 0);
 
                     break;
                 case CAVALRY:
-                    btn.setText("Cavallary");
+                    btn.setText(R.string.cavalry);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.cavalry, 0, 0);
 
                     break;
                 case ARTILLERY:
-                    btn.setText("Artillery");
+                    btn.setText(R.string.artillery);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.artillery, 0, 0);
 
                     break;
                 default:
-                    btn.setText("Empty");
+                    btn.setText(R.string.empty);
                     btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
                     break;
             }
-        }catch(Exception e ){
+        } catch (Exception e) {
             btn.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.placeholder_card, 0, 0);
         }
     }
-    public  void popupDiceRoll(int[] values) {
-        PopupWindow popupWindow= createPopUp(R.layout.popup_diceroll);
-        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+
+    public void popupDiceRoll(int[] values) {
+        PopupWindow popupWindow = createPopUp(R.layout.popup_diceroll);
+        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
 
 
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Back);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-            }
-        });
+        btnBack.setOnClickListener(view -> popupWindow.dismiss());
+
 
 
         NumberPicker n1 = popupWindow.getContentView().findViewById(R.id.dice1);
@@ -494,12 +475,12 @@ public class MainActivity extends AppCompatActivity {
         NumberPicker n4 = popupWindow.getContentView().findViewById(R.id.dice4);
         NumberPicker n5 = popupWindow.getContentView().findViewById(R.id.dice5);
 
-        NumberPicker[] dice = {n1,n2,n3,n4,n5};
-        setDice(dice,values);
+        NumberPicker[] dice = {n1, n2, n3, n4, n5};
+        setDice(dice, values);
     }
 
-    public static void setDice(NumberPicker[] dice, int[] values){
-        for(int i = 0;i<dice.length;i++){
+    public static void setDice(NumberPicker[] dice, int[] values) {
+        for (int i = 0; i < dice.length; i++) {
             dice[i].setMaxValue(6);
             dice[i].setMinValue(1);
             dice[i].setValue(values[i]);
@@ -508,62 +489,47 @@ public class MainActivity extends AppCompatActivity {
 
     public void popupReinforceTroops(Button hubButton){
         PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops);
-        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
         np.setMaxValue(10);     //setMaxValue(Player.getUnassignedAvailableTroops)
         np.setMinValue(0);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int troops = np.getValue();
-                //player.setUnassindeAvailableTroops(=-troops)      //delete now used troops
-                Hub selected = GlobalVariables.findHubById(hubButton.getId());
-                //selected.setText(selected.getHubButton().getText().toString()+troops);
-                //selected.setAmountTroops(selected.getAmmountTroops+troops);   //set new troop count
-                popupWindow.dismiss();
-            }
+        btnClose.setOnClickListener(view -> {
+            int troops = np.getValue();
+            Hub selected = GlobalVariables.findHubById(hubButton.getId());
+            popupWindow.dismiss();
         });
     }
 
-    public void popupMovetroops(){
-        PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops);
-        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+    public void popupMovetroops() {
+        PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
+        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
         np.setMaxValue(10);     //setMaxValue(Hub.getAmountTroops)
         np.setMinValue(1);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnClose.setOnClickListener(view -> {
 
-                int troops = np.getValue();
-
-                // if(gamestate == AttackGameState){
-                //calc battle
-                // }else{
-                //selectedHubs.get(0).setAmountTroops(selectedHubs.get(0).getAmountTroops()-troops);
-                //selectedHubs.get(1).setAmountTroops(selectedHubs.get(1).getAmountTroops()+troops);
-                //selectedHubs.get(0).setText(selectedHubs.get(0).getAmountTroops());
-                //selectedHubs.get(1).setText(selectedHubs.get(1).getAmountTroops());
-                //}
-                popupWindow.dismiss();
-                return;
-            }
+            int troops = np.getValue();
+            popupWindow.dismiss();
         });
     }
+
     public  void popupChat(){
         PopupWindow popupWindow= createPopUp(R.layout.popup_chat);
-        popupWindow.showAtLocation(new View(GlobalVariables.baseContext), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(new View(GlobalVariables.getBaseContext()), Gravity.CENTER, 0, 0);
+
         btnChat.clearCustomSize();
 
         Button btnExit = popupWindow.getContentView().findViewById(R.id.btn_Exit);
         Button btnSend = popupWindow.getContentView().findViewById(R.id.btn_Send);
 
         TextView msg = popupWindow.getContentView().findViewById(R.id.chatMsg);
-        if(currentState != null) {
-            String messages = currentState.getMessages()
+        if(currentGameData != null) {
+            String messages = currentGameData.getMessages()
+
                     .stream()
                     .map(ChatMessage::toString)
                     .collect(Collectors.joining("\n"));
@@ -572,24 +538,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         EditText sendMsg = popupWindow.getContentView().findViewById(R.id.sendMsg);
+        btnExit.setOnClickListener(view -> popupWindow.dismiss());
 
-        btnExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-                return;
-            }
-        });
-
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println(sendMsg.getText());
-                getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString()));
-
-                return;
-
-            }
-        });
+        btnSend.setOnClickListener(view -> getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString())));
     }
 }

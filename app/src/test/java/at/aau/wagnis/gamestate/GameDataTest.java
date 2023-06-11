@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Hub;
@@ -31,6 +32,8 @@ class GameDataTest {
 
     @Mock private Player player1;
     @Mock private Player player2;
+    private static String player1Address = "199.290.102.1";
+    private static String player2Address = "199.290.102.2";
 
     private GameData gameData1;
     private GameData gameData2;
@@ -73,6 +76,9 @@ class GameDataTest {
         when(player1.getHand()).thenReturn(new Cards[5]);
         when(player2.getHand()).thenReturn(new Cards[5]);
 
+        gameData1.addPlayerIdentifier(player1.getPlayerId(), player1Address);
+        gameData1.addPlayerIdentifier(player2.getPlayerId(), player2Address);
+
         when(hub1.getId()).thenReturn(1);
         when(hub2.getId()).thenReturn(2);
         when(hub3.getId()).thenReturn(3);
@@ -88,8 +94,8 @@ class GameDataTest {
 
         assertTrue(checkEqualGameData(gameData1,gameData2));
 
-        verify(player1, times(6)).getPlayerId();
-        verify(player2, times(4)).getPlayerId();
+        verify(player1, times(7)).getPlayerId();
+        verify(player2, times(5)).getPlayerId();
         verify(player1, times(2)).getUnassignedAvailableTroops();
         verify(player2, times(2)).getUnassignedAvailableTroops();
         verify(player1, times(2)).getHand();
@@ -111,6 +117,13 @@ class GameDataTest {
             return false;
         if(data1.getPlayers().size() != data2.getPlayers().size())
             return false;
+        if(data1.getPlayerIdentifier().size() != data2.getPlayerIdentifier().size())
+            return false;
+
+        for(Integer key1 : data1.getPlayerIdentifier().keySet()) {
+            if(!Objects.equals(data1.getPlayerIdentifier().get(key1), data2.getPlayerIdentifier().get(key1)))
+                return false;
+        }
 
         for(int i = 0; i < data1.getPlayers().size(); i++){
             if(data1.getPlayers().get(i).getPlayerId() != data2.getPlayers().get(i).getPlayerId())

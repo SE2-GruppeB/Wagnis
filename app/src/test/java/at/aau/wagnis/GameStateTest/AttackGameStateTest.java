@@ -189,4 +189,37 @@ class AttackGameStateTest {
         gameState.setDefender(true);
         assertTrue(gameState.isDefender());
     }
+
+    /**
+     * Testet, erstellen eines sourceHubs.
+     */
+    @Test
+    void testGetSourceHub(){
+        gameState.setSourceHub(sourceHub);
+        assertEquals(sourceHub, gameState.getSourceHub());
+    }
+    /**
+     * Testet, erstellen eines targetHubs.
+     */
+    @Test
+    void testGetTargetHub(){
+        gameState.setTargetHub(targetHub);
+        assertEquals(targetHub, gameState.getTargetHub());
+    }
+    /**
+     * Testet, abrufen der SourceHubId.
+     */
+    @Test
+    void testGetSourceHubId(){
+        gameState.setSourceHubId(5);
+        assertEquals(5, gameState.getSourceHubId());
+    }
+    /**
+     * Testet, abrufen der TargetHubId.
+     */
+    @Test
+    void testGetTargetHubId(){
+        gameState.setTargetHubId(5);
+        assertEquals(5, gameState.getTargetHubId());
+    }
 }

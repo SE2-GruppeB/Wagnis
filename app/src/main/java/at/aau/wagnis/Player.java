@@ -151,9 +151,13 @@ public class Player {
     }
 
     public int calcTroopsToDeploy() {
-        //TODO implement Method waiting
-
-
+        int ownedhubs = ownedHubs.size();
+        if (ownedhubs > 5){
+            do {
+                allTroopsPerRound++;
+                ownedhubs -= 4;
+            }while(ownedhubs  > 4);
+        }
         return allTroopsPerRound;
     }
 

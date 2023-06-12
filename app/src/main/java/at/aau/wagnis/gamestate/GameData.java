@@ -248,4 +248,5 @@ public class GameData {
     public List<ChatMessage> getMessages() {
         return this.messages;
     }
+
 }

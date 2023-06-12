@@ -24,7 +24,7 @@ public abstract class GameLogicState {
     public void chooseStart(List<Hub> unassignedCountries, List<Player> players) {
     }
 
-    public void reinforce() {
+    public void reinforce(List<Integer> hubsId , List<Integer> troops) {
     }
 
     public void attack() {

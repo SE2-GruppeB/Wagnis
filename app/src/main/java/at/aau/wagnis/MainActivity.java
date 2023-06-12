@@ -92,16 +92,17 @@ public class MainActivity extends AppCompatActivity {
         btnSettings = findViewById(R.id.btn_Settings);
         btnChat = findViewById(R.id.btn_Chat);
 
-        btnCards.setVisibility(View.GONE);
 
         setDisplayMetrics();
 
         btnSettings.setOnClickListener(view -> popupSettings());
 
         btnChat.setOnClickListener(view -> popupChat());
+        
 
         //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         btnCards.setOnClickListener(view -> popupCards(new Player()));
+
 
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {

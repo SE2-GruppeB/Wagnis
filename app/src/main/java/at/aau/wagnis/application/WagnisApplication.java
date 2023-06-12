@@ -21,7 +21,7 @@ public class WagnisApplication extends Application {
             new GameServerFactory(
                     Thread::new,
                     ServerSocket::new,
-                    () -> new LobbyState()
+                    LobbyState::new
             )
     );
 

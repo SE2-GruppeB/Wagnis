@@ -2,8 +2,6 @@ package at.aau.wagnis.gamestate;
 
 
 import java.util.List;
-import java.util.Locale;
-
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.server.GameServer;

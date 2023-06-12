@@ -113,7 +113,7 @@ public class GlobalVariables {
         GlobalVariables.displayHeightPx = displayHeightPx;
     }
 
-    public static ArrayList<Hub> getHubs() {
+    public static List<Hub> getHubs() {
         return hubs;
     }
 

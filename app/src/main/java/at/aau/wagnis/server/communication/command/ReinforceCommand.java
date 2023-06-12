@@ -79,7 +79,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
         @NonNull
         @Override
         public ReinforceCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
-            int hubCount = stream.readInt();
+            int hubCount = stream.read();
             List<Integer> troops = new ArrayList<>();
             List<Integer> hubIDs = new ArrayList<>();
             for (int i = 0; i < hubCount; i++) {

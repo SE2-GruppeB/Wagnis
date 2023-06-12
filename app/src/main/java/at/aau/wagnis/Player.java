@@ -151,11 +151,13 @@ public class Player {
     }
 
     public int calcTroopsToDeploy() {
-        double ownedhubs = ownedHubs.size() - 5;
+        int ownedhubs = ownedHubs.size();
+        if (ownedhubs > 5){
             do {
                 allTroopsPerRound++;
-                ownedhubs -= ownedhubs;
-            }while((ownedhubs  > 0));
+                ownedhubs -= 4;
+            }while(ownedhubs  > 4);
+        }
         return allTroopsPerRound;
     }
 

@@ -8,10 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
- class ReinforceCommandTest {
+class ReinforceCommandTest {
 
     ReinforceCommand command;
 
@@ -81,5 +87,20 @@ import java.util.List;
          assertEquals(expectedTypeTag, commandSerializer.getTypeTag());
      }
 
+     @Test
+     void readWriteStream() throws IOException {
+         ReinforceCommand.CommandSerializer commandSerializer = new ReinforceCommand.CommandSerializer();
 
+         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+         commandSerializer.writeToStream(command, dataOutputStream);
+
+         byte[] bytes = byteArrayOutputStream.toByteArray();
+
+         InputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+         DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+         ReinforceCommand result = commandSerializer.readFromStream(dataInputStream);
+         assertEquals(hubs, result.getHubs());
+         assertEquals(troopsToDeploy, result.getTroopsToDeploy());
+     }
 }

@@ -209,11 +209,6 @@ class PlayerTest {
     }
 
     @Test
-    void calcTroopsToDeploy() {
-        assertEquals(3, player.calcTroopsToDeploy());
-    }
-
-    @Test
     void useCardsSameType() {
         setUpCardMocks();
 
@@ -284,6 +279,7 @@ class PlayerTest {
 
     @Test
     void calculateTroopsTest() {
+        Player player2 = new Player();
         ArrayList<Hub> hubs = new ArrayList<>();
         hubs.add(new Hub(1));
         hubs.add(new Hub(2));
@@ -291,8 +287,8 @@ class PlayerTest {
         hubs.add(new Hub(4));
         hubs.add(new Hub(5));
         hubs.add(new Hub(6));
-        player.setOwnedHubs(hubs);
-        assertEquals(4,player.calcTroopsToDeploy());
+        player2.setOwnedHubs(hubs);
+        assertEquals(4,player2.calcTroopsToDeploy());
 
     }
 

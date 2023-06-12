@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.wagnis.gamestate.GameLogicState;
-import at.aau.wagnis.gamestate.ReinforceGameState;
 import at.aau.wagnis.server.communication.serialization.Serializer;
 
 public class ReinforceCommand implements ClientOriginatedServerCommand{
@@ -24,6 +23,13 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
     }
 
 
+    public List<Integer> getHubs() {
+        return hubs;
+    }
+
+    public List<Integer> getTroopsToDeploy() {
+        return troopsToDeploy;
+    }
 
     @Override
     public int getClientId() {
@@ -44,22 +50,22 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
         gameLogicState.reinforce(hubs, troopsToDeploy);
     }
 
-    public static class CommandSerializer implements Serializer<ReinforceGameState> {
+    public static class CommandSerializer implements Serializer<ReinforceCommand> {
 
         @NonNull
         @Override
-        public Class<ReinforceGameState> getTargetClass() {
-            return ReinforceGameState.class;
+        public Class<ReinforceCommand> getTargetClass() {
+            return ReinforceCommand.class;
         }
 
         @NonNull
         @Override
         public String getTypeTag() {
-            return "reinforce";
+            return "reinforce-command";
         }
 
         @Override
-        public void writeToStream(@NonNull ReinforceGameState obj, @NonNull DataOutputStream stream) throws IOException {
+        public void writeToStream(@NonNull ReinforceCommand obj, @NonNull DataOutputStream stream) throws IOException {
             List<Integer> hubs = obj.getHubs();
             List<Integer> troops = obj.getTroopsToDeploy();
             stream.write(hubs.size());
@@ -72,7 +78,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
 
         @NonNull
         @Override
-        public ReinforceGameState readFromStream(@NonNull DataInputStream stream) throws IOException {
+        public ReinforceCommand readFromStream(@NonNull DataInputStream stream) throws IOException {
             int hubCount = stream.readInt();
             List<Integer> troops = new ArrayList<>();
             List<Integer> hubIDs = new ArrayList<>();
@@ -82,7 +88,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
                 hubIDs.add(hubId);
                 troops.add(troop);
             }
-            return new ReinforceGameState(hubIDs, troops);
+            return new ReinforceCommand(hubIDs, troops);
         }
     }
 

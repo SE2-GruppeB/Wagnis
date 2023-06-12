@@ -185,19 +185,10 @@ class ReinforceGameStateTest {
 
         rgstate.reinforceSingle(hubs.get(0),troops.get(0));
         assertEquals(hub.getAmountTroops(),troops.get(0));
-        assertEquals(hub1.getAmountTroops(),0);
+        assertEquals(0,hub1.getAmountTroops());
         rgstate.reinforceSingle(hubs.get(1),troops.get(1));
         assertEquals(hub1.getAmountTroops(),troops.get(1));
 
     }
-   /* public void reinforceSingle (int hubId, int troops){
-        List<Hub> hubsFromServer = this.gameServer.getGameData().getHubs();
-        for (Hub hub : hubsFromServer) {
-            if (hub.getId() == hubId){
-                hub.addTroops(troops);
-            }
-        }
-    }
-    }*/
 
 }

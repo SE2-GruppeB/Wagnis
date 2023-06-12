@@ -1,9 +1,11 @@
 package at.aau.wagnis.GameStateTest;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 
 import android.widget.Button;
 
@@ -32,11 +34,20 @@ class AttackGameStateTest {
     private AttackGameState gameState;
     @Mock
     private AttackGameState gameState2;
+    @Mock
+    private AttackGameState gameState3;
+    @Mock
+    private Hub sourceHub3;
+    @Mock
+    private Hub targetHub3;
 
     private Player attacker;
     private Player defender;
     private Player attacker2;
     private Player defender2;
+
+    private Player attacker3;
+    private Player defender3;
 
     @BeforeEach
     void setup() {
@@ -45,6 +56,9 @@ class AttackGameStateTest {
 
         Button sourceButtonMock2 = Mockito.mock(Button.class);
         Button targetButtonMock2 = Mockito.mock(Button.class);
+
+        Button sourceButtonMock3 = Mockito.mock(Button.class);
+        Button targetButtonMock3 = Mockito.mock(Button.class);
 
         sourceHub = new Hub(sourceButtonMock);
         targetHub = new Hub(targetButtonMock);
@@ -79,6 +93,23 @@ class AttackGameStateTest {
         targetHub2.setAmountTroops(4);
 
         gameState2 = new AttackGameState(sourceHub2, targetHub2);
+
+        sourceHub3 = new Hub(sourceButtonMock3);
+        targetHub3 = new Hub(targetButtonMock3);
+
+        attacker3 = new Player(5);
+        defender3 = new Player(6);
+
+        sourceHub3.setOwner(attacker3);
+        targetHub3.setOwner(defender3);
+
+        attacker3.addHub(sourceHub3);
+        defender3.addHub(targetHub3);
+
+        sourceHub3.setAmountTroops(1);
+        targetHub3.setAmountTroops(1);
+
+        gameState3 = new AttackGameState(sourceHub3, targetHub3);
     }
 
     /**
@@ -188,5 +219,47 @@ class AttackGameStateTest {
     void testIsDefender(){
         gameState.setDefender(true);
         assertTrue(gameState.isDefender());
+    }
+
+    /**
+     * Testet, erstellen eines sourceHubs.
+     */
+    @Test
+    void testGetSourceHub(){
+        gameState.setSourceHub(sourceHub);
+        assertEquals(sourceHub, gameState.getSourceHub());
+    }
+    /**
+     * Testet, erstellen eines targetHubs.
+     */
+    @Test
+    void testGetTargetHub(){
+        gameState.setTargetHub(targetHub);
+        assertEquals(targetHub, gameState.getTargetHub());
+    }
+    /**
+     * Testet, abrufen der SourceHubId.
+     */
+    @Test
+    void testGetSourceHubId(){
+        gameState.setSourceHubId(5);
+        assertEquals(5, gameState.getSourceHubId());
+    }
+    /**
+     * Testet, abrufen der TargetHubId.
+     */
+    @Test
+    void testGetTargetHubId(){
+        gameState.setTargetHubId(5);
+        assertEquals(5, gameState.getTargetHubId());
+    }
+    /**
+     * Testet, ob eine IllegalArgumentException ausgelöst wird wenn Source- und TargetHub = 1.
+     */
+    @Test
+    void testAttackFailedIllegalArgumentException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            gameState3.attack();
+        });
     }
 }

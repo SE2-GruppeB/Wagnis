@@ -99,14 +99,7 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(view -> popupSettings());
 
         btnChat.setOnClickListener(view -> popupChat());
-
         
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupSettings();
-            }
-        });
 
         //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         btnCards.setOnClickListener(view -> popupCards(new Player()));

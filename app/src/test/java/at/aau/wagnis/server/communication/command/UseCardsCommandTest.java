@@ -39,10 +39,4 @@ import org.junit.jupiter.api.Test;
 
         assertEquals(expectedId, command.getClientId());
     }
-
-
-    @Test
-     void executeTest(){
-
-    }
 }

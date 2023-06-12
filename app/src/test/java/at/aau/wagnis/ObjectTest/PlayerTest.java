@@ -281,4 +281,19 @@ class PlayerTest {
 
         verify(hub).getAmountTroops();
     }
+
+    @Test
+    void calculateTroopsTest() {
+        ArrayList<Hub> hubs = new ArrayList<>();
+        hubs.add(new Hub(1));
+        hubs.add(new Hub(2));
+        hubs.add(new Hub(3));
+        hubs.add(new Hub(4));
+        hubs.add(new Hub(5));
+        hubs.add(new Hub(6));
+        player.setOwnedHubs(hubs);
+        assertEquals(4,player.calcTroopsToDeploy());
+
+    }
+
 }

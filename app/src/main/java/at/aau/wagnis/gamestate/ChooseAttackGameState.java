@@ -23,6 +23,12 @@ public class ChooseAttackGameState extends GameLogicState {
 
     @Override
     public void chooseAttack(int playerId, int sourceHubId, int targetHubId){
+        if (sourceHubId == targetHubId) {
+            throw new IllegalArgumentException("Der Quell-Hub und der Ziel-Hub dürfen nicht identisch sein!");
+        }
+
+
+        //Prüft ob source und target nicht der gleiche Hub sind
         List<Hub> hubs = this.gameServer.getGameData().getHubs();
         // Liste aller Hubs im Spiel
         List<Adjacency> adj = this.gameServer.getGameData().getAdjacencies();
@@ -37,15 +43,22 @@ public class ChooseAttackGameState extends GameLogicState {
             if(h.getId()==targetHubId){
                 targetHub=h;
                 // Findet den Hub welcher übereinstimmt und weise ihn targetHub zu
+
             }
         }
+
+        // Überprüfen, ob der Spieler den Angriff auf den eigenen Hub startet
+        if (sourceHub.getOwner()== targetHub.getOwner()) {
+            throw new IllegalArgumentException("Du kannst deinen eigenen Hub nicht angreifen!");
+        }
+
         // Durchlaufe alle benachbarten Hubpaare in der Liste
         for(Adjacency a : adj){
-            // Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum
+            //Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum
             if(a.isInPair(sourceHub, targetHub)){
                 this.gameServer.setGameLogicState(new AttackGameState(sourceHubId, targetHubId));
                 // Spielzustand auf AttackGameState mit den übergebenen Angreifer-Hub und Verteidiger Hub
-                return;
+               return;
             }
         }
         // Nicht benachbart -> Fehlermeldung ausgeben oder anzeigen

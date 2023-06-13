@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,7 +63,8 @@ import at.aau.wagnis.server.communication.command.StartGameCommand;
 
 public class MainActivity extends AppCompatActivity {
 
-    FloatingActionButton endTurn;
+
+    FloatingActionButton btnEndTurn;
     FloatingActionButton btnCards;
     FloatingActionButton btnSettings;
     FloatingActionButton btnChat;
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         adjacencyView = findViewById(R.id.adjacenciesView);
-        endTurn = findViewById(R.id.btn_EndTurn);
+        btnEndTurn = findViewById(R.id.btn_EndTurn);
         btnCards = findViewById(R.id.btn_Cards);
         btnSettings = findViewById(R.id.btn_Settings);
         btnChat = findViewById(R.id.btn_Chat);
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         btnCards.setOnClickListener(view -> popupCards(new Player()));
 
+        btnEndTurn.setOnClickListener(view -> {});
 
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
@@ -217,11 +220,13 @@ public class MainActivity extends AppCompatActivity {
                    if (lastClickedHub != null){
                         getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
                         lastClickedHub = null;
+                        Toast.makeText(MainActivity.this, "Targethub with id "+hub.getId()+" selected!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Attack started...", Toast.LENGTH_SHORT).show();
                     }else{
                         lastClickedHub = hub;
+                        Toast.makeText(MainActivity.this, "Sourcehub with id "+hub.getId()+" selected!\nSelect targethub!", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
                     }
-
-
             });
             GlobalVariables.getHubs().add(new Hub(hub));
             layout.addView(hub);
@@ -494,7 +499,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void popupMovetroops() {
+    public void popupMoveTroops() {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 

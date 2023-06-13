@@ -83,17 +83,6 @@ public class StartGameState extends GameLogicState {
         return player.getUnassignedAvailableTroops() > 0;
     }
 
-
-    // Aktualisiert den Text der Hubs, mit Anzahl der Truppen
-    private void updateHubText() {
-        for (Player player : players) {
-            for (Hub hub : player.getOwnedHubs()) {
-                hub.setText("Troops: " + hub.getAmountTroops());
-            }
-        }
-    }
-
-
     // Getter für die Hubs und Spieler
     public List<Hub> getHubs() {
         return hubs;

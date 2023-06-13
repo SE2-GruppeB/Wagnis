@@ -61,7 +61,7 @@ class ReinforceGameStateTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new ReinforceGameState(hubs, troopsNull);
         });
-        String expectedMessage = "TroopstoDeploy cannot be null";
+        String expectedMessage = "Troops to Deploy cannot be null";
         String actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);
@@ -118,7 +118,7 @@ class ReinforceGameStateTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             rgstate.setTroopsToDeploy(troopsNull);
         });
-        String expectedMessage = "TroopstoDeploy cannot be null";
+        String expectedMessage = "Troops to Deploy cannot be null";
         String actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);
@@ -132,7 +132,7 @@ class ReinforceGameStateTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             rgstate.reinforce();
         });
-        String expectedMessage = "Hubs and troopsToDeploy must have the same size";
+        String expectedMessage = "Hubs and troops To Deploy must have the same size";
         String actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);

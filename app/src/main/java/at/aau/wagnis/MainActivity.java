@@ -126,8 +126,27 @@ public class MainActivity extends AppCompatActivity {
                     for (Hub h : currentGameData.getHubs()) {
                         Hub uiHub = GlobalVariables.findHubById(h.getId());
                         uiHub.setText(h.getAmountTroops() + ", "+h.getId());
-                        if (h.getOwner()!=null)// TODO check why this is null sometimes
-                            uiHub.setHubImage(h.getOwner().getPlayerId() == 0 ? "ESA" : "NASA");
+                        if (h.getOwner() != null) {
+                            switch (h.getOwner().getPlayerId()){
+                                case 1:
+                                    uiHub.setHubImage("ESA");
+                                    break;
+                                case 2:
+                                    uiHub.setHubImage("NASA");
+                                    break;
+                                case 3:
+                                    uiHub.setHubImage("ISRO");
+                                    break;
+                                case 4:
+                                    uiHub.setHubImage("JAXA");
+                                    break;
+                                case 5:
+                                    uiHub.setHubImage("Roskosmos");
+                                    break;
+                                default:
+                                    uiHub.setHubImage("China manned space program");
+                            }
+                        }
                     }
                 }
 

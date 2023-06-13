@@ -13,10 +13,6 @@ public class StartGameState extends GameLogicState {
 
     @Override
     public void onEntry() {
-
-        this.players.add(new Player(0));
-        this.players.add(new Player(1));
-
         assignCountries();
         assignTroopsToHubs();
         this.gameServer.setGameLogicState(new ChooseAttackGameState());

@@ -126,8 +126,27 @@ public class MainActivity extends AppCompatActivity {
                     for (Hub h : currentGameData.getHubs()) {
                         Hub uiHub = GlobalVariables.findHubById(h.getId());
                         uiHub.setText(h.getAmountTroops() + ", "+h.getId());
-                        if (h.getOwner()!=null)// TODO check why this is null sometimes
-                            uiHub.setHubImage(h.getOwner().getPlayerId() == 0 ? "ESA" : "NASA");
+                        if (h.getOwner() != null) {
+                            switch (h.getOwner().getPlayerId()){
+                                case 1:
+                                    uiHub.setHubImage("ESA");
+                                    break;
+                                case 2:
+                                    uiHub.setHubImage("NASA");
+                                    break;
+                                case 3:
+                                    uiHub.setHubImage("ISRO");
+                                    break;
+                                case 4:
+                                    uiHub.setHubImage("JAXA");
+                                    break;
+                                case 5:
+                                    uiHub.setHubImage("Roskosmos");
+                                    break;
+                                default:
+                                    uiHub.setHubImage("China manned space program");
+                            }
+                        }
                     }
                 }
 
@@ -213,10 +232,6 @@ public class MainActivity extends AppCompatActivity {
             hub.setId(100 + hubs);
 
             hub.setOnClickListener(view -> {
-                int[] v = {1,2,3,4,5};
-                popupDiceRoll(v);
-                GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
-
                    if (lastClickedHub != null){
                         getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
                         lastClickedHub = null;

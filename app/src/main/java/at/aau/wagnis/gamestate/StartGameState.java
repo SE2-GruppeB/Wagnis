@@ -13,10 +13,6 @@ public class StartGameState extends GameLogicState {
 
     @Override
     public void onEntry() {
-
-        this.players.add(new Player(0));
-        this.players.add(new Player(1));
-
         assignCountries();
         assignTroopsToHubs();
         this.gameServer.setGameLogicState(new ChooseAttackGameState());
@@ -86,17 +82,6 @@ public class StartGameState extends GameLogicState {
     private boolean hasTroops(Player player) {
         return player.getUnassignedAvailableTroops() > 0;
     }
-
-
-    // Aktualisiert den Text der Hubs, mit Anzahl der Truppen
-    private void updateHubText() {
-        for (Player player : players) {
-            for (Hub hub : player.getOwnedHubs()) {
-                hub.setText("Troops: " + hub.getAmountTroops());
-            }
-        }
-    }
-
 
     // Getter für die Hubs und Spieler
     public List<Hub> getHubs() {

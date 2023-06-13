@@ -1,16 +1,45 @@
 package at.aau.wagnis.gamestate;
 
+import java.util.List;
+
+import at.aau.wagnis.Adjacency;
+import at.aau.wagnis.Hub;
+
 public class ChooseMoveState extends GameLogicState {
+
+    Hub sourceHub;
+    Hub targetHub;
+
 
     @Override
     public void chooseMove(int playerId, int sourceHubId, int targetHubId, int numTroops) {
-        // Holt die Spieldaten vom GameServer
-        this.gameServer.getGameData();
 
-        // Setzt den Spielzustand auf MoveTroopsState und übergibt die Hub-IDs
-        this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId));
+        List<Hub> hubs = this.gameServer.getGameData().getHubs();
+        List<Adjacency> adj = this.gameServer.getGameData().getAdjacencies();
 
-        // Verschiebt die Truppen
-        this.move(numTroops);
+        for(Hub h : hubs){
+            if(h.getId()==sourceHubId){
+                sourceHub=h;
+                // Findet den Hub welcher übereinstimmt und weise ihn sourceHub zu
+            }
+            if(h.getId()==targetHubId){
+                targetHub=h;
+                // Findet den Hub welcher übereinstimmt und weise ihn targetHub zu
+            }
+        }
+
+        for(Adjacency a : adj){
+            // Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum
+            if(a.isInPair(sourceHub, targetHub)){
+                this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId, numTroops));
+                return;
+            }
+        }
+        // Nicht benachbart -> Fehlermeldung ausgeben oder anzeigen
+        throw new IllegalArgumentException("Hubs sind nicht benachbart!");
+
+
     }
+
+
 }

@@ -232,10 +232,6 @@ public class MainActivity extends AppCompatActivity {
             hub.setId(100 + hubs);
 
             hub.setOnClickListener(view -> {
-                int[] v = {1,2,3,4,5};
-                popupDiceRoll(v);
-                GlobalVariables.findHubById(hub.getId()).setHubImage(GlobalVariables.getAgency());
-
                    if (lastClickedHub != null){
                         getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
                         lastClickedHub = null;

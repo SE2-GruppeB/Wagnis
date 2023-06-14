@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#92A4A8">
+    android:background="@color/teal_700">
 
 
     <TextView
@@ -13,14 +14,13 @@
         android:layout_alignParentEnd="true"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
-        android:text="Made with Resources from"
+        android:text="@string/madeWith"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginStart="0dp"/>
     <Button
         android:id="@+id/btn_AppIcon"
-        android:text="AppIcon - Icons8.de"
-        android:onClick="goToAppIcon"
+        android:text="@string/icons8App"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -30,51 +30,41 @@
         android:clickable="true"
         android:autoLink="web"
         android:cursorVisible="true"
-        android:linksClickable="true" />
+        android:linksClickable="true"
+        tools:ignore="TextViewEdits" />
 
     <Button
         android:id="@+id/btn_dome"
-        android:text="Dome - Icons8.de"
-        android:onClick="goToAppIcon"
+        android:text="@string/icons8Dome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="100dp"
-        android:clickable="true"
-        android:autoLink="web"
-        android:cursorVisible="true"
-        android:linksClickable="true" />
+        tools:ignore="TextViewEdits" />
 
     <Button
         android:id="@+id/btn_background"
-        android:text="Background - Vecteezy.com"
-        android:onClick="goToBackground"
+        android:text="@string/background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="150dp"
-        android:clickable="true"
-        android:autoLink="web"
-        android:cursorVisible="true"
-        android:linksClickable="true" />
+        tools:ignore="TextViewEdits" />
     <Button
         android:id="@+id/btn_surfaceBackground"
-        android:text="Surface-Background - Vecteezy.com"
-        android:onClick="goToSurface"
+        android:text="@string/surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="200dp"
-        android:clickable="true"
-        android:autoLink="web"
         android:cursorVisible="true"
-        android:linksClickable="true" />
+        tools:ignore="TextViewEdits" />
 
     <Button
         android:id="@+id/btn_surfaceBackground2"
@@ -84,10 +74,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="250dp"
-        android:autoLink="web"
-        android:clickable="true"
-        android:cursorVisible="true"
-        android:linksClickable="true"
-        android:onClick="goToUI"
-        android:text="UI-Background - Vecteezy.com" />
+        android:text="@string/backgroundUi"
+        tools:ignore="TextViewEdits" />
 </RelativeLayout>

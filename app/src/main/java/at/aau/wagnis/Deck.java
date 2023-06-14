@@ -45,12 +45,10 @@ public class Deck {
         }
     }
 
-    public void createMessageForCardGen(int hubId, Troops trooper) {
-        String info = "Info";
+    public String createMessageForCardGen(int hubId, Troops trooper) {
         String message = " Created new Card ID :";
-        String type = "Type";
-        //Log.d(info,message + hubId + type + trooper);
-
+        String type = "Type :";
+        return message + hubId + type + trooper;
     }
 
     public int numberOfCardsInDeck() {
@@ -59,9 +57,6 @@ public class Deck {
             if (b) {
                 count++;
             }
-        }
-        if (count == 0) {
-            //Log.d("Deck", "Deck is empty");
         }
         return count;
     }

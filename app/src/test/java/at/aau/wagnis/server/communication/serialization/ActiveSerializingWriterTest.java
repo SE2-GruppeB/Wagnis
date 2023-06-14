@@ -36,7 +36,7 @@ class ActiveSerializingWriterTest {
     private ActiveSerializingWriter<Object> subject;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         when(threadFactory.apply(any())).thenReturn(thread);
 

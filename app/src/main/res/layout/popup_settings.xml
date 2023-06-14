@@ -27,9 +27,9 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="40dp"
         android:layout_marginTop="80dp"
- />
+        android:contentDescription="@string/qr" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_Music"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,9 +38,8 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="162dp"
         android:checked="true"
-        android:text="Music on"
-        android:textOff="No"
-        android:textOn="Yes" />
+        android:text="@string/music"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_Restart"
@@ -51,6 +50,6 @@
         android:layout_marginTop="11dp"
         android:layout_marginEnd="95dp"
         android:clickable="true"
-        app:srcCompat="@android:drawable/ic_popup_sync" />
-
+        app:srcCompat="@android:drawable/ic_popup_sync"
+        android:contentDescription="@string/restart" />
 </RelativeLayout>

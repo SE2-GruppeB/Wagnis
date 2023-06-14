@@ -33,7 +33,7 @@ class DeserializingReaderTest {
     private DeserializingReader<Object> subject;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         subject = new DeserializingReader<>(EXPECTED_CLASS, dataInputStream, loader);
     }

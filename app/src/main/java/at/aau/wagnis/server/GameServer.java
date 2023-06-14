@@ -1,13 +1,14 @@
 package at.aau.wagnis.server;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
-import java.util.Collections;
 import java.util.Objects;
 
-import at.aau.wagnis.GlobalVariables;
 import at.aau.wagnis.gamestate.GameLogicState;
 import at.aau.wagnis.gamestate.GameData;
+import at.aau.wagnis.gamestate.LobbyState;
 import at.aau.wagnis.server.communication.command.ClientCommand;
 import at.aau.wagnis.server.communication.command.SendGameDataCommand;
 import at.aau.wagnis.server.communication.command.ServerCommand;
@@ -35,6 +36,7 @@ public class GameServer implements Runnable {
         this.connectionBus = Objects.requireNonNull(connectionBus);
         this.clientConnectionListener = Objects.requireNonNull(clientConnectionListener);
         this.gameLogicState = Objects.requireNonNull(initialState);
+        this.gameLogicState.setGameServer(this);
     }
 
     /**
@@ -44,18 +46,32 @@ public class GameServer implements Runnable {
         try {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
-                command.execute(gameLogicState);
-                if(gameData == null) {
-                    gameData = new GameData();
-                    GlobalVariables.seedGenerator();
-                    gameData.setSeed(GlobalVariables.getSeed());
-                    gameData.setPlayers(Collections.emptyList());
-                    gameData.setHubs(Collections.emptyList());
+                callCommand(command);
+
+                if(gameData == null && gameLogicState instanceof LobbyState) {
+                    gameData = ((LobbyState) gameLogicState).getGameData();
                 }
+
+                if(gameData != null) {  // without this condition some tests would fail
+                    gameData.setCurrentGameLogicState(gameLogicState.getClass().getSimpleName());
+                }
+
                 broadcastCommand(new SendGameDataCommand(gameData));
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Extrected method to avoid SonarCloud code smell
+     * @param command Command to be executed
+     */
+    private void callCommand(ServerCommand command) {
+        try {
+            command.execute(gameLogicState);
+        } catch (IllegalArgumentException e){
+            Log.e("Server","Ignored Illegal Command"+e.getMessage());
         }
     }
 
@@ -66,6 +82,8 @@ public class GameServer implements Runnable {
 
     public void setGameLogicState(@NonNull GameLogicState gameLogicState) {
         this.gameLogicState = Objects.requireNonNull(gameLogicState);
+        gameLogicState.setGameServer(this);
+        gameLogicState.onEntry();
     }
 
     public void broadcastCommand(@NonNull ClientCommand command) {

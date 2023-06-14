@@ -18,7 +18,7 @@ class ProcessChatMessageCommandTest {
     private ProcessChatMessageCommand command;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         command = new ProcessChatMessageCommand("Hello, World!");
     }
 
@@ -29,6 +29,71 @@ class ProcessChatMessageCommandTest {
                 IllegalStateException.class,
                 command::getClientId
         );
+    }
+
+    @Test
+    void throwsForNullMessage() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand(null)
+        );
+
+        assertEquals("Message can't be null!", ex.getMessage());
+    }
+
+    @Test
+    void throwsForEmptyMessage() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand("")
+        );
+
+        assertEquals("Message can't be empty!", ex.getMessage());
+    }
+
+    @Test
+    void throwsForNewLine() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand("\n")
+        );
+
+        assertEquals("Message can't contain new line!", ex.getMessage());
+    }
+
+    @Test
+    void throwsForCarriageReturn() {
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand("\r")
+        );
+
+        assertEquals("Message can't contain carriage return!", ex.getMessage());
+    }
+
+
+    @Test
+    void throwsForLongMessage() {
+        //given
+        StringBuilder sb = new StringBuilder(201);
+
+        for (int i = 0; i < 201; i++) {
+            sb.append("a");
+        }
+
+        String input = sb.toString();
+
+        // when & then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProcessChatMessageCommand(input)
+        );
+
+        assertEquals("Message too long!", ex.getMessage());
     }
 
     @Test

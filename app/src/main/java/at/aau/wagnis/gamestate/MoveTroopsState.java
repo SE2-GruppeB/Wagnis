@@ -1,5 +1,10 @@
 package at.aau.wagnis.gamestate;
 
+
+import at.aau.wagnis.Adjacency;
+
+import at.aau.wagnis.GlobalVariables;
+
 import at.aau.wagnis.Hub;
 
 public class MoveTroopsState extends GameLogicState {
@@ -7,6 +12,7 @@ public class MoveTroopsState extends GameLogicState {
     private Hub targetHub;
     private int sourceHubId;
     private int targetHubId;
+
     private int numTroops;
 
     public MoveTroopsState(Hub sourceHub, Hub targetHub) {
@@ -20,29 +26,56 @@ public class MoveTroopsState extends GameLogicState {
         this.numTroops = numTroops;
     }
 
-    public void move(int numTroops) {
-        moveTroopsBetweenHubs(numTroops);
+    @Override
+    public void onEntry() {
+        if (sourceHub == null) {
+            this.sourceHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == sourceHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
+        }
+        if (targetHub == null) {
+            this.targetHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == targetHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
+        }
+        try {
+            //move();
+        }
+        finally {
+            this.gameServer.setGameLogicState(new ChooseMoveState());
+        }
+
     }
 
-    private void moveTroopsBetweenHubs(int numTroops) {
+    @Override
+    public boolean move(int numTroops) {
+        if (isMoveValid(numTroops)) {
+            moveTroopsBetweenHubs(numTroops);
+            return true; // Successful move
+        }
+        return false;
+    }
 
-
+    private boolean isMoveValid(int numTroops) {
         if (sourceHub == null || targetHub == null) {
-            throw new IllegalArgumentException("Invalid source or target hub.");
+            return false;
         }
 
         if (sourceHub.getOwner() != targetHub.getOwner()) {
-            throw new IllegalArgumentException("Cannot move troops between hubs owned by different players.");
+            return false;
         }
-
-        if (sourceHub.getAmountTroops() <= 1 || sourceHub.getAmountTroops() < numTroops) {
-            throw new IllegalArgumentException("Illegal move: not enough troops at source hub.");
+        return sourceHub.getAmountTroops() > 1 && sourceHub.getAmountTroops() >= numTroops;
+    }
+    private boolean areHubsAdjacent(Hub sourceHub, Hub targetHub) {
+        for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {
+            if ((adjacency.getHub1() == sourceHub && adjacency.getHub2() == targetHub) ||
+                    (adjacency.getHub1() == targetHub && adjacency.getHub2() == sourceHub)) {
+                return true;
+            }
         }
+        return false;
+    }
 
+    private void moveTroopsBetweenHubs(int numTroops) {
         sourceHub.setAmountTroops(sourceHub.getAmountTroops() - numTroops);
         targetHub.setAmountTroops(targetHub.getAmountTroops() + numTroops);
     }
-
 
     public int getSourceHubId() {
         return sourceHubId;
@@ -60,4 +93,3 @@ public class MoveTroopsState extends GameLogicState {
         this.targetHubId = targetHubId;
     }
 }
-

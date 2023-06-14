@@ -3,11 +3,8 @@ package at.aau.wagnis;
 
 import android.graphics.Color;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import at.aau.wagnis.server.communication.serialization.Serializer;
 
 public class Player {
 
@@ -37,7 +34,6 @@ public class Player {
     public Player(int playerId) {
         this.ownedHubs = new ArrayList<>();
         this.playerId = playerId;
-        //this.playerColor = Color.valueOf(Color.BLACK);
         this.hand = new Cards[MAX_CARDS_IN_HAND];
         allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;
@@ -71,6 +67,7 @@ public class Player {
     }
 
     public void addHub(Hub hub) {
+        hub.setOwner(this);
         this.ownedHubs.add(hub);
     }
 
@@ -155,8 +152,13 @@ public class Player {
     }
 
     public int calcTroopsToDeploy() {
-        //TODO implement Method waiting
-
+        int ownedhubs = ownedHubs.size();
+        if (ownedhubs > 5){
+            do {
+                allTroopsPerRound++;
+                ownedhubs -= 4;
+            }while(ownedhubs  > 4);
+        }
         return allTroopsPerRound;
     }
 

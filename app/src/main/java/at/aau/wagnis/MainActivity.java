@@ -18,6 +18,7 @@ import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.WindowMetrics;
 import android.widget.Button;
@@ -117,45 +118,49 @@ public class MainActivity extends AppCompatActivity {
 
             currentGameData = newGameData;
 
-
-                if (!wasDrawn) {
-                    generateMap(currentGameData.getSeed());
-                    popupStart(btnCards);
-                    wasDrawn = true;
-                } else {
-                    for (Hub h : currentGameData.getHubs()) {
-                        Hub uiHub = GlobalVariables.findHubById(h.getId());
-                        uiHub.setText(h.getAmountTroops() + ", "+h.getId());
-                        if (h.getOwner() != null) {
-                            switch (h.getOwner().getPlayerId()){
-                                case 1:
-                                    uiHub.setHubImage("ESA");
-                                    break;
-                                case 2:
-                                    uiHub.setHubImage("NASA");
-                                    break;
-                                case 3:
-                                    uiHub.setHubImage("ISRO");
-                                    break;
-                                case 4:
-                                    uiHub.setHubImage("JAXA");
-                                    break;
-                                case 5:
-                                    uiHub.setHubImage("Roskosmos");
-                                    break;
-                                default:
-                                    uiHub.setHubImage("China manned space program");
-                            }
+            if (!wasDrawn) {
+                generateMap(currentGameData.getSeed());
+                popupStart(btnCards);
+                wasDrawn = true;
+            } else {
+                for (Hub h : currentGameData.getHubs()) {
+                    Hub uiHub = GlobalVariables.findHubById(h.getId());
+                    uiHub.setText(h.getAmountTroops() + ", "+h.getId());
+                    if (h.getOwner() != null) {
+                        switch (h.getOwner().getPlayerId()){
+                            case 0:
+                                uiHub.setHubImage("ESA");
+                                break;
+                            case 1:
+                                uiHub.setHubImage("NASA");
+                                break;
+                            case 2:
+                                uiHub.setHubImage("JAXA");
+                                break;
+                            case 3:
+                                uiHub.setHubImage("ISRO");
+                                break;
+                            case 4:
+                                uiHub.setHubImage("Roskosmos");
+                                break;
+                            default:
+                                uiHub.setHubImage("China manned space program");
                         }
                     }
                 }
+            }
 
-                if(startpopup.isShowing()) {
-                    updatePlayerCount();
-                    if (!(currentGameData.getCurrentGameLogicState().equals("LobbyState"))) {
-                        startpopup.dismiss();
-                    }
+            if(startpopup.isShowing()) {
+                updatePlayerCount();
+                if (!(currentGameData.getCurrentGameLogicState().equals("LobbyState"))) {
+                    startpopup.dismiss();
                 }
+            }
+
+            if(currentGameData.getCurrentGameLogicState().equals("VictoryState")) {
+                String ip = currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer());
+                showEndGame(ip.equals(getIpAddress()));
+            }
         }));
 
 
@@ -353,6 +358,20 @@ public class MainActivity extends AppCompatActivity {
 
         manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
+    }
+
+    private void showEndGame(boolean victor) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUp;
+        if(victor) {
+            popUp = inflater.inflate(R.layout.win_screen, null);
+        } else {
+            popUp = inflater.inflate(R.layout.lose_screen, null);
+        }
+        PopupWindow popupWindow = new PopupWindow(popUp, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
+        Button btnClose = popupWindow.getContentView().findViewById(R.id.buttonHome);
+        btnClose.setOnClickListener(view -> System.exit(0));
     }
 
     public void popupSettings() {

@@ -67,6 +67,7 @@ public class Player {
     }
 
     public void addHub(Hub hub) {
+        hub.setOwner(this);
         this.ownedHubs.add(hub);
     }
 

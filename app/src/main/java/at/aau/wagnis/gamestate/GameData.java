@@ -19,6 +19,7 @@ public class GameData {
     private static final String PLAYER_STRING  = "PLAYER";
     private static final String CARD_STRING  = "CARD";
     private static final String HUB_STRING  = "HUB";
+    private static final String CURRENT_PLAYER_STRING = "ACTIVE";
     protected static final int MSG_HISTORY_LENGTH = 10;
 
     private String seed;
@@ -26,8 +27,9 @@ public class GameData {
     private List<Player> players;
     private List<Adjacency> adjacencies;
     private List<ChatMessage> messages;
-    Map<Integer, String> playerIdentifier;
+    private Map<Integer, String> playerIdentifier;
     private String currentGameLogicState;
+    private int currentPlayerID;
 
     public GameData() {
         super();
@@ -37,6 +39,7 @@ public class GameData {
         playerIdentifier = new HashMap<>();
         messages = new ArrayList<>();
         currentGameLogicState = "LobbyState";
+        currentPlayerID = 0;
     }
 
     public String getCurrentGameLogicState() {
@@ -63,9 +66,17 @@ public class GameData {
         this.adjacencies = adjacencies;
     }
 
+    public void setCurrentPlayer(int currentPlayerID) {
+        this.currentPlayerID = currentPlayerID;
+    }
+
     public void addPlayerIdentifier(int playerId, String ipAddress) {
         playerIdentifier.put(playerId, ipAddress);
         players.add(new Player(playerId));
+    }
+
+    public void nextPlayer() {
+        currentPlayerID = (++currentPlayerID) % players.size();
     }
 
     public String getSeed() {
@@ -88,6 +99,10 @@ public class GameData {
         return playerIdentifier;
     }
 
+    public int getCurrentPlayer() {
+        return currentPlayerID;
+    }
+
     public String serialize() {
         // TYPE1<VALUE1>TYPE1TYPE2<VALUE2>TYPE2...
         // SEED(string), PLAYER[i](id, unassigned, cards[i](type)), HUB[i](hubID, ownerID, troops)
@@ -99,6 +114,14 @@ public class GameData {
             builder.append(i.getKey()).append(";");
             builder.append(i.getValue());
             builder.append(IDENTIFIER_STRING);
+        }
+
+        // Current player turn
+        if(!players.isEmpty()) {
+            builder.append(CURRENT_PLAYER_STRING);
+            Player currentPlayer = players.get(currentPlayerID);
+            builder.append(currentPlayer.getPlayerId());
+            builder.append(CURRENT_PLAYER_STRING);
         }
 
         // current GameLogicState
@@ -150,6 +173,12 @@ public class GameData {
             int key = Integer.parseInt(data[0]);
             String value = data[1];
             playerIdentifier.put(key, value);
+        }
+
+        // current Players turn
+        String[] currentPlayerData = input.split(CURRENT_PLAYER_STRING);
+        if(currentPlayerData.length > 2) {
+            setCurrentPlayer(Integer.parseInt(currentPlayerData[1]));
         }
 
         // current GameLocigState

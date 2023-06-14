@@ -40,5 +40,7 @@
     <string name="cavalry">Cavalry</string>
     <string name="artillery">Artillery</string>
     <string name="empty">Empty</string>
+    <string name="you_lost">You Lost!</string>
+    <string name="you_won">You Won!</string>
 
 </resources>

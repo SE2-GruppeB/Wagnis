@@ -17,7 +17,7 @@ class SerializerTest {
     void noMissingValues() {
         for (Serializer<?> serializer : ServiceLoader.load(Serializer.class)) {
             assertNotNull(
-                    serializer.getTypeTag(),
+                    serializer.getTargetClass(),
                     String.format("Serializer '%s' has null target class", serializer.getClass().getName())
             );
 

@@ -120,7 +120,9 @@ public class ActiveSerializingWriter<T> {
             writer.flush();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            e.printStackTrace();
         } catch (IOException | SerializationException ex) {
+            ex.printStackTrace();
             this.errorCallback.run();
             this.close();
         }

@@ -48,7 +48,7 @@ public class ChooseAttackGameState extends GameLogicState {
         }
 
         // Überprüfen, ob der Spieler den Angriff auf den eigenen Hub startet
-        if (sourceHub.getOwner()== targetHub.getOwner()) {
+        if (sourceHub.getOwner() == targetHub.getOwner()) {
             throw new IllegalArgumentException("Du kannst deinen eigenen Hub nicht angreifen!");
         }
 

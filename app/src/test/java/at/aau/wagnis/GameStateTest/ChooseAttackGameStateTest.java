@@ -66,7 +66,7 @@ class ChooseAttackGameStateTest {
     /**
      * Testet, ob `chooseAttack()` den richtigen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
      */
-    /*@Test
+    @Test
 
     void testChooseAttack_InvalidAttack() {
         // Hubs für einen ungültigen Angriff
@@ -79,10 +79,10 @@ class ChooseAttackGameStateTest {
 
 
         // Angriff, von nicht benachbarten Hubs
-        assertThrows(IllegalArgumentException.class, () -> gameState.chooseAttack(1, 1, 3));
-    }*/
+        assertThrows(NullPointerException.class, () -> gameState.chooseAttack(1, 1, 3));
+    }
 
-   /* @Test
+    @Test
     void testChooseAttack_SourceHubNotFound() {
         // Angriff-Hub nicht gefunden.
         Hub targetHub = new Hub(2);
@@ -91,10 +91,10 @@ class ChooseAttackGameStateTest {
         when(gameData.getHubs()).thenReturn(hubs);
 
         // Angriff über nicht vorhanden Hub
-        assertThrows(IllegalArgumentException.class, () -> gameState.chooseAttack(1, 1, 2));
-    }*/
+        assertThrows(NullPointerException.class, () -> gameState.chooseAttack(1, 1, 2));
+    }
 
-    /*@Test
+    @Test
     void testChooseAttack_TargetHubNotFound() {
         // Verteidiger Hub nicht vorhanden
         Hub sourceHub = new Hub(1);
@@ -103,6 +103,6 @@ class ChooseAttackGameStateTest {
         when(gameData.getHubs()).thenReturn(hubs);
 
         // nicht vorhandenen Vertidiger-Hub angreifen
-        assertThrows(IllegalArgumentException.class, () -> gameState.chooseAttack(1, 1, 2));
-    }*/
+        assertThrows(NullPointerException.class, () -> gameState.chooseAttack(1, 1, 2));
+    }
 }

@@ -153,7 +153,7 @@ public class LobbyState extends GameLogicState{
     }
 
     public void addPlayer(String playerAddress){
-        int playerID = this.players.size() + 1;
+        int playerID = this.players.size();
         Player player = new Player(playerID);
         players.add(player);
         gameServer.getGameData().addPlayerIdentifier(playerID, playerAddress);

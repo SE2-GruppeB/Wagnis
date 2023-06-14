@@ -94,7 +94,7 @@ class GameDataTest {
 
         assertTrue(checkEqualGameData(gameData1,gameData2));
 
-        verify(player1, times(7)).getPlayerId();
+        verify(player1, times(8)).getPlayerId();
         verify(player2, times(5)).getPlayerId();
         verify(player1, times(2)).getUnassignedAvailableTroops();
         verify(player2, times(2)).getUnassignedAvailableTroops();

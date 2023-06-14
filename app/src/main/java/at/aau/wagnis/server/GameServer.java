@@ -46,7 +46,7 @@ public class GameServer implements Runnable {
         try {
             while(!Thread.currentThread().isInterrupted()) {
                 ServerCommand command = connectionBus.getNextCommand();
-                command.execute(gameLogicState);
+                callCommand(command);
 
                 if(gameData == null && gameLogicState instanceof LobbyState) {
                     gameData = ((LobbyState) gameLogicState).getGameData();
@@ -58,10 +58,20 @@ public class GameServer implements Runnable {
 
                 broadcastCommand(new SendGameDataCommand(gameData));
             }
-        } catch (IllegalArgumentException e){
-            Log.e("Server","Ignored Illegal Command"+e.getMessage());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Extrected method to avoid SonarCloud code smell
+     * @param command Command to be executed
+     */
+    private void callCommand(ServerCommand command) {
+        try {
+            command.execute(gameLogicState);
+        } catch (IllegalArgumentException e){
+            Log.e("Server","Ignored Illegal Command"+e.getMessage());
         }
     }
 

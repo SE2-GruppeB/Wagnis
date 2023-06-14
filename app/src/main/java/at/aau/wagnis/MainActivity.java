@@ -233,14 +233,22 @@ public class MainActivity extends AppCompatActivity {
 
             hub.setOnClickListener(view -> {
                    if (lastClickedHub != null){
-                        getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
-                        lastClickedHub = null;
-                        Toast.makeText(MainActivity.this, "Targethub with id "+hub.getId()+" selected!", Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(MainActivity.this, "Attack started...", Toast.LENGTH_SHORT).show();
+                       if(currentGameData.getCurrentPlayer() != hub.getId()) {
+                           getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
+                           lastClickedHub = null;
+                           Toast.makeText(MainActivity.this, "Targethub with id " + hub.getId() + " selected!", Toast.LENGTH_SHORT).show();
+                           //Toast.makeText(MainActivity.this, "Attack started...", Toast.LENGTH_SHORT).show();
+                       }else{
+                           Toast.makeText(MainActivity.this, "Targethub must not be in your possession!\nSelect a new target again!", Toast.LENGTH_LONG).show();
+                       }
                     }else{
-                        lastClickedHub = hub;
-                        Toast.makeText(MainActivity.this, "Sourcehub with id "+hub.getId()+" selected!\nSelect targethub!", Toast.LENGTH_LONG).show();
-                        //Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+                       if(currentGameData.getCurrentPlayer() == hub.getId()) {
+                           lastClickedHub = hub;
+                           Toast.makeText(MainActivity.this, "Sourcehub with id " + hub.getId() + " selected!\nSelect targethub!", Toast.LENGTH_LONG).show();
+                           //Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+                       }else{
+                           Toast.makeText(MainActivity.this, "Sourcehub must be in your possession!\nSelect a new sourcehub!", Toast.LENGTH_LONG).show();
+                       }
                     }
             });
             GlobalVariables.getHubs().add(new Hub(hub));
@@ -418,7 +426,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-
         btnPlay.setOnClickListener(view -> {
             if (countOfBtnsPressed.get() < 4) {
                 int[] chosenBtns = new int[3];
@@ -475,11 +482,8 @@ public class MainActivity extends AppCompatActivity {
         PopupWindow popupWindow = createPopUp(R.layout.popup_diceroll);
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
-
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Back);
         btnBack.setOnClickListener(view -> popupWindow.dismiss());
-
-
 
         NumberPicker n1 = popupWindow.getContentView().findViewById(R.id.dice1);
         NumberPicker n2 = popupWindow.getContentView().findViewById(R.id.dice2);

@@ -42,5 +42,6 @@
     <string name="empty">Empty</string>
     <string name="you_lost">You Lost!</string>
     <string name="you_won">You Won!</string>
+    <string name="restart_app">RESTART APP</string>
 
 </resources>

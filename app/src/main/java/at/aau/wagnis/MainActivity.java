@@ -429,8 +429,7 @@ public class MainActivity extends AppCompatActivity {
         PopupWindow popupWindow = createPopUp(R.layout.popup_settings);
 
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
-        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
-        btnClose.setOnClickListener(view -> popupWindow.dismiss());
+
 
         SwitchCompat switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
         switchMusic.setText(R.string.music);

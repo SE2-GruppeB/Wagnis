@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 String ip = currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer());
                 showEndGame(ip.equals(getIpAddress()));
             }
+            enableButtons();
         }));
 
 
@@ -178,6 +179,22 @@ public class MainActivity extends AppCompatActivity {
         drawHubs(GlobalVariables.getSeed());
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
+    }
+    private void enableButtons(){
+        if(isCurrentPlayer()){
+            btnEndTurn.setEnabled(true);
+            btnChat.setEnabled(true);
+            btnCards.setEnabled(true);
+            for (int i = 0;i< GlobalVariables.getHubs().size();i++){
+                GlobalVariables.getHubs().get(i).getHubButton().setEnabled(true);
+            }
+        }
+        btnEndTurn.setEnabled(false);
+        btnChat.setEnabled(false);
+        btnCards.setEnabled(false);
+        for (int i = 0;i< GlobalVariables.getHubs().size();i++){
+            GlobalVariables.getHubs().get(i).getHubButton().setEnabled(false);
+        }
     }
 
     @Override

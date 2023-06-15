@@ -53,13 +53,10 @@ import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
-
 import at.aau.wagnis.server.communication.command.ChooseAttackCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
-
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -101,12 +98,13 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(view -> popupSettings());
 
         btnChat.setOnClickListener(view -> popupChat());
-        
+
 
         //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         btnCards.setOnClickListener(view -> popupCards(new Player()));
 
-        btnEndTurn.setOnClickListener(view -> {});
+        btnEndTurn.setOnClickListener(view -> {
+        });
 
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
@@ -125,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 for (Hub h : currentGameData.getHubs()) {
                     Hub uiHub = GlobalVariables.findHubById(h.getId());
-                    uiHub.setText(h.getAmountTroops() + ", "+h.getId());
+                    uiHub.setText(h.getAmountTroops() + ", " + h.getId());
                     if (h.getOwner() != null) {
-                        switch (h.getOwner().getPlayerId()){
+                        switch (h.getOwner().getPlayerId()) {
                             case 0:
                                 uiHub.setHubImage("ESA");
                                 break;
@@ -150,22 +148,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            if(startpopup.isShowing()) {
+            if (startpopup.isShowing()) {
                 updatePlayerCount();
                 if (!(currentGameData.getCurrentGameLogicState().equals("LobbyState"))) {
                     startpopup.dismiss();
                 }
             }
 
-            if(currentGameData.getCurrentGameLogicState().equals("VictoryState")) {
+            if (currentGameData.getCurrentGameLogicState().equals("VictoryState")) {
                 String ip = currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer());
                 showEndGame(ip.equals(getIpAddress()));
             }
         }));
 
 
-
     }
+    // Überprüft, ob der aktuelle Spieler der Spieler des Geräts ist
+    private boolean isCurrentPlayer() {
+        // Vergleicht die IP-Adresse des aktuellen Geräts mit der IP-Adresse des aktuellen Spielers
+        if (currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer()).equals(getIpAddress())) {
+            return true;
+        }
+        return false;
+        // Der aktuelle Spieler ist nicht der Spieler des aktuellen Geräts
+    }
+
 
     private void generateMap(String seed) {
         GlobalVariables.setSeed(seed);
@@ -178,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         /*System Bars appearing when focusable popups are opened appears to be a bug*/
         WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        windowInsetsController.setSystemBarsBehavior( WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
@@ -191,13 +198,13 @@ public class MainActivity extends AppCompatActivity {
     public void setDisplayMetrics() {
         WindowMetrics windowMetrics = getWindowManager().getCurrentWindowMetrics();
         Insets insets = windowMetrics.getWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
-        GlobalVariables.setDisplayWidthPx(windowMetrics.getBounds().width()-insets.top-insets.bottom);          /*width & height swapped because landscape mode*/
-        GlobalVariables.setDisplayHeightPx(windowMetrics.getBounds().height()-insets.left-insets.right);
+        GlobalVariables.setDisplayWidthPx(windowMetrics.getBounds().width() - insets.top - insets.bottom);          /*width & height swapped because landscape mode*/
+        GlobalVariables.setDisplayHeightPx(windowMetrics.getBounds().height() - insets.left - insets.right);
     }
 
 
-    private int dpToPx(int dp){
-       return dp *(getResources().getDisplayMetrics().densityDpi/160);
+    private int dpToPx(int dp) {
+        return dp * (getResources().getDisplayMetrics().densityDpi / 160);
     }
 
     public PopupWindow createPopUp(int popupId) {
@@ -232,21 +239,45 @@ public class MainActivity extends AppCompatActivity {
         int height = GlobalVariables.getDisplayHeightPx();
         int heightSpace = height / 6;
 
+        // Für jeden Eintrag in der Liste Seeds von GlobalVariables durchlaufen
         for (String s : GlobalVariables.getSeeds()) {
+            // Erzeugen einer Schaltfläche (Button) mit einem speziellen Stil (btn_hub_style)
             Button hub = new Button(new ContextThemeWrapper(this, R.style.btn_hub_style), null, R.style.btn_hub_style);
-            hub.setId(100 + hubs);
+            hub.setId(100 + hubs);  // Eindeutige ID für die Schaltfläche setzen
 
+            // OnClickListener für die Schaltfläche festlegen
             hub.setOnClickListener(view -> {
-                   if (lastClickedHub != null){
-                        getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(),hub.getId() ));
-                        lastClickedHub = null;
-                        Toast.makeText(MainActivity.this, "Targethub with id "+hub.getId()+" selected!", Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(MainActivity.this, "Attack started...", Toast.LENGTH_SHORT).show();
-                    }else{
-                        lastClickedHub = hub;
-                        Toast.makeText(MainActivity.this, "Sourcehub with id "+hub.getId()+" selected!\nSelect targethub!", Toast.LENGTH_LONG).show();
-                        //Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+                //
+                if (isCurrentPlayer()) {
+                    Hub clickedHub = null;
+                    // Überprüfen, welcher Hub mit der geklickten Schaltfläche übereinstimmt
+                    for (Hub h : currentGameData.getHubs()) {
+                        if (h.getId() == hub.getId()) {
+                            clickedHub = h;
+                        }
                     }
+                    if (lastClickedHub != null) {
+                        // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
+                        if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {
+                            // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
+                            getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
+                            lastClickedHub = null;
+                            Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Zielhub darf nicht in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist
+                        if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                            lastClickedHub = hub;  // Den zuletzt geklickten Hub speichern
+                            Toast.makeText(MainActivity.this, "Quellhub mit ID " + hub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Quellhub muss in deinem Besitz sein!\nWähle einen neuen Quellhub aus!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Es ist nicht dein Zug.\nBitte warte, bis du an der Reihe bist!", Toast.LENGTH_SHORT).show();
+                }
             });
             GlobalVariables.getHubs().add(new Hub(hub));
             layout.addView(hub);
@@ -295,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePlayerCount() {
-        playerCount.setText("PlayerCount: "+ currentGameData.getPlayers().size());
+        playerCount.setText("PlayerCount: " + currentGameData.getPlayers().size());
     }
 
     public void popupStart(View view) {
@@ -323,10 +354,10 @@ public class MainActivity extends AppCompatActivity {
         MultiFormatWriter mWriter = new MultiFormatWriter();
         try {
             BitMatrix mMatrix;
-            if(Boolean.TRUE.equals(GlobalVariables.getIsClient())){
-                mMatrix = mWriter.encode(GlobalVariables.getHostIP(), BarcodeFormat.QR_CODE, 500,500);
-            }else{
-                mMatrix = mWriter.encode(getIpAddress(), BarcodeFormat.QR_CODE, 500,500);
+            if (Boolean.TRUE.equals(GlobalVariables.getIsClient())) {
+                mMatrix = mWriter.encode(GlobalVariables.getHostIP(), BarcodeFormat.QR_CODE, 500, 500);
+            } else {
+                mMatrix = mWriter.encode(getIpAddress(), BarcodeFormat.QR_CODE, 500, 500);
             }
 
             BarcodeEncoder mEncoder = new BarcodeEncoder();
@@ -337,13 +368,14 @@ public class MainActivity extends AppCompatActivity {
             restart();
         }
     }
+
     private String getIpAddress() {
         ConnectivityManager manager = getSystemService(ConnectivityManager.class);
         Network network = manager.getActiveNetwork();
         LinkProperties prop = manager.getLinkProperties(network);
-        for (LinkAddress linkAddress : prop.getLinkAddresses()){
+        for (LinkAddress linkAddress : prop.getLinkAddresses()) {
             InetAddress inetAddress = linkAddress.getAddress();
-            if(inetAddress instanceof Inet4Address){
+            if (inetAddress instanceof Inet4Address) {
                 return inetAddress.getHostAddress();
             }
         }
@@ -353,8 +385,8 @@ public class MainActivity extends AppCompatActivity {
     public void restart() {
         Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
         int pendingIntent = 123456;
-        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent,restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager manager = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent, restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager manager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
 
         manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
@@ -363,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
     private void showEndGame(boolean victor) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUp;
-        if(victor) {
+        if (victor) {
             popUp = inflater.inflate(R.layout.win_screen, null);
         } else {
             popUp = inflater.inflate(R.layout.lose_screen, null);
@@ -388,9 +420,9 @@ public class MainActivity extends AppCompatActivity {
         switchMusic.setChecked(GlobalVariables.getMediaPlayer().isPlaying());
 
         switchMusic.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked){
+            if (isChecked) {
                 GlobalVariables.getMediaPlayer().start();
-            }else{
+            } else {
                 GlobalVariables.getMediaPlayer().pause();
             }
         });
@@ -436,7 +468,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
 
         btnPlay.setOnClickListener(view -> {
             if (countOfBtnsPressed.get() < 4) {
@@ -494,11 +525,8 @@ public class MainActivity extends AppCompatActivity {
         PopupWindow popupWindow = createPopUp(R.layout.popup_diceroll);
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
-
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Back);
         btnBack.setOnClickListener(view -> popupWindow.dismiss());
-
-
 
         NumberPicker n1 = popupWindow.getContentView().findViewById(R.id.dice1);
         NumberPicker n2 = popupWindow.getContentView().findViewById(R.id.dice2);
@@ -518,8 +546,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void popupReinforceTroops(Button hubButton){
-        PopupWindow popupWindow= createPopUp(R.layout.popup_movetroops);
+    public void popupReinforceTroops(Button hubButton) {
+        PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
@@ -548,8 +576,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public  void popupChat(){
-        PopupWindow popupWindow= createPopUp(R.layout.popup_chat);
+    public void popupChat() {
+        PopupWindow popupWindow = createPopUp(R.layout.popup_chat);
         popupWindow.showAtLocation(new View(this
         ), Gravity.CENTER, 0, 0);
 
@@ -559,7 +587,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnSend = popupWindow.getContentView().findViewById(R.id.btn_Send);
 
         TextView msg = popupWindow.getContentView().findViewById(R.id.chatMsg);
-        if(currentGameData != null) {
+        if (currentGameData != null) {
             String messages = currentGameData.getMessages()
 
                     .stream()

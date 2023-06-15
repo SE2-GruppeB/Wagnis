@@ -71,4 +71,7 @@ public abstract class GameLogicState {
 
     public void onEntry() {
     }
+    public void next(){
+
+    }
 }

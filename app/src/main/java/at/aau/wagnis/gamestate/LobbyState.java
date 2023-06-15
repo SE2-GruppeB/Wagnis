@@ -159,12 +159,12 @@ public class LobbyState extends GameLogicState{
         gameServer.getGameData().addPlayerIdentifier(playerID, playerAddress);
     }
 
+    @Override
     public void next(){
         GameData gameData = new GameData();
         gameData.setSeed(seed);
         gameData.setHubs(new ArrayList<>(hubs.values()));
         gameData.setPlayers(players);
-        gameServer.getGameData().setCurrentGameLogicState("StartGameState");
         gameServer.setGameLogicState(new StartGameState(gameData));
     }
 }

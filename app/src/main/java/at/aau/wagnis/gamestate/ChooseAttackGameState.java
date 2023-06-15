@@ -49,9 +49,14 @@ public class ChooseAttackGameState extends GameLogicState {
         }
 
         // Überprüfen, ob der Spieler den Angriff auf den eigenen Hub startet
-        if (sourceHub.getOwner()== targetHub.getOwner()) {
+        if (sourceHub.getOwner() == targetHub.getOwner()) {
             throw new IllegalArgumentException("Du kannst deinen eigenen Hub nicht angreifen!");
         }
+
+        /*
+        if(sourceHub.getOwner().getPlayerId() != gameServer.getGameData().getCurrentPlayer()){
+            throw new IllegalArgumentException("Sourcehub muss dir gehören!");
+        }*/
 
         // Durchlaufe alle benachbarten Hubpaare in der Liste
         for(Adjacency a : adj){

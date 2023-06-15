@@ -67,7 +67,6 @@ class ChooseAttackGameStateTest {
      * Testet, ob `chooseAttack()` den richtigen `AttackGameState` festlegt, indem `gameServer.setGameLogicState()` aufgerufen wird.
      */
     @Test
-
     void testChooseAttack_InvalidAttack() {
         // Hubs für einen ungültigen Angriff
         Hub sourceHub = new Hub(1);

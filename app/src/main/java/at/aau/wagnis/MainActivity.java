@@ -163,12 +163,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private boolean isCurrentPlayer(){
-        if(currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer()).equals(getIpAddress())){
-            return true; //Start Pornhub.com
+    // Überprüft, ob der aktuelle Spieler der Spieler des Geräts ist
+    private boolean isCurrentPlayer() {
+        // Vergleicht die IP-Adresse des aktuellen Geräts mit der IP-Adresse des aktuellen Spielers
+        if (currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer()).equals(getIpAddress())) {
+            return true;
         }
         return false;
+        // Der aktuelle Spieler ist nicht der Spieler des aktuellen Geräts
     }
+
 
     private void generateMap(String seed) {
         GlobalVariables.setSeed(seed);

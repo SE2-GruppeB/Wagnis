@@ -75,8 +75,8 @@ public class ReinforceGameState extends GameLogicState{
             }
         }
     }
+    @Override
     public void next(){
-        gameServer.getGameData().setCurrentGameLogicState("ChooseAttackState");
         gameServer.setGameLogicState(new ChooseAttackGameState());
     }
 }

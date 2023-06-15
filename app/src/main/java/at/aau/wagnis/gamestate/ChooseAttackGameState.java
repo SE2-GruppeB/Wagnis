@@ -70,8 +70,9 @@ public class ChooseAttackGameState extends GameLogicState {
         // Nicht benachbart -> Fehlermeldung ausgeben oder anzeigen
         throw new IllegalArgumentException("Hubs sind nicht benachbart!");
     }
+
+    @Override
     public void next(){
-        gameServer.getGameData().setCurrentGameLogicState("ChooseMoveState");
         gameServer.setGameLogicState(new ChooseMoveState());
     }
 }

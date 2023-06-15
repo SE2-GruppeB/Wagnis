@@ -55,6 +55,7 @@ import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
 
 import at.aau.wagnis.server.communication.command.ChooseAttackCommand;
+import at.aau.wagnis.server.communication.command.EndTurnCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
 
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         btnCards.setOnClickListener(view -> popupCards(new Player()));
 
-        btnEndTurn.setOnClickListener(view -> {});
+        btnEndTurn.setOnClickListener(view -> {getGameManager().postCommand(new EndTurnCommand());});
 
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {

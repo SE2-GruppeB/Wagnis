@@ -40,6 +40,16 @@ public class ChooseMoveState extends GameLogicState {
 
 
     }
+    public void next(){
+        gameServer.getGameData().setCurrentGameLogicState("ChooseAttackState");
+        gameServer.getGameData().nextPlayer();
+        gameServer.setGameLogicState(new ChooseAttackGameState());
 
+        /* ReinforceGameState currently WIP
 
+        gameServer.getGameData().setCurrentGameLogicState("ReinforceState");
+        gameServer.getGameData().nextPlayer();
+        gameServer.setGameLogicState(new ReinforceGameState());
+        */
+    }
 }

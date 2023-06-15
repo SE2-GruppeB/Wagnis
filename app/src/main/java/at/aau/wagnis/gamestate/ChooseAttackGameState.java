@@ -1,5 +1,6 @@
 package at.aau.wagnis.gamestate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.aau.wagnis.Adjacency;
@@ -63,5 +64,9 @@ public class ChooseAttackGameState extends GameLogicState {
         }
         // Nicht benachbart -> Fehlermeldung ausgeben oder anzeigen
         throw new IllegalArgumentException("Hubs sind nicht benachbart!");
+    }
+    public void next(){
+        gameServer.getGameData().setCurrentGameLogicState("ChooseMoveState");
+        gameServer.setGameLogicState(new ChooseMoveState());
     }
 }

@@ -29,6 +29,7 @@ public class Player {
         this.hand = new Cards[MAX_CARDS_IN_HAND];
         allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;
+        playerId = -1;
     }
 
     public Player(int playerId) {

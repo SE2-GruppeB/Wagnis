@@ -14,6 +14,7 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         btnCards.setOnClickListener(view -> popupCards(new Player()));
 
-        btnEndTurn.setOnClickListener(view -> {getGameManager().postCommand(new EndTurnCommand());});
+        btnEndTurn.setOnClickListener(view -> getGameManager().postCommand(new EndTurnCommand()));
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
             /*Code to be executed on UI thread*/
@@ -159,11 +160,11 @@ public class MainActivity extends AppCompatActivity {
                 String ip = currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer());
                 showEndGame(ip.equals(getIpAddress()));
             }
-
         }));
 
 
     }
+
     // Überprüft, ob der aktuelle Spieler der Spieler des Geräts ist
     private boolean isCurrentPlayer() {
         // Vergleicht die IP-Adresse des aktuellen Geräts mit der IP-Adresse des aktuellen Spielers
@@ -181,17 +182,18 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.setAdjacencies();
         drawAdjacencies();
     }
-    private void enableButtons(){
-        if(isCurrentPlayer()){
+
+    private void enableButtons() {
+        if (isCurrentPlayer()) {
             btnEndTurn.setEnabled(true);
             btnCards.setEnabled(true);
-            for (int i = 0;i< GlobalVariables.getHubs().size();i++){
+            for (int i = 0; i < GlobalVariables.getHubs().size(); i++) {
                 GlobalVariables.getHubs().get(i).getHubButton().setEnabled(true);
             }
-        }else{
+        } else {
             btnEndTurn.setEnabled(false);
             btnCards.setEnabled(false);
-            for (int i = 0;i< GlobalVariables.getHubs().size();i++){
+            for (int i = 0; i < GlobalVariables.getHubs().size(); i++) {
                 GlobalVariables.getHubs().get(i).getHubButton().setEnabled(false);
             }
         }

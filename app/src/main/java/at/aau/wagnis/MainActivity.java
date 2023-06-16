@@ -45,8 +45,11 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import org.w3c.dom.Text;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
 
         setContentView(R.layout.activity_main);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         adjacencyView = findViewById(R.id.adjacenciesView);
         btnEndTurn = findViewById(R.id.btn_EndTurn);
@@ -147,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 enableButtons();
+                showState();
             }
 
             if (startpopup.isShowing()) {
@@ -241,7 +246,15 @@ public class MainActivity extends AppCompatActivity {
         return ((WagnisApplication) getApplication()).getGameManager();
     }
 
-
+    private void showState(){
+        if(!currentGameData.getCurrentGameLogicState().equals("LobbyState")) {
+            if (isCurrentPlayer()) {
+                Toast.makeText(MainActivity.this, "Your Turn: " + currentGameData.getCurrentGameLogicState(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Player " + currentGameData.getCurrentPlayer() + " turn!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     private Button lastClickedHub = null;
 
     public void drawHubs(String seed) {

@@ -256,9 +256,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    private Button lastClickedHub = null;
-    private int troops;
-
+    private Hub lastClickedHub = null;
     public void drawHubs(String seed) {
 
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
@@ -286,68 +284,34 @@ public class MainActivity extends AppCompatActivity {
 
             // OnClickListener für die Schaltfläche festlegen
             hub.setOnClickListener(view -> {
+                    Hub clickedHub = null;
+                    for (Hub h : currentGameData.getHubs()) {// Überprüfen, welcher Hub mit der geklickten Schaltfläche übereinstimmt
+                        if (h.getId() == hub.getId()) {
+                            clickedHub = h;
+                        }
+                    }
+                    if (lastClickedHub != null) {
+                        if(currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")&&currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()){
+                             // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
+                                getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), clickedHub.getId())); // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
+                                Toast.makeText(MainActivity.this, "Zielhub mit ID " + clickedHub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
 
-                if(currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")){
-                if (isCurrentPlayer()) {
-                    Hub clickedHub = null;
-                    // Überprüfen, welcher Hub mit der geklickten Schaltfläche übereinstimmt
-                    for (Hub h : currentGameData.getHubs()) {
-                        if (h.getId() == hub.getId()) {
-                            clickedHub = h;
+                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")&&currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                                popupMoveTroops(lastClickedHub,clickedHub);
+                                Toast.makeText(MainActivity.this, "Zielhub mit ID " + clickedHub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(MainActivity.this, "Ungültiger Zielhub ausgewählt!", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    if (lastClickedHub != null) {
-                        // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
-                        if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {
-                            // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
-                            getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
-                            lastClickedHub = null;
-                            Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Zielhub darf nicht in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
-                        }
+                        lastClickedHub = null;
                     } else {
                         // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist
                         if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
-                            lastClickedHub = hub;  // Den zuletzt geklickten Hub speichern
-                            Toast.makeText(MainActivity.this, "Quellhub mit ID " + hub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
+                            lastClickedHub = clickedHub;  // Den zuletzt geklickten Hub speichern
+                            Toast.makeText(MainActivity.this, "Quellhub mit ID " + clickedHub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(MainActivity.this, "Quellhub muss in deinem Besitz sein!\nWähle einen neuen Quellhub aus!", Toast.LENGTH_SHORT).show();
                         }
                     }
-                } else {
-                    Toast.makeText(MainActivity.this, "Es ist nicht dein Zug.\nBitte warte, bis du an der Reihe bist!", Toast.LENGTH_SHORT).show();
-                }
-                } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")) {
-                    Hub clickedHub = null;
-                    for (Hub h : currentGameData.getHubs()) {
-                        if (h.getId() == hub.getId()) {
-                            clickedHub = h;
-                        }
-                    }
-                    if (lastClickedHub != null) {
-                        // Überprüfen, ob der aktuelle Spieler der Besitzer des Zielhubs ist
-                        if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
-                            for(Hub h : currentGameData.getHubs()){
-                                if(h.getId()==lastClickedHub.getId()){
-                                    popupMoveTroops(h,clickedHub);
-                                }
-                            }
-                            lastClickedHub = null;
-                            Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Zielhub muss in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist
-                        if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
-                            lastClickedHub = hub;  // Den zuletzt geklickten Hub speichern
-                            Toast.makeText(MainActivity.this, "Quellhub mit ID " + hub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Quellhub muss in deinem Besitz sein!\nWähle einen neuen Quellhub aus!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
             });
             GlobalVariables.getHubs().add(new Hub(hub));
             layout.addView(hub);
@@ -632,7 +596,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void popupMoveTroops(Hub source,Hub target) {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
-        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
+        if(source.getAmountTroops()>1){
+            popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
+        }else{
+            popupWindow.dismiss();
+        }
+
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
@@ -640,7 +609,7 @@ public class MainActivity extends AppCompatActivity {
         np.setMinValue(1);
         btnClose.setOnClickListener(view -> {
 
-            troops =np.getValue();
+            int troops =np.getValue();
             getGameManager().postCommand(new ChooseMoveCommand(source.getId(), target.getId(),troops));
             popupWindow.dismiss();
 

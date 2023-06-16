@@ -3,6 +3,7 @@ package at.aau.wagnis.gamestate;
 
 import java.util.List;
 import at.aau.wagnis.Hub;
+import at.aau.wagnis.Player;
 
 public class ReinforceGameState extends GameLogicState{
     private List<Integer> hubs;
@@ -57,6 +58,13 @@ public class ReinforceGameState extends GameLogicState{
     }
 
     @Override
+    public void onEntry() {
+        Player currentPlayer = gameServer.getGameData().getPlayers().get(gameServer.getGameData().getCurrentPlayer());
+        int unassigned = currentPlayer.getUnassignedAvailableTroops() + currentPlayer.getOwnedHubs().size()/3 > 3 ? currentPlayer.getOwnedHubs().size()/3 : 3;
+        currentPlayer.setUnassignedAvailableTroops(unassigned);
+    }
+
+    @Override
     public void reinforce(List<Integer> hubsId , List<Integer> troops) {
         if (hubsId.size() != troops.size()) {
             throw new IllegalArgumentException("Hubs and troopsToDeploy must have the same size");
@@ -72,8 +80,9 @@ public class ReinforceGameState extends GameLogicState{
     public void reinforceSingle (int hubId, int troops){
         List<Hub> hubsFromServer = this.gameServer.getGameData().getHubs();
         for (Hub hub : hubsFromServer) {
-            if (hub.getId() == hubId){
+            if (hub.getId() == hubId) {
                 hub.addTroops(troops);
+                hub.getOwner().assignTroops(troops);
             }
         }
     }

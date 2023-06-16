@@ -8,14 +8,20 @@ import at.aau.wagnis.Player;
 
 public class StartGameState extends GameLogicState {
     // Eine Liste der Hubs und Spieler
-    private final List<Hub> hubs;
-    private final List<Player> players;
+    private List<Hub> hubs;
+    private List<Player> players;
 
     @Override
     public void onEntry() {
+        this.hubs = gameServer.getGameData().getHubs();
+        this.players = gameServer.getGameData().getPlayers();
         assignCountries();
         assignTroopsToHubs();
         this.gameServer.setGameLogicState(new ReinforceGameState());
+    }
+
+    public StartGameState() {
+        super();
     }
 
     public StartGameState(GameData gameData) {
@@ -65,7 +71,7 @@ public class StartGameState extends GameLogicState {
     // Platziert Truppen auf einem Hub
     private void placeTroopsOnHub(Player player, Hub hub, int troopsToPlace) {
         hub.addTroops(troopsToPlace);
-        player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - troopsToPlace);
+        player.assignTroops(troopsToPlace);
     }
 
     // Weist jedem Hub eine Truppe zu
@@ -73,7 +79,7 @@ public class StartGameState extends GameLogicState {
         if (player.getOwnedHubs().size() <= player.getUnassignedAvailableTroops()) {
             for (Hub hub : player.getOwnedHubs()) {
                 hub.setAmountTroops(hub.getAmountTroops() + 1);
-                player.setUnassignedAvailableTroops(player.getUnassignedAvailableTroops() - 1);
+                player.assignTroops(1);
             }
         }
     }

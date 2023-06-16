@@ -1,8 +1,6 @@
 package at.aau.wagnis;
 
-
 import android.graphics.Color;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,8 +142,8 @@ public class Player {
         }
     }
 
-    public int getUnassignedTroops() {
-        return this.unassignedAvailableTroops;
+    public void assignTroops(int troops) {
+        this.unassignedAvailableTroops = unassignedAvailableTroops - troops;
     }
 
     public int getAllTroopsPerRound() {

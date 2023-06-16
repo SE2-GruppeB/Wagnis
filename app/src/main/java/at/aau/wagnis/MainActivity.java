@@ -177,11 +177,7 @@ public class MainActivity extends AppCompatActivity {
     // Überprüft, ob der aktuelle Spieler der Spieler des Geräts ist
     private boolean isCurrentPlayer() {
         // Vergleicht die IP-Adresse des aktuellen Geräts mit der IP-Adresse des aktuellen Spielers
-        if (currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer()).equals(getIpAddress())) {
-            return true;
-        }
-        return false;
-        // Der aktuelle Spieler ist nicht der Spieler des aktuellen Geräts
+        return currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer()).equals(getIpAddress());
     }
 
 
@@ -605,11 +601,13 @@ public class MainActivity extends AppCompatActivity {
             np.setMinValue(0);
             btnClose.setOnClickListener(view -> {
                 int troop = np.getValue();
-                List<Integer> hubs = new ArrayList<>();
-                hubs.add(hub.getId());
-                List<Integer> troops = new ArrayList<>();
-                troops.add(troop);
-                getGameManager().postCommand(new ReinforceCommand(hubs,troops));
+                if(troop > 0) {
+                    List<Integer> hubs = new ArrayList<>();
+                    hubs.add(hub.getId());
+                    List<Integer> troops = new ArrayList<>();
+                    troops.add(troop);
+                    getGameManager().postCommand(new ReinforceCommand(hubs, troops));
+                }
                 popupWindow.dismiss();
             });
         }else{

@@ -2,6 +2,7 @@ package at.aau.wagnis.ObjectTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,6 +20,8 @@ import android.widget.Button;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -290,6 +293,25 @@ class PlayerTest {
         player2.setOwnedHubs(hubs);
         assertEquals(4,player2.calcTroopsToDeploy());
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {7, 2, 9, 22, 8})
+    void testAssignTroops(int troopsToDeploy) {
+        int expectedUnassigned = player.getUnassignedAvailableTroops() - troopsToDeploy;
+
+        player.assignTroops(troopsToDeploy);
+
+        assertEquals(expectedUnassigned, player.getUnassignedAvailableTroops());
+    }
+
+    @Test
+    void addCardToFullHand() {
+        for(int i = 0; i < 5; i++) {
+            assertTrue(player.addCardToHand(mock(Cards.class)));
+        }
+
+        assertFalse(player.addCardToHand(mock(Cards.class)));
     }
 
 }

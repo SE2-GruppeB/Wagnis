@@ -161,10 +161,6 @@ public class LobbyState extends GameLogicState{
 
     @Override
     public void next(){
-        GameData gameData = new GameData();
-        gameData.setSeed(seed);
-        gameData.setHubs(new ArrayList<>(hubs.values()));
-        gameData.setPlayers(players);
-        gameServer.setGameLogicState(new StartGameState(gameData));
+        gameServer.setGameLogicState(new StartGameState());
     }
 }

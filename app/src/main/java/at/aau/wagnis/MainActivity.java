@@ -14,7 +14,6 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,13 +44,11 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import org.w3c.dom.Text;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -608,9 +605,9 @@ public class MainActivity extends AppCompatActivity {
             np.setMinValue(0);
             btnClose.setOnClickListener(view -> {
                 int troop = np.getValue();
-                List hubs = new ArrayList();
+                List<Integer> hubs = new ArrayList<>();
                 hubs.add(hub.getId());
-                List troops = new ArrayList();
+                List<Integer> troops = new ArrayList<>();
                 troops.add(troop);
                 getGameManager().postCommand(new ReinforceCommand(hubs,troops));
                 popupWindow.dismiss();

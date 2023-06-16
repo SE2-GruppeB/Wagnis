@@ -54,6 +54,7 @@ import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.command.ChooseAttackCommand;
+import at.aau.wagnis.server.communication.command.ChooseMoveCommand;
 import at.aau.wagnis.server.communication.command.EndTurnCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
@@ -272,15 +273,28 @@ public class MainActivity extends AppCompatActivity {
                             clickedHub = h;
                         }
                     }
+
                     if (lastClickedHub != null) {
                         // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
-                        if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {
-                            // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
-                            getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
-                            lastClickedHub = null;
-                            Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Zielhub darf nicht in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
+                        if (currentGameData.getCurrentGameLogicState().equals("ChooseAttackState")) {
+                            if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {
+                                // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
+                                getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
+                                lastClickedHub = null;
+                                Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "Zielhub darf nicht in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
+                            }
+                        }else if(currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")){
+                            if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                                // Befehl zum Truppen bewegen senden und den letzten ausgewählten Hub zurücksetzen
+                                getGameManager().postCommand(new ChooseMoveCommand(lastClickedHub.getId(), hub.getId(), 1));
+                                System.out.println("it works");
+                                lastClickedHub = null;
+                                Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "Zielhub muss in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } else {
                         // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist

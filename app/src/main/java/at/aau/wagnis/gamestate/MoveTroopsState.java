@@ -35,7 +35,7 @@ public class MoveTroopsState extends GameLogicState {
             this.targetHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == targetHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
         }
         try {
-            //move();
+            move(numTroops);
         }
         finally {
             this.gameServer.setGameLogicState(new ChooseMoveState());
@@ -60,7 +60,10 @@ public class MoveTroopsState extends GameLogicState {
         if (sourceHub.getOwner() != targetHub.getOwner()) {
             return false;
         }
+
         return sourceHub.getAmountTroops() > 1 && sourceHub.getAmountTroops() >= numTroops;
+
+
     }
     private boolean areHubsAdjacent(Hub sourceHub, Hub targetHub) {
         for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {

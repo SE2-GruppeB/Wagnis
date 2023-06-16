@@ -5,3 +5,4 @@ at.aau.wagnis.server.communication.command.StartGameCommand$CommandSerializer
 at.aau.wagnis.server.communication.command.IdentifyCommand$CommandSerializer
 at.aau.wagnis.server.communication.command.ReinforceCommand$CommandSerializer
 at.aau.wagnis.server.communication.command.EndTurnCommand$CommandSerializer
+at.aau.wagnis.server.communication.command.ChooseMoveCommand$CommandSerializer

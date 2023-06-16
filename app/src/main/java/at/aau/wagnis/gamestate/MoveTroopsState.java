@@ -35,7 +35,7 @@ public class MoveTroopsState extends GameLogicState {
             this.targetHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == targetHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
         }
         try {
-            //move();
+            move(numTroops);
         }
         finally {
             this.gameServer.setGameLogicState(new ChooseMoveState());

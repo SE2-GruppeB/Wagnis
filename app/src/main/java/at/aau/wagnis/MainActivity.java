@@ -58,6 +58,7 @@ import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
 import at.aau.wagnis.gamestate.GameData;
 import at.aau.wagnis.server.communication.command.ChooseAttackCommand;
+import at.aau.wagnis.server.communication.command.ChooseMoveCommand;
 import at.aau.wagnis.server.communication.command.EndTurnCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
@@ -256,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private Button lastClickedHub = null;
+    private int troops;
 
     public void drawHubs(String seed) {
 
@@ -284,7 +286,8 @@ public class MainActivity extends AppCompatActivity {
 
             // OnClickListener für die Schaltfläche festlegen
             hub.setOnClickListener(view -> {
-                //
+
+                if(currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")){
                 if (isCurrentPlayer()) {
                     Hub clickedHub = null;
                     // Überprüfen, welcher Hub mit der geklickten Schaltfläche übereinstimmt
@@ -314,6 +317,36 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "Es ist nicht dein Zug.\nBitte warte, bis du an der Reihe bist!", Toast.LENGTH_SHORT).show();
+                }
+                } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")) {
+                    Hub clickedHub = null;
+                    for (Hub h : currentGameData.getHubs()) {
+                        if (h.getId() == hub.getId()) {
+                            clickedHub = h;
+                        }
+                    }
+                    if (lastClickedHub != null) {
+                        // Überprüfen, ob der aktuelle Spieler der Besitzer des Zielhubs ist
+                        if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                            for(Hub h : currentGameData.getHubs()){
+                                if(h.getId()==lastClickedHub.getId()){
+                                    popupMoveTroops(h,clickedHub);
+                                }
+                            }
+                            lastClickedHub = null;
+                            Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Zielhub muss in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist
+                        if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                            lastClickedHub = hub;  // Den zuletzt geklickten Hub speichern
+                            Toast.makeText(MainActivity.this, "Quellhub mit ID " + hub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Quellhub muss in deinem Besitz sein!\nWähle einen neuen Quellhub aus!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             });
             GlobalVariables.getHubs().add(new Hub(hub));
@@ -597,18 +630,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void popupMoveTroops() {
+    public void popupMoveTroops(Hub source,Hub target) {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
-        np.setMaxValue(10);     //setMaxValue(Hub.getAmountTroops)
+        np.setMaxValue(source.getAmountTroops()-1);     //setMaxValue
         np.setMinValue(1);
         btnClose.setOnClickListener(view -> {
 
-            int troops = np.getValue();
+            troops =np.getValue();
+            getGameManager().postCommand(new ChooseMoveCommand(source.getId(), target.getId(),troops));
             popupWindow.dismiss();
+
         });
     }
 

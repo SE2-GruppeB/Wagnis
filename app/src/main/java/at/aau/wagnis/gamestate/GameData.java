@@ -31,6 +31,8 @@ public class GameData {
     private String currentGameLogicState;
     private int currentPlayerID;
 
+    private Deck mainDeck;
+
     public GameData() {
         super();
         hubs = new ArrayList<>();
@@ -60,6 +62,10 @@ public class GameData {
 
     public void setHubs(List<Hub> hubs){
         this.hubs = new ArrayList<>(hubs);
+    }
+
+    public void setMainDeck(Deck mainDeck){
+        this.mainDeck = mainDeck;
     }
 
     public void setAdjacencies(List<Adjacency> adjacencies) {
@@ -102,6 +108,11 @@ public class GameData {
     public int getCurrentPlayer() {
         return currentPlayerID;
     }
+
+    public Deck getMainDeck() {return mainDeck;}
+
+
+
 
     public String serialize() {
         // TYPE1<VALUE1>TYPE1TYPE2<VALUE2>TYPE2...

@@ -2,6 +2,7 @@ package at.aau.wagnis;
 
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +129,10 @@ public class Player {
     }
 
     public void useCards(int firstCId, int secCId, int thirdCId) {
+        if (hand[firstCId ] == null){
+            throw new IllegalArgumentException("Card not in players' hand");
+        }
+        Log.d(",","" + hand[0] + hand[1] + hand[2]);
         if (Cards.checkIfCardSameType(hand[firstCId], hand[secCId], hand[thirdCId])) {
             if (hand[firstCId].getType().equals(Troops.INFANTRY)) {
                 allTroopsPerRound += 1;
@@ -152,13 +157,15 @@ public class Player {
     }
 
     public int calcTroopsToDeploy() {
-        int ownedhubs = ownedHubs.size();
-        if (ownedhubs > 5){
-            do {
-                allTroopsPerRound++;
-                ownedhubs -= 4;
-            }while(ownedhubs  > 4);
-        }
+       if (ownedHubs !=  null) {
+           int ownedhubs = ownedHubs.size();
+           if (ownedhubs > 5){
+               do {
+                   allTroopsPerRound++;
+                   ownedhubs -= 4;
+               }while(ownedhubs  > 4);
+           }
+       }
         return allTroopsPerRound;
     }
 
@@ -168,8 +175,10 @@ public class Player {
 
     public int countAmountTroops() {
         int amountTroops = 0;
-        for (Hub hub : this.ownedHubs) {
-            amountTroops += hub.getAmountTroops();
+        if (ownedHubs != null){
+            for (Hub hub : this.ownedHubs) {
+                amountTroops += hub.getAmountTroops();
+            }
         }
         return amountTroops;
     }

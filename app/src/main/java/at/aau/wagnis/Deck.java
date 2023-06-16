@@ -1,11 +1,14 @@
 package at.aau.wagnis;
 
+import android.util.Log;
+
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Deck {
 
-    private final Cards[] cards;
+    private Cards[] cards;
     private final boolean[] isinDeck;
 
     public Deck(int maxHubCount) {
@@ -15,6 +18,16 @@ public class Deck {
         this.cards = new Cards[maxHubCount];
         this.isinDeck = new boolean[maxHubCount];
         this.fillDeck();
+    }
+
+    public Deck() {
+        this.cards = new Cards[5];
+        this.isinDeck = new boolean[5];
+    }
+
+    public void setCards(Cards[] cards){
+        this.cards = cards;
+        Arrays.fill(isinDeck, false);
     }
 
     public Cards[] getCards() {
@@ -63,6 +76,7 @@ public class Deck {
 
     public void placeCardInDeck(Cards card) {
         for (int i = 0; i < cards.length; i++) {
+            Log.d("test", "" + cards[i].toString() + card .toString());
             if (cards[i].equals(card)) {
                 isinDeck[i] = true;
                 return;

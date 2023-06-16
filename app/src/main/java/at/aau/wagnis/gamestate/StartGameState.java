@@ -3,6 +3,7 @@ package at.aau.wagnis.gamestate;
 import java.util.List;
 import java.util.Random;
 
+import at.aau.wagnis.Deck;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
@@ -11,16 +12,22 @@ public class StartGameState extends GameLogicState {
     private final List<Hub> hubs;
     private final List<Player> players;
 
+    private final GameData gameData;
+
     @Override
     public void onEntry() {
         assignCountries();
         assignTroopsToHubs();
+        Deck mainDeck = new Deck(hubs.size());
+        gameData.setMainDeck(mainDeck);
         this.gameServer.setGameLogicState(new ChooseAttackGameState());
+        //this.gameServer.setGameLogicState(new ReinforceGameState());
     }
 
     public StartGameState(GameData gameData) {
         this.hubs = gameData.getHubs();
         this.players = gameData.getPlayers();
+        this.gameData = gameData;
     }
 
     public void assignCountries() {

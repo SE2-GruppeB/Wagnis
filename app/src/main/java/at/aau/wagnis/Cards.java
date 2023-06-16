@@ -62,6 +62,9 @@ public class Cards {
     }
 
     public void placeCardInDeck() {
+        if (deck == null) {
+            throw new IllegalArgumentException("Deck can not be null");
+        }
         deck.placeCardInDeck(this);
     }
 
@@ -82,5 +85,14 @@ public class Cards {
         int result = id;
         result = 31 * result + type.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Cards{" +
+                "id=" + id +
+                ", type=" + type +
+                ", deck=" + deck +
+                '}';
     }
 }

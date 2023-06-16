@@ -14,6 +14,7 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +47,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -455,8 +458,23 @@ public class MainActivity extends AppCompatActivity {
         Button btnPlay = popupWindow.getContentView().findViewById(R.id.btn_play);
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnBack.setOnClickListener(view -> popupWindow.dismiss());
+        //Cards[] cards = player.getHand();
+        // testing
 
-        Cards[] cards = player.getHand();
+        Player tester = new Player();
+        List<Hub> hubs = new ArrayList<>();
+        hubs.add(new Hub(0));
+
+        Deck testDeck = new Deck();
+        Cards[] cards = {new Cards(0,Troops.INFANTRY,testDeck)
+                ,new Cards(1,Troops.INFANTRY,testDeck)
+                ,new Cards(2,Troops.INFANTRY,testDeck)
+                ,new Cards(4,Troops.ARTILLERY,testDeck)
+                ,new Cards(3,Troops.CAVALRY,testDeck)
+                };
+        testDeck.setCards(cards);
+        tester.setHand(cards);
+
 
         Button[] btns = new Button[5];
         btns[0] = popupWindow.getContentView().findViewById(R.id.btn_Card0);
@@ -467,41 +485,52 @@ public class MainActivity extends AppCompatActivity {
 
         boolean[] btnsPressed = new boolean[5];
         AtomicInteger countOfBtnsPressed = new AtomicInteger();
-
         updateCards(btns, cards);
 
         for (int i = 0; i < btns.length; i++) {
-            int index = i;
-            btns[i].setOnClickListener(view -> {
-                if (Boolean.TRUE.equals(btnsPressed[index])) {
-                    btnsPressed[index] = false;
-                    countOfBtnsPressed.getAndDecrement();
-                } else {
-                    if (countOfBtnsPressed.get() < 4) {
-                        btnsPressed[index] = true;
-                        countOfBtnsPressed.getAndIncrement();
+            if (cards[i] != null) {
+                int index = i;
+                btns[i].setOnClickListener(view -> {
+                    if (Boolean.TRUE.equals(btnsPressed[index])) {
+                        btnsPressed[index] = false;
+                        countOfBtnsPressed.getAndDecrement();
+                        Toast.makeText(this,"" +countOfBtnsPressed, Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (countOfBtnsPressed.get() < 4) {
+                            btnsPressed[index] = true;
+                            countOfBtnsPressed.getAndIncrement();
+                            Toast.makeText(this,"" +countOfBtnsPressed, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         btnPlay.setOnClickListener(view -> {
-            if (countOfBtnsPressed.get() < 4) {
+            Log.d(",","" + tester.toString());
+
+            if (countOfBtnsPressed.get() == 3) {
                 int[] chosenBtns = new int[3];
                 int counter = 0;
-                for (int i = 0; i < chosenBtns.length; i++) {
-                    for (; counter < btns.length; counter++) {
-                        if (btnsPressed[counter]) {
-                            chosenBtns[i] = counter;
-                            break;
-                        }
+                for (int i = 0; i < btns.length; i++){
+                    if (btnsPressed[i]) {
+                        chosenBtns[counter] = i;
+                        counter++;
                     }
                 }
-                player.useCards(chosenBtns[0], chosenBtns[1], chosenBtns[2]);
+
+
+                //player.useCards(chosenBtns[0], chosenBtns[1], chosenBtns[2]);
+                tester.useCards(chosenBtns[0], chosenBtns[1], chosenBtns[2]);
+                Log.d(",","" + tester.getAllTroopsPerRound());
                 updateCards(btns, cards);
+            } else {
+                Toast.makeText(this," you have chosen " + countOfBtnsPressed + " but you need 3", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 
     public void updateCards(Button[] btns, Cards[] cards) {
         for (int i = 0; i < btns.length; i++) {

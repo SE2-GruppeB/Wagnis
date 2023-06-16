@@ -47,7 +47,7 @@ public class ReinforceCommand implements ClientOriginatedServerCommand{
 
     @Override
     public void execute(@NonNull GameLogicState gameLogicState) {
-        gameLogicState.reinforce(hubs, troopsToDeploy);
+        gameLogicState.reinforce(this.hubs, this.troopsToDeploy);
     }
 
     public static class CommandSerializer implements Serializer<ReinforceCommand> {

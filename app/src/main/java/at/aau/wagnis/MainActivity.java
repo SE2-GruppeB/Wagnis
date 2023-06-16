@@ -49,6 +49,8 @@ import org.w3c.dom.Text;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -62,6 +64,7 @@ import at.aau.wagnis.server.communication.command.ChooseMoveCommand;
 import at.aau.wagnis.server.communication.command.EndTurnCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
+import at.aau.wagnis.server.communication.command.ReinforceCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
 
 
@@ -110,7 +113,10 @@ public class MainActivity extends AppCompatActivity {
         //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
         btnCards.setOnClickListener(view -> popupCards(new Player()));
 
-        btnEndTurn.setOnClickListener(view -> getGameManager().postCommand(new EndTurnCommand()));
+        btnEndTurn.setOnClickListener(view -> {
+            lastClickedHub=null;
+            getGameManager().postCommand(new EndTurnCommand());
+        });
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
             /*Code to be executed on UI thread*/
@@ -297,18 +303,24 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Zielhub mit ID " + clickedHub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
 
                         } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")&&currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
-                                popupMoveTroops(lastClickedHub,clickedHub);
-                                Toast.makeText(MainActivity.this, "Zielhub mit ID " + clickedHub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
-                        }else{
+                            popupMoveTroops(lastClickedHub, clickedHub);
+                            Toast.makeText(MainActivity.this, "Zielhub mit ID " + clickedHub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
+
+                        } else{
                             Toast.makeText(MainActivity.this, "Ungültiger Zielhub ausgewählt!", Toast.LENGTH_SHORT).show();
                         }
                         lastClickedHub = null;
                     } else {
                         // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist
                         if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
-                            lastClickedHub = clickedHub;  // Den zuletzt geklickten Hub speichern
-                            Toast.makeText(MainActivity.this, "Quellhub mit ID " + clickedHub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
-                        } else {
+                            if(currentGameData.getCurrentGameLogicState().equals("ReinforceGameState")){
+                                popupReinforceTroops(clickedHub);
+                                lastClickedHub=null;
+                            }else{
+                                lastClickedHub = clickedHub;  // Den zuletzt geklickten Hub speichern
+                                Toast.makeText(MainActivity.this, "Quellhub mit ID " + clickedHub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
+                            }
+                             } else {
                             Toast.makeText(MainActivity.this, "Quellhub muss in deinem Besitz sein!\nWähle einen neuen Quellhub aus!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -579,19 +591,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void popupReinforceTroops(Button hubButton) {
+    public void popupReinforceTroops(Hub hub) {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
-        np.setMaxValue(10);     //setMaxValue(Player.getUnassignedAvailableTroops)
-        np.setMinValue(0);
-        btnClose.setOnClickListener(view -> {
-            int troops = np.getValue();
-            Hub selected = GlobalVariables.findHubById(hubButton.getId());
+        Player currentPlayer=null;
+        for(Player p : currentGameData.getPlayers()){
+            if(p.getPlayerId()==currentGameData.getCurrentPlayer()){
+                currentPlayer=p;
+            }
+        }
+        if(currentPlayer!=null){
+            np.setMaxValue(currentPlayer.getUnassignedAvailableTroops());
+            np.setMinValue(0);
+            btnClose.setOnClickListener(view -> {
+                int troop = np.getValue();
+                List hubs = new ArrayList();
+                hubs.add(hub.getId());
+                List troops = new ArrayList();
+                troops.add(troop);
+                getGameManager().postCommand(new ReinforceCommand(hubs,troops));
+                popupWindow.dismiss();
+            });
+        }else{
             popupWindow.dismiss();
-        });
+        }
+
+
     }
 
     public void popupMoveTroops(Hub source,Hub target) {

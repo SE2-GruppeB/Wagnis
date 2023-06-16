@@ -44,7 +44,7 @@ public class ChooseMoveState extends GameLogicState {
     @Override
     public void next(){
         gameServer.getGameData().nextPlayer();
-        gameServer.setGameLogicState(new ChooseAttackGameState());
+        gameServer.setGameLogicState(new ReinforceGameState());
 
         /* ReinforceGameState currently WIP
         gameServer.getGameData().nextPlayer();

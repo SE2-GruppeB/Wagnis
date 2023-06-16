@@ -15,7 +15,7 @@ public class StartGameState extends GameLogicState {
     public void onEntry() {
         assignCountries();
         assignTroopsToHubs();
-        this.gameServer.setGameLogicState(new ChooseAttackGameState());
+        this.gameServer.setGameLogicState(new ReinforceGameState());
     }
 
     public StartGameState(GameData gameData) {

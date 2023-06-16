@@ -1,7 +1,6 @@
 package at.aau.wagnis.gamestate;
 
 import java.util.Random;
-
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
@@ -50,7 +49,19 @@ public class AttackGameState extends GameLogicState {
         }
         try {
             attack();
-        } finally {
+            if (gameWon(targetHub.getOwner())) {
+                this.gameServer.setGameLogicState(new VictoryState(targetHub.getOwner()));
+                //Send winner id via broadcast to all clients
+                /*this.gameServer.broadcastCommand(new ClientCommand() {
+                    @Override
+                    public void execute(@NonNull ClientLogic clientLogic) {
+                        clientLogic.updateGameLogicState(new VictoryState(attackingPlayer));
+                    }
+                });*/
+            } else {
+                this.gameServer.setGameLogicState(new ChooseAttackGameState());
+            }
+        } catch(IllegalArgumentException e) {
             this.gameServer.setGameLogicState(new ChooseAttackGameState());
         }
     }
@@ -122,25 +133,14 @@ public class AttackGameState extends GameLogicState {
         // Überprüfen, ob der Verteidiger besiegt wurde
         if (this.targetHub.getAmountTroops() <= 0) {
 
-            Player attackingPlayer = this.sourceHub.getOwner();
-            attackingPlayer.addHub(this.targetHub);
             Player defendingPlayer = this.targetHub.getOwner();
             defendingPlayer.removeHub(this.targetHub);
+            Player attackingPlayer = this.sourceHub.getOwner();
+            attackingPlayer.addHub(this.targetHub);
+
             // Die Hälfte der Hubs, des Angreifer-Hubs werden dem Verteidiger-Hub bei einer Übernahmen zugewiesen
             this.targetHub.setAmountTroops(this.sourceHub.getAmountTroops()/2);
             this.sourceHub.setAmountTroops(this.sourceHub.getAmountTroops() - (this.sourceHub.getAmountTroops()/2));
-            if (gameWon(attackingPlayer)) {
-                this.gameServer.setGameLogicState(new VictoryState(attackingPlayer));
-                //Send winner id via broadcast to all clients
-                /*this.gameServer.broadcastCommand(new ClientCommand() {
-                    @Override
-                    public void execute(@NonNull ClientLogic clientLogic) {
-                        clientLogic.updateGameLogicState(new VictoryState(attackingPlayer));
-                    }
-                });*/
-            } else {
-                this.gameServer.setGameLogicState(new ChooseAttackGameState());
-            }
         }
     }
 

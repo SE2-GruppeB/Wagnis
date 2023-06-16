@@ -289,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
                             if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
                                 // Befehl zum Truppen bewegen senden und den letzten ausgewählten Hub zurücksetzen
                                 getGameManager().postCommand(new ChooseMoveCommand(lastClickedHub.getId(), hub.getId(), 1));
-                                System.out.println("it works");
                                 lastClickedHub = null;
                                 Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
                             } else {

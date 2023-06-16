@@ -29,6 +29,7 @@ public class ChooseMoveState extends GameLogicState {
         }
         this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId, numTroops));
 
+
         /*
         for(Adjacency a : adj){
             // Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum

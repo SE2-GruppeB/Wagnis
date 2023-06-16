@@ -210,7 +210,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        GlobalVariables.getMediaPlayer().start();
         super.onResume();
+    }
+    @Override
+    protected void onPause() {
+        GlobalVariables.getMediaPlayer().pause();
+        super.onPause();
     }
 
     public void setDisplayMetrics() {

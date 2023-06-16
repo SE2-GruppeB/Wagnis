@@ -43,5 +43,6 @@
     <string name="you_lost">You Lost!</string>
     <string name="you_won">You Won!</string>
     <string name="restart_app">RESTART APP</string>
+    <string name="music_pixabay_com">Music - Pixabay.com</string>
 
 </resources>

@@ -280,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-
                     if (lastClickedHub != null) {
                         // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
                         if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {
@@ -604,8 +603,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
 
-        // Update the maximum value of the NumberPicker
-        int maxTroops = currentTroops - 1; // Assuming currentTroops holds the maximum number of troops available
+        int maxTroops = currentTroops - 1;
         np.setMaxValue(maxTroops);
         np.setMinValue(0);
 

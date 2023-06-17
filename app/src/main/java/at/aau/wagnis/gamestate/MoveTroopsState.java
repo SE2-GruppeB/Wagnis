@@ -60,7 +60,10 @@ public class MoveTroopsState extends GameLogicState {
         if (sourceHub.getOwner() != targetHub.getOwner()) {
             return false;
         }
+
         return sourceHub.getAmountTroops() > 1 && sourceHub.getAmountTroops() >= numTroops;
+
+
     }
     private boolean areHubsAdjacent(Hub sourceHub, Hub targetHub) {
         for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {

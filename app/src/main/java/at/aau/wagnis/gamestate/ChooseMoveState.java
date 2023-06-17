@@ -27,7 +27,10 @@ public class ChooseMoveState extends GameLogicState {
                 // Findet den Hub welcher übereinstimmt und weise ihn targetHub zu
             }
         }
+        this.gameServer.setGameLogicState(new MoveTroopsState(sourceHubId, targetHubId, numTroops));
 
+
+        /*
         for(Adjacency a : adj){
             // Überprüfe, ob das aktuelle Hubpaar entweder den sourceHub und targetHub und andersrum
             if(a.isInPair(sourceHub, targetHub)){
@@ -36,10 +39,11 @@ public class ChooseMoveState extends GameLogicState {
             }
         }
         // Nicht benachbart -> Fehlermeldung ausgeben oder anzeigen
-        throw new IllegalArgumentException("Hubs sind nicht benachbart!");
-
-
+        throw new IllegalArgumentException("Hubs sind nicht benachbart!!!");
+*/
     }
+
+
 
     @Override
     public void next(){

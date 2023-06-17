@@ -64,9 +64,14 @@ public class MainActivity extends AppCompatActivity {
     ImageView adjacencyView;
     GameData currentGameData;
     boolean wasDrawn = false;
-    PopupWindow startpopup;
+    PopupWindow startPopup;
     TextView playerCount;
     String lastState;
+
+    private Button currentlyClickedHub;
+
+    private int currentTroops;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +100,13 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(view -> popupSettings());
 
         btnChat.setOnClickListener(view -> popupChat());
+      btnCards.setOnClickListener(view -> popupCards(new Player()));
+
 
         btnEndTurn.setOnClickListener(view -> {
             lastClickedHub=null;
             getGameManager().postCommand(new EndTurnCommand());
+            
         });
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
@@ -145,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
                 showState();
             }
 
-            if (startpopup.isShowing()) {
+            if (startPopup.isShowing()) {
                 updatePlayerCount();
                 if (!(currentGameData.getCurrentGameLogicState().equals("LobbyState"))) {
-                    startpopup.dismiss();
+                    startPopup.dismiss();
                 }
             }
 
@@ -275,9 +283,12 @@ public class MainActivity extends AppCompatActivity {
                     for (Hub h : currentGameData.getHubs()) {// Überprüfen, welcher Hub mit der geklickten Schaltfläche übereinstimmt
                         if (h.getId() == hub.getId()) {
                             clickedHub = h;
+
                         }
                     }
+
                     if (lastClickedHub != null) {
+
                         if(currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")&&currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()){
                              // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
                                 getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), clickedHub.getId())); // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
@@ -357,13 +368,13 @@ public class MainActivity extends AppCompatActivity {
     public void popupStart(View view) {
         LayoutInflater inflater = this.getLayoutInflater();
         final View layout = inflater.inflate(R.layout.popup_start, null);
-        startpopup = new PopupWindow(layout, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
-        Button btnClose = startpopup.getContentView().findViewById(R.id.btn_start);
-        playerCount = startpopup.getContentView().findViewById(R.id.txtPlayerCount);
-        ImageView qrCode = startpopup.getContentView().findViewById(R.id.qrCode);
+        startPopup = new PopupWindow(layout, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        Button btnClose = startPopup.getContentView().findViewById(R.id.btn_start);
+        playerCount = startPopup.getContentView().findViewById(R.id.txtPlayerCount);
+        ImageView qrCode = startPopup.getContentView().findViewById(R.id.qrCode);
 
 
-        if (view.post(() -> startpopup.showAtLocation(new View(this), Gravity.CENTER, 0, 0))) { //Call popUp after setup has finished
+        if (view.post(() -> startPopup.showAtLocation(new View(this), Gravity.CENTER, 0, 0))) { //Call popUp after setup has finished
             updatePlayerCount();
         }
 
@@ -617,8 +628,10 @@ public class MainActivity extends AppCompatActivity {
             getGameManager().postCommand(new ChooseMoveCommand(source.getId(), target.getId(),troops));
             popupWindow.dismiss();
 
+
         });
     }
+
 
     public void popupChat() {
         PopupWindow popupWindow = createPopUp(R.layout.popup_chat);
@@ -646,4 +659,6 @@ public class MainActivity extends AppCompatActivity {
 
         btnSend.setOnClickListener(view -> getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString())));
     }
+
+
 }

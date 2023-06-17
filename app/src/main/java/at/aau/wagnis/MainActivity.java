@@ -1,9 +1,5 @@
 package at.aau.wagnis;
 
-import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,7 +24,6 @@ import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -37,21 +32,16 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
@@ -63,10 +53,9 @@ import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.ReinforceCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
-
+import at.aau.wagnis.server.communication.command.UseCardsCommand;
 
 public class MainActivity extends AppCompatActivity {
-
 
     FloatingActionButton btnEndTurn;
     FloatingActionButton btnCards;
@@ -106,10 +95,6 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(view -> popupSettings());
 
         btnChat.setOnClickListener(view -> popupChat());
-
-
-        //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
-        btnCards.setOnClickListener(view -> popupCards(new Player()));
 
         btnEndTurn.setOnClickListener(view -> {
             lastClickedHub=null;
@@ -155,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+                btnCards.setOnClickListener(view -> popupCards(currentGameData.getPlayers().get(currentGameData.getCurrentPlayer())));
                 enableButtons();
                 showState();
             }
@@ -248,16 +234,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showState(){
-        if(!currentGameData.getCurrentGameLogicState().equals("LobbyState")) {
-            if(!currentGameData.getCurrentGameLogicState().equals(lastState)){
-                    if (isCurrentPlayer()) {
-                        Toast.makeText(MainActivity.this, "Your Turn: " + currentGameData.getCurrentGameLogicState(), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Player " + currentGameData.getCurrentPlayer() + " turn!", Toast.LENGTH_SHORT).show();
-                    }
-             lastState=currentGameData.getCurrentGameLogicState();
+        if(!currentGameData.getCurrentGameLogicState().equals("LobbyState") && (!currentGameData.getCurrentGameLogicState().equals(lastState))){
+            if (isCurrentPlayer()) {
+                Toast.makeText(MainActivity.this, "Your Turn: " + currentGameData.getCurrentGameLogicState(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Player " + currentGameData.getCurrentPlayer() + " turn!", Toast.LENGTH_SHORT).show();
             }
-
+            lastState=currentGameData.getCurrentGameLogicState();
         }
     }
     private Hub lastClickedHub = null;
@@ -425,12 +408,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void restart() {
-        Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
-        int pendingIntent = 123456;
-        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent, restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager manager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
-
-        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
     }
 
@@ -480,7 +457,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnPlay = popupWindow.getContentView().findViewById(R.id.btn_play);
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnBack.setOnClickListener(view -> popupWindow.dismiss());
-
         Cards[] cards = player.getHand();
 
         Button[] btns = new Button[5];
@@ -490,41 +466,43 @@ public class MainActivity extends AppCompatActivity {
         btns[3] = popupWindow.getContentView().findViewById(R.id.btn_Card3);
         btns[4] = popupWindow.getContentView().findViewById(R.id.btn_Card4);
 
-        boolean[] btnsPressed = new boolean[5];
-        AtomicInteger countOfBtnsPressed = new AtomicInteger();
-
         updateCards(btns, cards);
+
+        Button[] selectedButtons = new Button[3];
 
         for (int i = 0; i < btns.length; i++) {
             int index = i;
             btns[i].setOnClickListener(view -> {
-                if (Boolean.TRUE.equals(btnsPressed[index])) {
-                    btnsPressed[index] = false;
-                    countOfBtnsPressed.getAndDecrement();
-                } else {
-                    if (countOfBtnsPressed.get() < 4) {
-                        btnsPressed[index] = true;
-                        countOfBtnsPressed.getAndIncrement();
+                for(int j = 0; j < selectedButtons.length; j++) {
+                    if (player.getHand()[index] != null) {
+                        if (selectedButtons[j] == null) {
+                            selectedButtons[j] = btns[index];
+                            btns[index].setBackgroundColor(Color.RED);
+                            return;
+                        } else if (selectedButtons[j].equals(btns[index])) {
+                            selectedButtons[j] = null;
+                            btns[index].setBackgroundColor(Color.GRAY);
+                            return;
+                        }
                     }
                 }
             });
         }
 
         btnPlay.setOnClickListener(view -> {
-            if (countOfBtnsPressed.get() < 4) {
-                int[] chosenBtns = new int[3];
-                int counter = 0;
-                for (int i = 0; i < chosenBtns.length; i++) {
-                    for (; counter < btns.length; counter++) {
-                        if (btnsPressed[counter]) {
-                            chosenBtns[i] = counter;
-                            break;
-                        }
+            int[] indexes = new int[3];
+            int counter = 0;
+            for(int i = 0; i < btns.length; i++) {
+                for (Button button : selectedButtons) {
+                    if (button == null)
+                        return;
+                    if (button.equals(btns[i])) {
+                        indexes[counter++] = i;
                     }
                 }
-                player.useCards(chosenBtns[0], chosenBtns[1], chosenBtns[2]);
-                updateCards(btns, cards);
             }
+            getGameManager().postCommand(new UseCardsCommand(indexes[0], indexes[1], indexes[2]));
+            popupWindow.dismiss();
         });
     }
 

@@ -2,6 +2,7 @@ package at.aau.wagnis.gamestate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import at.aau.wagnis.Cards;
+import at.aau.wagnis.Deck;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
@@ -174,8 +176,13 @@ class GameDataTest {
             ChatMessage chatMessage = result.get(i);
             assertEquals(""+i, chatMessage.getMessage());
         }
+    }
 
-
+    @Test
+    void testGetSetDeck() {
+        Deck expectedDeck = new Deck(8);
+        gameData1.setDeck(expectedDeck);
+        assertEquals(expectedDeck.getCards().length, gameData1.getDeck().getCards().length);
     }
 
 }

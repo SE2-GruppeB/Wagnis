@@ -223,14 +223,14 @@ class PlayerTest {
         player.setHand(playerHand);
 
 
-        int troopsBeforeUsingCards = player.getAllTroopsPerRound();
+        int troopsBeforeUsingCards = player.getUnassignedAvailableTroops();
         player.useCards(0, 1, 2);
 
         Cards[] expectedHand = new Cards[]{null, null, null, null, null};
         Cards[] actualHand = player.getHand();
 
         assertTrue(checkEqualCardDeck(expectedHand, actualHand));
-        assertEquals(troopsBeforeUsingCards + 3, player.getAllTroopsPerRound());
+        assertEquals(troopsBeforeUsingCards + 3, player.getUnassignedAvailableTroops());
 
         verify(card1, times(4)).getType();
         verify(card2, times(1)).getType();
@@ -248,7 +248,7 @@ class PlayerTest {
         Cards[] playerHand = new Cards[]{card1, card2, card3, null, null};
         player.setHand(playerHand);
 
-        int troopsBeforeUsingCards = player.getAllTroopsPerRound();
+        int troopsBeforeUsingCards = player.getUnassignedAvailableTroops();
         player.useCards(0, 1, 2);
 
         Cards[] expectedHand = new Cards[]{null, null, null, null, null};
@@ -256,7 +256,7 @@ class PlayerTest {
 
 
         assertTrue(checkEqualCardDeck(expectedHand, actualHand));
-        assertEquals(troopsBeforeUsingCards + 10, player.getAllTroopsPerRound());
+        assertEquals(troopsBeforeUsingCards + 10, player.getUnassignedAvailableTroops());
 
         verify(card1, times(3)).getType();
         verify(card2, times(3)).getType();
@@ -291,7 +291,7 @@ class PlayerTest {
         hubs.add(new Hub(5));
         hubs.add(new Hub(6));
         player2.setOwnedHubs(hubs);
-        assertEquals(4,player2.calcTroopsToDeploy());
+        assertEquals(3, player2.calcTroopsPerRound());
 
     }
 

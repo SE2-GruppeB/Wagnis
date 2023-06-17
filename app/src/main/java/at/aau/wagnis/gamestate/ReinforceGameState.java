@@ -1,6 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-
 import java.util.List;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
@@ -60,7 +59,7 @@ public class ReinforceGameState extends GameLogicState{
     @Override
     public void onEntry() {
         Player currentPlayer = gameServer.getGameData().getPlayers().get(gameServer.getGameData().getCurrentPlayer());
-        int unassigned = currentPlayer.getUnassignedAvailableTroops() + currentPlayer.getOwnedHubs().size()/3 > 3 ? currentPlayer.getOwnedHubs().size()/3 : 3;
+        int unassigned = currentPlayer.getUnassignedAvailableTroops() + currentPlayer.calcTroopsPerRound();
         currentPlayer.setUnassignedAvailableTroops(unassigned);
     }
 

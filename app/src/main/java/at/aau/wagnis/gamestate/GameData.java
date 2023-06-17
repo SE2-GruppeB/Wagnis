@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Cards;
 import at.aau.wagnis.Deck;
@@ -30,6 +29,7 @@ public class GameData {
     private Map<Integer, String> playerIdentifier;
     private String currentGameLogicState;
     private int currentPlayerID;
+    private Deck deck;
 
     public GameData() {
         super();
@@ -70,12 +70,19 @@ public class GameData {
         this.currentPlayerID = currentPlayerID;
     }
 
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
     public void addPlayerIdentifier(int playerId, String ipAddress) {
         playerIdentifier.put(playerId, ipAddress);
         players.add(new Player(playerId));
     }
 
     public void nextPlayer() {
+        Player currentPlayer = players.get(currentPlayerID);
+        Cards c = deck.drawCardFromDeck();
+        currentPlayer.addCardToHand(c);
         currentPlayerID = (++currentPlayerID) % players.size();
     }
 
@@ -101,6 +108,10 @@ public class GameData {
 
     public int getCurrentPlayer() {
         return currentPlayerID;
+    }
+
+    public Deck getDeck() {
+        return deck;
     }
 
     public String serialize() {

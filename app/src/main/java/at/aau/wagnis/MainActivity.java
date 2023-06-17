@@ -277,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
+
                     if (lastClickedHub != null) {
                         // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
                             if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {

@@ -68,10 +68,6 @@ public class MainActivity extends AppCompatActivity {
     TextView playerCount;
     String lastState;
 
-    private Button currentlyClickedHub;
-
-    private int currentTroops;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

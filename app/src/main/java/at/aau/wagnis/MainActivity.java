@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                             getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
                             lastClickedHub = null;
                             Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
-                        } else {
+                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")){
                             Toast.makeText(MainActivity.this, "Zielhub darf nicht in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
                         }
                         if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")) {
@@ -603,11 +603,13 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
-        np.setMaxValue(currentTroops - 1);     //setMaxValue(Hub.getAmountTroops)
+
+        // Update the maximum value of the NumberPicker
+        int maxTroops = currentTroops - 1; // Assuming currentTroops holds the maximum number of troops available
+        np.setMaxValue(maxTroops);
         np.setMinValue(0);
 
         btnClose.setOnClickListener(view -> {
-
             int troops = np.getValue();
             popupWindow.dismiss();
 
@@ -615,6 +617,7 @@ public class MainActivity extends AppCompatActivity {
             lastClickedHub = null;
         });
     }
+
 
     public void popupChat() {
         PopupWindow popupWindow = createPopUp(R.layout.popup_chat);

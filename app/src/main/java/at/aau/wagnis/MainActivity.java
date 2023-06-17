@@ -279,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
 
                     if (lastClickedHub != null) {
                         // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
-                        if (currentGameData.getCurrentGameLogicState().equals("ChooseAttackState")) {
                             if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {
                                 // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
                                 getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
@@ -288,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 Toast.makeText(MainActivity.this, "Zielhub darf nicht in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
                             }
-                        }else if(currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")){
+                            if(currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")){
                             if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
                                 // Befehl zum Truppen bewegen senden und den letzten ausgewählten Hub zurücksetzen
                                 currentlyClickedHub = hub;

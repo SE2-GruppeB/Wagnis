@@ -82,7 +82,8 @@ public class GameData {
     public void nextPlayer() {
         Player currentPlayer = players.get(currentPlayerID);
         Cards c = deck.drawCardFromDeck();
-        currentPlayer.addCardToHand(c);
+        if(!currentPlayer.addCardToHand(c))
+            deck.placeCardInDeck(c);
         currentPlayerID = (++currentPlayerID) % players.size();
     }
 

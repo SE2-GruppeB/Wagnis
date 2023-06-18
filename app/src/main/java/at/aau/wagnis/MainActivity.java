@@ -473,6 +473,10 @@ public class MainActivity extends AppCompatActivity {
         btns[3] = popupWindow.getContentView().findViewById(R.id.btn_Card3);
         btns[4] = popupWindow.getContentView().findViewById(R.id.btn_Card4);
 
+        for(Button b : btns){
+            b.setBackgroundColor(Color.GRAY);
+        }
+
         updateCards(btns, cards);
 
         Button[] selectedButtons = new Button[3];

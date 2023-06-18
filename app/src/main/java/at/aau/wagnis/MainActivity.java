@@ -653,7 +653,12 @@ public class MainActivity extends AppCompatActivity {
         EditText sendMsg = popupWindow.getContentView().findViewById(R.id.sendMsg);
         btnExit.setOnClickListener(view -> popupWindow.dismiss());
 
-        btnSend.setOnClickListener(view -> getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString())));
+            btnSend.setOnClickListener(view -> {
+                try{
+                getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString()));
+                }catch (Exception e ){
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }});
     }
 
 

@@ -28,7 +28,7 @@ public class ChooseMoveState extends GameLogicState {
     }
 
 
-
+    // Wechselt zum nächsten Spieler und startet einen neuen ReinforceGameState
     @Override
     public void next(){
         gameServer.getGameData().nextPlayer();

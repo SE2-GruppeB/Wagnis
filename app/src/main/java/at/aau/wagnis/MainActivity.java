@@ -1,9 +1,5 @@
 package at.aau.wagnis;
 
-import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,7 +24,6 @@ import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -37,18 +32,16 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
-
 import at.aau.wagnis.application.GameManager;
 import at.aau.wagnis.application.WagnisApplication;
 import at.aau.wagnis.gamestate.ChatMessage;
@@ -58,10 +51,12 @@ import at.aau.wagnis.server.communication.command.ChooseMoveCommand;
 import at.aau.wagnis.server.communication.command.EndTurnCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
+import at.aau.wagnis.server.communication.command.ReinforceCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
-
+import at.aau.wagnis.server.communication.command.UseCardsCommand;
 
 public class MainActivity extends AppCompatActivity {
+
     FloatingActionButton btnEndTurn;
     FloatingActionButton btnCards;
     FloatingActionButton btnSettings;
@@ -71,9 +66,8 @@ public class MainActivity extends AppCompatActivity {
     boolean wasDrawn = false;
     PopupWindow startPopup;
     TextView playerCount;
-    private Button currentlyClickedHub;
+    String lastState;
 
-    private int currentTroops;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         getGameManager().postCommand(new IdentifyCommand(GlobalVariables.getLocalIpAddress()));
 
         setContentView(R.layout.activity_main);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         adjacencyView = findViewById(R.id.adjacenciesView);
         btnEndTurn = findViewById(R.id.btn_EndTurn);
@@ -101,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(view -> popupSettings());
 
         btnChat.setOnClickListener(view -> popupChat());
+      btnCards.setOnClickListener(view -> popupCards(new Player()));
 
-
-        //TODO: irgendwoher brauch ma den Player der den Button geklickt hat
-        btnCards.setOnClickListener(view -> popupCards(new Player()));
 
         btnEndTurn.setOnClickListener(view -> {
+            lastClickedHub=null;
             getGameManager().postCommand(new EndTurnCommand());
+            
         });
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
@@ -149,7 +144,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+                btnCards.setOnClickListener(view -> popupCards(currentGameData.getPlayers().get(currentGameData.getCurrentPlayer())));
                 enableButtons();
+                showState();
             }
 
             if (startPopup.isShowing()) {
@@ -163,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 String ip = currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer());
                 showEndGame(ip.equals(getIpAddress()));
             }
-
         }));
 
 
@@ -172,11 +168,7 @@ public class MainActivity extends AppCompatActivity {
     // Überprüft, ob der aktuelle Spieler der Spieler des Geräts ist
     private boolean isCurrentPlayer() {
         // Vergleicht die IP-Adresse des aktuellen Geräts mit der IP-Adresse des aktuellen Spielers
-        if (currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer()).equals(getIpAddress())) {
-            return true;
-        }
-        return false;
-        // Der aktuelle Spieler ist nicht der Spieler des aktuellen Geräts
+        return currentGameData.getPlayerIdentifier().get(currentGameData.getCurrentPlayer()).equals(getIpAddress());
     }
 
 
@@ -214,7 +206,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        GlobalVariables.getMediaPlayer().start();
         super.onResume();
+    }
+    @Override
+    protected void onPause() {
+        GlobalVariables.getMediaPlayer().pause();
+        super.onPause();
     }
 
     public void setDisplayMetrics() {
@@ -239,9 +237,17 @@ public class MainActivity extends AppCompatActivity {
         return ((WagnisApplication) getApplication()).getGameManager();
     }
 
-
-    private Button lastClickedHub = null;
-
+    private void showState(){
+        if(!currentGameData.getCurrentGameLogicState().equals("LobbyState") && (!currentGameData.getCurrentGameLogicState().equals(lastState))){
+            if (isCurrentPlayer()) {
+                Toast.makeText(MainActivity.this, "Your Turn: " + currentGameData.getCurrentGameLogicState(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Player " + currentGameData.getCurrentPlayer() +" "+currentGameData.getCurrentGameLogicState()+" turn!", Toast.LENGTH_SHORT).show();
+            }
+            lastState=currentGameData.getCurrentGameLogicState();
+        }
+    }
+    private Hub lastClickedHub = null;
     public void drawHubs(String seed) {
 
         ConstraintLayout layout = findViewById(R.id.layout_activity_main);
@@ -269,11 +275,8 @@ public class MainActivity extends AppCompatActivity {
 
             // OnClickListener für die Schaltfläche festlegen
             hub.setOnClickListener(view -> {
-                //
-                if (isCurrentPlayer()) {
                     Hub clickedHub = null;
-                    // Überprüfen, welcher Hub mit der geklickten Schaltfläche übereinstimmt
-                    for (Hub h : currentGameData.getHubs()) {
+                    for (Hub h : currentGameData.getHubs()) {// Überprüfen, welcher Hub mit der geklickten Schaltfläche übereinstimmt
                         if (h.getId() == hub.getId()) {
                             clickedHub = h;
 
@@ -281,38 +284,32 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (lastClickedHub != null) {
-                        // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
-                        if (currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()) {
-                            // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
-                            getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), hub.getId()));
-                            lastClickedHub = null;
-                            Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
-                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")){
-                            Toast.makeText(MainActivity.this, "Zielhub darf nicht in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
+
+                        if(currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")&&currentGameData.getCurrentPlayer() != clickedHub.getOwner().getPlayerId()){
+                             // Überprüfen, ob der aktuelle Spieler nicht der Besitzer des Zielhubs ist
+                                getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), clickedHub.getId())); // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
+
+
+                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")&&currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                            popupMoveTroops(lastClickedHub, clickedHub);
+
+                        } else{
+                            Toast.makeText(MainActivity.this, "Invalid Hub!", Toast.LENGTH_SHORT).show();
                         }
-                        if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")) {
-                            if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
-                                // Befehl zum Truppen bewegen senden und den letzten ausgewählten Hub zurücksetzen
-                                currentlyClickedHub = hub;
-                                popupMoveTroops();
-                                Toast.makeText(MainActivity.this, "Zielhub mit ID " + hub.getId() + " ausgewählt!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(MainActivity.this, "Zielhub muss in deinem Besitz sein!\nWähle ein neues Ziel aus!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                        lastClickedHub = null;
                     } else {
                         // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist
                         if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
-                            lastClickedHub = hub;  // Den zuletzt geklickten Hub speichern
-                            currentTroops = clickedHub.getAmountTroops();
-                            Toast.makeText(MainActivity.this, "Quellhub mit ID " + hub.getId() + " ausgewählt!\nWähle einen Zielhub!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Quellhub muss in deinem Besitz sein!\nWähle einen neuen Quellhub aus!", Toast.LENGTH_SHORT).show();
+                            if(currentGameData.getCurrentGameLogicState().equals("ReinforceGameState")){
+                                popupReinforceTroops(clickedHub);
+                                lastClickedHub=null;
+                            }else{
+                                lastClickedHub = clickedHub;  // Den zuletzt geklickten Hub speichern
+                            }
+                             } else {
+                            Toast.makeText(MainActivity.this, "Source must be in your possession!\nChoose a new Hub!", Toast.LENGTH_SHORT).show();
                         }
                     }
-                } else {
-                    Toast.makeText(MainActivity.this, "Es ist nicht dein Zug.\nBitte warte, bis du an der Reihe bist!", Toast.LENGTH_SHORT).show();
-                }
             });
             GlobalVariables.getHubs().add(new Hub(hub));
             layout.addView(hub);
@@ -418,12 +415,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void restart() {
-        Intent restartActivity = new Intent(getApplicationContext(), MenuActivity.class);
-        int pendingIntent = 123456;
-        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), pendingIntent, restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager manager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
-
-        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
     }
 
@@ -446,8 +437,7 @@ public class MainActivity extends AppCompatActivity {
         PopupWindow popupWindow = createPopUp(R.layout.popup_settings);
 
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
-        Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
-        btnClose.setOnClickListener(view -> popupWindow.dismiss());
+
 
         SwitchCompat switchMusic = popupWindow.getContentView().findViewById(R.id.switch_Music);
         switchMusic.setText(R.string.music);
@@ -474,7 +464,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnPlay = popupWindow.getContentView().findViewById(R.id.btn_play);
         Button btnBack = popupWindow.getContentView().findViewById(R.id.btn_Close);
         btnBack.setOnClickListener(view -> popupWindow.dismiss());
-
         Cards[] cards = player.getHand();
 
         Button[] btns = new Button[5];
@@ -484,41 +473,47 @@ public class MainActivity extends AppCompatActivity {
         btns[3] = popupWindow.getContentView().findViewById(R.id.btn_Card3);
         btns[4] = popupWindow.getContentView().findViewById(R.id.btn_Card4);
 
-        boolean[] btnsPressed = new boolean[5];
-        AtomicInteger countOfBtnsPressed = new AtomicInteger();
+        for(Button b : btns){
+            b.setBackgroundColor(Color.GRAY);
+        }
 
         updateCards(btns, cards);
+
+        Button[] selectedButtons = new Button[3];
 
         for (int i = 0; i < btns.length; i++) {
             int index = i;
             btns[i].setOnClickListener(view -> {
-                if (Boolean.TRUE.equals(btnsPressed[index])) {
-                    btnsPressed[index] = false;
-                    countOfBtnsPressed.getAndDecrement();
-                } else {
-                    if (countOfBtnsPressed.get() < 4) {
-                        btnsPressed[index] = true;
-                        countOfBtnsPressed.getAndIncrement();
+                for(int j = 0; j < selectedButtons.length; j++) {
+                    if (player.getHand()[index] != null) {
+                        if (selectedButtons[j] == null) {
+                            selectedButtons[j] = btns[index];
+                            btns[index].setBackgroundColor(Color.RED);
+                            return;
+                        } else if (selectedButtons[j].equals(btns[index])) {
+                            selectedButtons[j] = null;
+                            btns[index].setBackgroundColor(Color.GRAY);
+                            return;
+                        }
                     }
                 }
             });
         }
 
         btnPlay.setOnClickListener(view -> {
-            if (countOfBtnsPressed.get() < 4) {
-                int[] chosenBtns = new int[3];
-                int counter = 0;
-                for (int i = 0; i < chosenBtns.length; i++) {
-                    for (; counter < btns.length; counter++) {
-                        if (btnsPressed[counter]) {
-                            chosenBtns[i] = counter;
-                            break;
-                        }
+            int[] indexes = new int[3];
+            int counter = 0;
+            for(int i = 0; i < btns.length; i++) {
+                for (Button button : selectedButtons) {
+                    if (button == null)
+                        return;
+                    if (button.equals(btns[i])) {
+                        indexes[counter++] = i;
                     }
                 }
-                player.useCards(chosenBtns[0], chosenBtns[1], chosenBtns[2]);
-                updateCards(btns, cards);
             }
+            getGameManager().postCommand(new UseCardsCommand(indexes[0], indexes[1], indexes[2]));
+            popupWindow.dismiss();
         });
     }
 
@@ -581,38 +576,59 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void popupReinforceTroops(Button hubButton) {
+    public void popupReinforceTroops(Hub hub) {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
         popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
-        np.setMaxValue(10);     //setMaxValue(Player.getUnassignedAvailableTroops)
-        np.setMinValue(0);
-        btnClose.setOnClickListener(view -> {
-            int troops = np.getValue();
-            Hub selected = GlobalVariables.findHubById(hubButton.getId());
+        Player currentPlayer=null;
+        for(Player p : currentGameData.getPlayers()){
+            if(p.getPlayerId()==currentGameData.getCurrentPlayer()){
+                currentPlayer=p;
+            }
+        }
+        if(currentPlayer!=null){
+            np.setMaxValue(currentPlayer.getUnassignedAvailableTroops());
+            np.setMinValue(0);
+            btnClose.setOnClickListener(view -> {
+                int troop = np.getValue();
+                if(troop > 0) {
+                    List<Integer> hubs = new ArrayList<>();
+                    hubs.add(hub.getId());
+                    List<Integer> troops = new ArrayList<>();
+                    troops.add(troop);
+                    getGameManager().postCommand(new ReinforceCommand(hubs, troops));
+                }
+                popupWindow.dismiss();
+            });
+        }else{
             popupWindow.dismiss();
-        });
+        }
+
+
     }
 
-    public void popupMoveTroops() {
+    public void popupMoveTroops(Hub source,Hub target) {
         PopupWindow popupWindow = createPopUp(R.layout.popup_movetroops);
-        popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
+        if(source.getAmountTroops()>1){
+            popupWindow.showAtLocation(new View(this), Gravity.CENTER, 0, 0);
+        }else{
+            popupWindow.dismiss();
+        }
+
 
         Button btnClose = popupWindow.getContentView().findViewById(R.id.btn_Close);
         NumberPicker np = popupWindow.getContentView().findViewById(R.id.np_troops);
-
-        int maxTroops = currentTroops - 1;
-        np.setMaxValue(maxTroops);
-        np.setMinValue(0);
-
+        np.setMaxValue(source.getAmountTroops()-1);     //setMaxValue
+        np.setMinValue(1);
         btnClose.setOnClickListener(view -> {
-            int troops = np.getValue();
+
+            int troops =np.getValue();
+            getGameManager().postCommand(new ChooseMoveCommand(source.getId(), target.getId(),troops));
             popupWindow.dismiss();
 
-            getGameManager().postCommand(new ChooseMoveCommand(lastClickedHub.getId(), currentlyClickedHub.getId(), troops));
-            lastClickedHub = null;
+
         });
     }
 
@@ -641,7 +657,12 @@ public class MainActivity extends AppCompatActivity {
         EditText sendMsg = popupWindow.getContentView().findViewById(R.id.sendMsg);
         btnExit.setOnClickListener(view -> popupWindow.dismiss());
 
-        btnSend.setOnClickListener(view -> getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString())));
+            btnSend.setOnClickListener(view -> {
+                try{
+                getGameManager().postCommand(new ProcessChatMessageCommand(sendMsg.getText().toString()));
+                }catch (Exception e ){
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }});
     }
 
 

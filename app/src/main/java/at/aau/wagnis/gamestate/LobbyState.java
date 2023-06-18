@@ -1,13 +1,12 @@
 package at.aau.wagnis.gamestate;
 
 import androidx.annotation.VisibleForTesting;
-
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import at.aau.wagnis.Adjacency;
-
+import at.aau.wagnis.Deck;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 
@@ -21,12 +20,14 @@ public class LobbyState extends GameLogicState{
     private HashMap<Integer,Hub> hubs;
     private List<Adjacency> adjacencies;
     private String seed;
+    private Deck deck;
 
 
     public LobbyState(){
         players = new ArrayList<>();
         hubs = new HashMap<>();
         adjacencies = new ArrayList<>();
+        deck = new Deck(NUMBER_OF_HUBS);
         seedGenerator();
         hubs = generateHubs();
         hubsPerLine = (int) Math.ceil(hubs.size()/6f);
@@ -39,6 +40,7 @@ public class LobbyState extends GameLogicState{
         gameData.setHubs(new ArrayList<>(hubs.values()));
         gameData.setPlayers(players);
         gameData.setAdjacencies(adjacencies);
+        gameData.setDeck(deck);
         return gameData;
     }
 
@@ -161,10 +163,6 @@ public class LobbyState extends GameLogicState{
 
     @Override
     public void next(){
-        GameData gameData = new GameData();
-        gameData.setSeed(seed);
-        gameData.setHubs(new ArrayList<>(hubs.values()));
-        gameData.setPlayers(players);
-        gameServer.setGameLogicState(new StartGameState(gameData));
+        gameServer.setGameLogicState(new StartGameState());
     }
 }

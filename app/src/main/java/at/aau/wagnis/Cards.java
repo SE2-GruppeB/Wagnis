@@ -15,15 +15,15 @@ public class Cards {
     }
 
     public static boolean checkIfCardSameType(Cards first, Cards second, Cards third) {
-        if (first.equals(second) && first.equals(third)) {
-            throw new IllegalArgumentException("you cant use the same card thrice");
+        if (first == second && first == third) {
+            throw new IllegalArgumentException("you cant use the same card twice");
         }
         return first.getType().equals(second.getType()) && first.getType().equals(third.getType());
     }
 
     public static boolean checkIfEachCardDiffType(Cards first, Cards second, Cards third) {
-        if (first.equals(second) && first.equals(third)) {
-            throw new IllegalArgumentException("you cant use the same card thrice");
+        if (first == second || first == third) {
+            throw new IllegalArgumentException("you cant use the same card twice");
         }
         return !first.getType().equals(second.getType()) && !first.getType().equals(third.getType()) && !second.getType().equals(third.getType());
     }

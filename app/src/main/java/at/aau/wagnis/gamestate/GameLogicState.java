@@ -1,6 +1,4 @@
 package at.aau.wagnis.gamestate;
-
-
 import java.util.List;
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
@@ -73,5 +71,10 @@ public abstract class GameLogicState {
     }
     public void next(){
 
+    }
+
+    public void useCards(int index1, int index2, int index3) {
+        Player currentPlayer = gameServer.getGameData().getPlayers().get(gameServer.getGameData().getCurrentPlayer());
+        currentPlayer.useCards(index1, index2, index3);
     }
 }

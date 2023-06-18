@@ -41,7 +41,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        GlobalVariables.setMediaPlayer(MediaPlayer.create(this.getApplicationContext(), R.raw.music1));
+        GlobalVariables.setMediaPlayer(MediaPlayer.create(this.getApplicationContext(), R.raw.music2));
         GlobalVariables.getMediaPlayer().start();
         GlobalVariables.getMediaPlayer().setLooping(true);
 
@@ -74,6 +74,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        GlobalVariables.getMediaPlayer().start();
         getGameManager().setConnectionStateListener(newConnectionState -> runOnUiThread(() -> {
             switch (newConnectionState) {
                 case CONNECTING:
@@ -94,6 +95,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        GlobalVariables.getMediaPlayer().pause();
         getGameManager().setConnectionStateListener(null);
     }
 
@@ -183,6 +185,8 @@ public class MenuActivity extends AppCompatActivity {
         surface.setOnClickListener(view -> goToSurface());
         Button ui = popupWindow.getContentView().findViewById(R.id.btn_surfaceBackground2);
         ui.setOnClickListener(view -> goToUI());
+        Button music = popupWindow.getContentView().findViewById(R.id.btn_music);
+        music.setOnClickListener(view -> goToMusic());
     }
 
     private void goToUrl (String url) {
@@ -206,6 +210,9 @@ public class MenuActivity extends AppCompatActivity {
     }
     public void goToUI () {
         goToUrl ( "https://www.vecteezy.com/vector-art/21604946-futuristic-vector-hud-interface-screen-design-digital-callouts-titles-hud-ui-gui-futuristic-user");
+    }
+    public void goToMusic () {
+        goToUrl ( "https://pixabay.com/music/suspense-space-ambient-sci-fi-121842/");
     }
 
     public PopupWindow createPopUp(int popupId){

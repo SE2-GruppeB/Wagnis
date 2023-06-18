@@ -1,8 +1,8 @@
 package at.aau.wagnis.gamestate;
 
-
 import java.util.List;
 import at.aau.wagnis.Hub;
+import at.aau.wagnis.Player;
 
 public class ReinforceGameState extends GameLogicState{
     private List<Integer> hubs;
@@ -18,7 +18,9 @@ public class ReinforceGameState extends GameLogicState{
         this.hubs = hubs;
         this.troopsToDeploy = troopsToDeploy;
     }
-
+    public ReinforceGameState(){
+        super();
+    }
     public List<Integer> getHubs() {
         return hubs;
     }
@@ -55,23 +57,31 @@ public class ReinforceGameState extends GameLogicState{
     }
 
     @Override
+    public void onEntry() {
+        Player currentPlayer = gameServer.getGameData().getPlayers().get(gameServer.getGameData().getCurrentPlayer());
+        int unassigned = currentPlayer.getUnassignedAvailableTroops() + currentPlayer.calcTroopsPerRound();
+        currentPlayer.setUnassignedAvailableTroops(unassigned);
+    }
+
+    @Override
     public void reinforce(List<Integer> hubsId , List<Integer> troops) {
-        if (hubs.size() != troops.size()) {
+        if (hubsId.size() != troops.size()) {
             throw new IllegalArgumentException("Hubs and troopsToDeploy must have the same size");
         }
-        if (hubs.isEmpty()) {
+        if (hubsId.isEmpty()) {
             throw new IllegalArgumentException("There must be at least one");
         }
-        for (int i = 0; i < hubs.size(); i++) {
-            reinforceSingle(hubs.get(i),troops.get(i));
+        for (int i = 0; i < hubsId.size(); i++) {
+            reinforceSingle(hubsId.get(i),troops.get(i));
         }
     }
 
     public void reinforceSingle (int hubId, int troops){
         List<Hub> hubsFromServer = this.gameServer.getGameData().getHubs();
         for (Hub hub : hubsFromServer) {
-            if (hub.getId() == hubId){
+            if (hub.getId() == hubId) {
                 hub.addTroops(troops);
+                hub.getOwner().assignTroops(troops);
             }
         }
     }

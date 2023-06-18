@@ -1,8 +1,6 @@
 package at.aau.wagnis;
 
-
 import android.graphics.Color;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +27,7 @@ public class Player {
         this.hand = new Cards[MAX_CARDS_IN_HAND];
         allTroopsPerRound = BASE_TROOPS_PER_ROUND;
         this.unassignedAvailableTroops = 60;
+        playerId = -1;
     }
 
     public Player(int playerId) {
@@ -130,36 +129,29 @@ public class Player {
     public void useCards(int firstCId, int secCId, int thirdCId) {
         if (Cards.checkIfCardSameType(hand[firstCId], hand[secCId], hand[thirdCId])) {
             if (hand[firstCId].getType().equals(Troops.INFANTRY)) {
-                allTroopsPerRound += 1;
+                unassignedAvailableTroops += 1;
             } else if (hand[firstCId].getType().equals(Troops.CAVALRY)) {
-                allTroopsPerRound += 3;
+                unassignedAvailableTroops += 3;
             } else {
-                allTroopsPerRound += 5;
+                unassignedAvailableTroops += 5;
             }
             deleteGroupOfCardPerId(firstCId, secCId, thirdCId);
         } else if (Cards.checkIfEachCardDiffType(hand[firstCId], hand[secCId], hand[thirdCId])) {
-            allTroopsPerRound += 10;
+            unassignedAvailableTroops += 10;
             deleteGroupOfCardPerId(firstCId, secCId, thirdCId);
         }
     }
 
-    public int getUnassignedTroops() {
-        return this.unassignedAvailableTroops;
+    public void assignTroops(int troops) {
+        this.unassignedAvailableTroops = unassignedAvailableTroops - troops;
     }
 
     public int getAllTroopsPerRound() {
         return this.allTroopsPerRound;
     }
 
-    public int calcTroopsToDeploy() {
-        int ownedhubs = ownedHubs.size();
-        if (ownedhubs > 5){
-            do {
-                allTroopsPerRound++;
-                ownedhubs -= 4;
-            }while(ownedhubs  > 4);
-        }
-        return allTroopsPerRound;
+    public int calcTroopsPerRound() {
+        return Math.max(ownedHubs.size() / 3, 3);
     }
 
     public void resetTroopsPerRound() {

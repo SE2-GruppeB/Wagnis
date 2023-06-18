@@ -106,7 +106,7 @@ class CardsTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             Cards.checkIfCardSameType(cards, cards, cards);
         });
-        String expectedMessage = "you cant use the same card thrice";
+        String expectedMessage = "you cant use the same card twice";
         String actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);
@@ -165,7 +165,7 @@ class CardsTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             Cards.checkIfEachCardDiffType(cards, cards, cards);
         });
-        String expectedMessage = "you cant use the same card thrice";
+        String expectedMessage = "you cant use the same card twice";
         String actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);

@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                                 getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), clickedHub.getId())); // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
 
 
-                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")&&currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")&&currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()&&lastClickedHub!=clickedHub) {
                             popupMoveTroops(lastClickedHub, clickedHub);
 
                         } else{
@@ -408,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
         for (LinkAddress linkAddress : prop.getLinkAddresses()) {
             InetAddress inetAddress = linkAddress.getAddress();
             if (inetAddress instanceof Inet4Address) {
-                return inetAddress.getHostAddress();
+                return "1";
             }
         }
         return "no fitting ip address found";

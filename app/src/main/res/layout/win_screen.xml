@@ -12,13 +12,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/planetred" />
+        app:srcCompat="@drawable/planetred"
+        android:contentDescription="@string/background" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="264dp"
         android:layout_height="140dp"
-        android:text="You Won!"
+        android:text="@string/you_won"
         android:textColor="#0B0A0A"
         android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,13 +38,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:srcCompat="@drawable/baseline_rocket_launch_24" />
+        app:srcCompat="@drawable/baseline_rocket_launch_24"
+        android:contentDescription="@string/you_won" />
 
     <Button
         android:id="@+id/buttonHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Return to Homescreen"
+        android:text="@string/return_to_homescreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

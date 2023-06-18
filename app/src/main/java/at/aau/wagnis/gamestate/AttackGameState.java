@@ -8,8 +8,8 @@ import at.aau.wagnis.Player;
  * In der Attacker Game-State Klasse werden Angriffe auf Hubs abgehandelt.
  */
 public class AttackGameState extends GameLogicState {
-    public int testAttackerDiceRoll;
-    public int testDefenderDiceRoll;
+    private int testAttackerDiceRoll;
+    private int testDefenderDiceRoll;
     private boolean attacker = false;
     private boolean defender = false;
     private Hub sourceHub;
@@ -52,12 +52,6 @@ public class AttackGameState extends GameLogicState {
             if (gameWon(targetHub.getOwner())) {
                 this.gameServer.setGameLogicState(new VictoryState(targetHub.getOwner()));
                 //Send winner id via broadcast to all clients
-                /*this.gameServer.broadcastCommand(new ClientCommand() {
-                    @Override
-                    public void execute(@NonNull ClientLogic clientLogic) {
-                        clientLogic.updateGameLogicState(new VictoryState(attackingPlayer));
-                    }
-                });*/
             } else {
                 this.gameServer.setGameLogicState(new ChooseAttackGameState());
             }
@@ -161,13 +155,19 @@ public class AttackGameState extends GameLogicState {
      */
     private int diceRoll() {
         Random randomGen = new Random();
-        int diceValue = randomGen.nextInt(6) + 1;
-        //Log.d("Info :","" + diceValue);
-        return diceValue;
+        return randomGen.nextInt(6) + 1;
     }
 
     // Getter und Setter
 
+
+    public int getTestAttackerDiceRoll() {
+        return testAttackerDiceRoll;
+    }
+
+    public int getTestDefenderDiceRoll() {
+        return testDefenderDiceRoll;
+    }
 
     public Hub getSourceHub() {
         return sourceHub;

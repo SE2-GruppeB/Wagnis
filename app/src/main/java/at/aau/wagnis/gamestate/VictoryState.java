@@ -37,7 +37,6 @@ public class VictoryState extends GameLogicState {
      */
     public void toVictoryScreen(Context context) {
         Intent intent = new Intent(context, VictoryScreen.class);
-        //intent.putExtra("player", this.winner);
         context.startActivity(intent);
     }
 }

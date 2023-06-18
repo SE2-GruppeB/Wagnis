@@ -45,5 +45,6 @@
     <string name="restart_app">RESTART APP</string>
     <string name="music_pixabay_com">Music - Pixabay.com</string>
     <string name="accept">Accept</string>
+    <string name="return_to_homescreen">Return to Homescreen</string>
 
 </resources>

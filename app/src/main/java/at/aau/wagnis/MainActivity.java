@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                                 getGameManager().postCommand(new ChooseAttackCommand(lastClickedHub.getId(), clickedHub.getId())); // Befehl zum Angriff senden und den letzten ausgewählten Hub zurücksetzen
 
 
-                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")&&currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
+                        } else if (currentGameData.getCurrentGameLogicState().equals("ChooseMoveState")&&currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()&&lastClickedHub!=clickedHub) {
                             popupMoveTroops(lastClickedHub, clickedHub);
 
                         } else{

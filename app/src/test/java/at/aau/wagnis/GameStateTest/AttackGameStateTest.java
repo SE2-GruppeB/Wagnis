@@ -1,21 +1,14 @@
 package at.aau.wagnis.GameStateTest;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-
 import android.widget.Button;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
 import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.gamestate.AttackGameState;
@@ -45,7 +38,6 @@ class AttackGameStateTest {
     private Player defender;
     private Player attacker2;
     private Player defender2;
-
     private Player attacker3;
     private Player defender3;
 
@@ -173,7 +165,7 @@ class AttackGameStateTest {
     @Test
     void testAttackerDiceRoll(){
         gameState.attack();
-        assertEquals(2,gameState.testAttackerDiceRoll);
+        assertEquals(2,gameState.getTestAttackerDiceRoll());
     }
 
     /**
@@ -182,7 +174,7 @@ class AttackGameStateTest {
     @Test
     void testAttackerDiceRoll2(){
         gameState2.attack();
-        assertEquals(3,gameState2.testAttackerDiceRoll);
+        assertEquals(3,gameState2.getTestAttackerDiceRoll());
     }
 
     /**
@@ -191,7 +183,7 @@ class AttackGameStateTest {
     @Test
     void testDefenderDiceRoll(){
         gameState.attack();
-        assertEquals(2,gameState.testDefenderDiceRoll);
+        assertEquals(2,gameState.getTestDefenderDiceRoll());
     }
 
     /**
@@ -200,7 +192,7 @@ class AttackGameStateTest {
     @Test
     void testDefenderDiceRoll2(){
         gameState2.attack();
-        assertEquals(2,gameState2.testDefenderDiceRoll);
+        assertEquals(2,gameState2.getTestDefenderDiceRoll());
     }
 
     /**

@@ -1,6 +1,6 @@
 package at.aau.wagnis.gamestate;
+
 import java.util.List;
-import at.aau.wagnis.Hub;
 import at.aau.wagnis.Player;
 import at.aau.wagnis.server.GameServer;
 
@@ -17,17 +17,15 @@ public abstract class GameLogicState {
     public void start() {
     }
 
-    public void chooseStart(List<Hub> unassignedCountries, List<Player> players) {
-    }
-
     public void reinforce(List<Integer> hubsId , List<Integer> troops) {
     }
 
     public void attack() {
     }
+
     public void handleChatMessage(Integer clientId, String message) {
         this.gameServer.getGameData().addMessage(clientId,message);
-        if(message.toLowerCase().trim().equals(CHEAT_COMMAND)) {
+        if(message.trim().equalsIgnoreCase(CHEAT_COMMAND)) {
             Player cheatPlayer = this.gameServer.getGameData().getPlayers()
                     .stream()
                     .filter(player -> player.getPlayerId() == clientId)
@@ -55,20 +53,16 @@ public abstract class GameLogicState {
         Thread.currentThread().interrupt();
     }
 
-
     public void handleNewConnection(int clientId) { }
 
     public void handleClosedConnection(int clientId) { }
 
-
     public void end() {
-    }
-
-    public void checkForVictory() {
     }
 
     public void onEntry() {
     }
+
     public void next(){
 
     }

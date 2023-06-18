@@ -1,10 +1,5 @@
 package at.aau.wagnis.gamestate;
 
-
-import at.aau.wagnis.Adjacency;
-
-import at.aau.wagnis.GlobalVariables;
-
 import at.aau.wagnis.Hub;
 
 public class MoveTroopsState extends GameLogicState {
@@ -62,17 +57,6 @@ public class MoveTroopsState extends GameLogicState {
         }
 
         return sourceHub.getAmountTroops() > 1 && sourceHub.getAmountTroops() >= numTroops;
-
-
-    }
-    private boolean areHubsAdjacent(Hub sourceHub, Hub targetHub) {
-        for (Adjacency adjacency : GlobalVariables.getAdjacencies()) {
-            if ((adjacency.getHub1() == sourceHub && adjacency.getHub2() == targetHub) ||
-                    (adjacency.getHub1() == targetHub && adjacency.getHub2() == sourceHub)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void moveTroopsBetweenHubs(int numTroops) {

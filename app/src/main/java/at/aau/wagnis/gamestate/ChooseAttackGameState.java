@@ -1,8 +1,6 @@
 package at.aau.wagnis.gamestate;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import at.aau.wagnis.Adjacency;
 import at.aau.wagnis.Hub;
 
@@ -52,11 +50,6 @@ public class ChooseAttackGameState extends GameLogicState {
         if (sourceHub.getOwner() == targetHub.getOwner()) {
             throw new IllegalArgumentException("Du kannst deinen eigenen Hub nicht angreifen!");
         }
-
-        /*
-        if(sourceHub.getOwner().getPlayerId() != gameServer.getGameData().getCurrentPlayer()){
-            throw new IllegalArgumentException("Sourcehub muss dir gehören!");
-        }*/
 
         // Durchlaufe alle benachbarten Hubpaare in der Liste
         for(Adjacency a : adj){

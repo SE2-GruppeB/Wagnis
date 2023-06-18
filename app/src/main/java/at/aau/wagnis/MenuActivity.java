@@ -64,7 +64,7 @@ public class MenuActivity extends AppCompatActivity {
         for (LinkAddress linkAddress : prop.getLinkAddresses()){
             InetAddress inetAddress = linkAddress.getAddress();
             if(inetAddress instanceof Inet4Address){
-                return "1";
+                return inetAddress.getHostAddress();
 
             }
         }

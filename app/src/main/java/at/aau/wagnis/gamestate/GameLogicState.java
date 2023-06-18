@@ -25,7 +25,7 @@ public abstract class GameLogicState {
 
     public void handleChatMessage(Integer clientId, String message) {
         this.gameServer.getGameData().addMessage(clientId,message);
-        if(message.toLowerCase().trim().equals(CHEAT_COMMAND.toLowerCase())) {
+        if(message.trim().equalsIgnoreCase(CHEAT_COMMAND)) {
             Player cheatPlayer = this.gameServer.getGameData().getPlayers()
                     .stream()
                     .filter(player -> player.getPlayerId() == clientId)

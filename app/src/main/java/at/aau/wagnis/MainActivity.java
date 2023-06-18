@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
             if (isCurrentPlayer()) {
                 Toast.makeText(MainActivity.this, "Your Turn: " + currentGameData.getCurrentGameLogicState(), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "Player " + currentGameData.getCurrentPlayer() + " turn!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Player " + currentGameData.getCurrentPlayer() +" "+currentGameData.getCurrentGameLogicState()+" turn!", Toast.LENGTH_SHORT).show();
             }
             lastState=currentGameData.getCurrentGameLogicState();
         }
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                             popupMoveTroops(lastClickedHub, clickedHub);
 
                         } else{
-                            Toast.makeText(MainActivity.this, "Ungültiger Zielhub ausgewählt!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Invalid Hub!", Toast.LENGTH_SHORT).show();
                         }
                         lastClickedHub = null;
                     } else {
@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                                 lastClickedHub = clickedHub;  // Den zuletzt geklickten Hub speichern
                             }
                              } else {
-                            Toast.makeText(MainActivity.this, "Quellhub muss in deinem Besitz sein!\nWähle einen neuen Quellhub aus!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Source must be in your possession!\nChoose a new Hub!", Toast.LENGTH_SHORT).show();
                         }
                     }
             });

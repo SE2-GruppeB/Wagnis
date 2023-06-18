@@ -4,6 +4,9 @@ import android.widget.Button;
 
 import java.util.Objects;
 
+/**
+ * Die Klasse Hub repräsentiert einen Hub im Spiel.
+ */
 public class Hub implements Comparable<Hub>{
 
     private final int id;
@@ -11,6 +14,11 @@ public class Hub implements Comparable<Hub>{
     private Player owner;
     private int amountTroops;
 
+    /**
+     * Erzeugt einen Hub mit einem Button-Objekt.
+     *
+     * @param hubButton Der Button, der den Hub repräsentiert.
+     */
     public Hub(Button hubButton) {
         this.hubButton = hubButton;
         this.id = hubButton.getId();
@@ -18,6 +26,11 @@ public class Hub implements Comparable<Hub>{
         this.owner = new Player();
     }
 
+    /**
+     * Erzeugt einen Hub mit einer ID.
+     *
+     * @param id Die ID des Hubs.
+     */
     public Hub(int id) {
         this.hubButton = null;
         this.id = id;
@@ -25,6 +38,12 @@ public class Hub implements Comparable<Hub>{
         this.owner = new Player();
     }
 
+    /**
+     * Überprüft, ob ein anderes Objekt gleich ist.
+     *
+     * @param o Das zu vergleichende Objekt.
+     * @return true, wenn das Objekt gleich diesem Hub ist, sonst false.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,31 +54,66 @@ public class Hub implements Comparable<Hub>{
         return false;
     }
 
+    /**
+     * Berechnet den Hash-Code dieses Hubs.
+     *
+     * @return Der berechnete Hash-Code.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, owner);
     }
 
+    /**
+     * Gibt den Button des Hubs zurück.
+     *
+     * @return Der Button des Hubs.
+     */
     public Button getHubButton() {
         return this.hubButton;
     }
 
+    /**
+     * Gibt die ID des Hubs zurück.
+     *
+     * @return Die ID des Hubs.
+     */
     public int getId() {
         return this.id;
     }
 
+    /**
+     * Setzt den Text des Hubs auf die angegebene Anzahl von Truppen.
+     *
+     * @param troops Die Anzahl der Truppen als String.
+     */
     public void setText(String troops) {
         this.hubButton.setText(troops);
     }
 
+    /**
+     * Gibt die Anzahl der Truppen auf dem Hub zurück.
+     *
+     * @return Die Anzahl der Truppen auf dem Hub.
+     */
     public int getAmountTroops() {
         return this.amountTroops;
     }
 
+    /**
+     * Setzt die Anzahl der Truppen auf dem Hub.
+     *
+     * @param amountTroops Die Anzahl der Truppen.
+     */
     public void setAmountTroops(int amountTroops) {
         this.amountTroops = amountTroops;
     }
 
+    /**
+     * Gibt den Besitzer des Hubs zurück.
+     *
+     * @return Der Besitzer des Hubs.
+     */
     public Player getOwner() {
         return this.owner;
     }
@@ -68,6 +122,11 @@ public class Hub implements Comparable<Hub>{
         this.owner = hubOwner;
     }
 
+    /**
+     * Setzt das Bild des Hubs entsprechend der angegebenen Teams(Auswählbare Raumfart-Agenturen).
+     *
+     * @param agency Der Name der Agentur.
+     */
     public void setHubImage(String agency) {
         switch (agency) {
             case ("ESA"):
@@ -90,6 +149,11 @@ public class Hub implements Comparable<Hub>{
         }
     }
 
+    /**
+     * Fügt die angegebene Anzahl von Truppen zu den bestehenden Truppen auf dem Hub hinzu.
+     *
+     * @param troops Die Anzahl der Truppen, die hinzugefügt werden sollen.
+     */
     public void addTroops(int troops) {
         this.amountTroops += troops;
     }
@@ -98,12 +162,18 @@ public class Hub implements Comparable<Hub>{
     public String toString() {
         return "Hub{" +
                 "id=" + id +
-
                 ", amountTroops=" + amountTroops +
                 '}';
     }
 
-
+    /**
+     * Vergleicht diesen Hub mit einem anderen Hub.
+     *
+     * @param hub Der zu vergleichende Hub.
+     * @return Eine negative ganze Zahl, wenn dieser HubId kleiner ist als der des andere Hub;
+     *         eine positive ganze Zahl, wenn dieser HubId größer ist als der des andere Hub;
+     *         andernfalls 0, wenn beide HubIds gleich sind.
+     */
     @Override
     public int compareTo(Hub hub) {
         if(this.getId()>hub.getId()){
@@ -114,5 +184,3 @@ public class Hub implements Comparable<Hub>{
         return 0;
     }
 }
-
-

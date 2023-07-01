@@ -90,6 +90,28 @@ public class Hub implements Comparable<Hub>{
         }
     }
 
+    public void setBigHubImage(int id) {
+        switch (id) {
+            case (0):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome_x48);
+                break;
+            case (1):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome6_x48);
+                break;
+            case (2):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome5_x48);
+                break;
+            case (3):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome4_x48);
+                break;
+            case (4):
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome3_x48);
+                break;
+            default:
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome2_x48);
+        }
+    }
+
     public void addTroops(int troops) {
         this.amountTroops += troops;
     }

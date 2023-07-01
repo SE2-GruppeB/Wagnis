@@ -119,31 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 popupStart(btnCards);
                 wasDrawn = true;
             } else {
-                for (Hub h : currentGameData.getHubs()) {
-                    Hub uiHub = GlobalVariables.findHubById(h.getId());
-                    uiHub.setText(h.getAmountTroops() + ", " + h.getId());
-                    if (h.getOwner() != null) {
-                        switch (h.getOwner().getPlayerId()) {
-                            case 0:
-                                uiHub.setHubImage("ESA");
-                                break;
-                            case 1:
-                                uiHub.setHubImage("NASA");
-                                break;
-                            case 2:
-                                uiHub.setHubImage("JAXA");
-                                break;
-                            case 3:
-                                uiHub.setHubImage("ISRO");
-                                break;
-                            case 4:
-                                uiHub.setHubImage("Roskosmos");
-                                break;
-                            default:
-                                uiHub.setHubImage("China manned space program");
-                        }
-                    }
-                }
+                updateHubs();
                 btnCards.setOnClickListener(view -> popupCards(currentGameData.getPlayers().get(currentGameData.getCurrentPlayer())));
                 enableButtons();
                 showState();
@@ -163,6 +139,34 @@ public class MainActivity extends AppCompatActivity {
         }));
 
 
+    }
+
+    private void updateHubs(){
+        for (Hub h : currentGameData.getHubs()) {
+            Hub uiHub = GlobalVariables.findHubById(h.getId());
+            uiHub.setText(h.getAmountTroops() + ", " + h.getId());
+            if (h.getOwner() != null) {
+                switch (h.getOwner().getPlayerId()) {
+                    case 0:
+                        uiHub.setHubImage("ESA");
+                        break;
+                    case 1:
+                        uiHub.setHubImage("NASA");
+                        break;
+                    case 2:
+                        uiHub.setHubImage("JAXA");
+                        break;
+                    case 3:
+                        uiHub.setHubImage("ISRO");
+                        break;
+                    case 4:
+                        uiHub.setHubImage("Roskosmos");
+                        break;
+                    default:
+                        uiHub.setHubImage("China manned space program");
+                }
+            }
+        }
     }
 
     // Überprüft, ob der aktuelle Spieler der Spieler des Geräts ist
@@ -295,6 +299,8 @@ public class MainActivity extends AppCompatActivity {
 
                         } else{
                             Toast.makeText(MainActivity.this, "Invalid Hub!", Toast.LENGTH_SHORT).show();
+                            updateHubs();
+
                         }
                         lastClickedHub = null;
                     } else {
@@ -305,6 +311,8 @@ public class MainActivity extends AppCompatActivity {
                                 lastClickedHub=null;
                             }else{
                                 lastClickedHub = clickedHub;  // Den zuletzt geklickten Hub speichern
+                                GlobalVariables.findHubById(lastClickedHub.getId()).setBigHubImage(lastClickedHub.getOwner().getPlayerId());//
+                                showAdjacent(lastClickedHub);
                             }
                              } else {
                             Toast.makeText(MainActivity.this, "Source must be in your possession!\nChoose a new Hub!", Toast.LENGTH_SHORT).show();
@@ -355,6 +363,25 @@ public class MainActivity extends AppCompatActivity {
 
         }
         adjacencyView.setImageBitmap(bitmap);
+    }
+
+    private void showAdjacent(Hub selected){
+        List<Hub> adjacendHubs=new ArrayList<>();
+        for(Adjacency a : GlobalVariables.getAdjacencies()){
+            if(a.getHub1().getId()==selected.getId()&&a.getHub1().getOwner().getPlayerId()!=a.getHub2().getOwner().getPlayerId()){
+                adjacendHubs.add(a.getHub2());
+            } else if (a.getHub2().getId()==selected.getId()&&a.getHub1().getOwner().getPlayerId()!=a.getHub2().getOwner().getPlayerId()) {
+                adjacendHubs.add(a.getHub1());
+            }
+        }
+
+        for (Hub h : adjacendHubs){
+            for (Hub h2:currentGameData.getHubs()){
+                if(h.getId()==h2.getId()){
+                    h.setBigHubImage(h2.getOwner().getPlayerId());
+                }
+            }
+        }
     }
 
     private void updatePlayerCount() {

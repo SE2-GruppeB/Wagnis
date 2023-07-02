@@ -90,21 +90,21 @@ public class Hub implements Comparable<Hub>{
         }
     }
 
-    public void setBigHubImage(int id) {
-        switch (id) {
-            case (0):
+    public void setBigHubImage(String agency) {
+        switch (agency) {
+            case ("ESA"):
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome_x48);
                 break;
-            case (1):
+            case ("NASA"):
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome6_x48);
                 break;
-            case (2):
+            case ("ISRO"):
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome5_x48);
                 break;
-            case (3):
+            case ("JAXA"):
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome4_x48);
                 break;
-            case (4):
+            case ("Roskosmos"):
                 this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome3_x48);
                 break;
             default:

@@ -66,6 +66,7 @@ public class ChooseAttackGameState extends GameLogicState {
 
     @Override
     public void next(){
+        gameServer.getGameData().setSelectedHub(-1); // wenn in nachsten State, dann ist wieder kein Hub mehr ausgewaehlt
         gameServer.setGameLogicState(new ChooseMoveState());
     }
 }

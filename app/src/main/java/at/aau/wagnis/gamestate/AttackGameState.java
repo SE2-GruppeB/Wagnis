@@ -41,6 +41,7 @@ public class AttackGameState extends GameLogicState {
 
     @Override
     public void onEntry() {
+        gameServer.getGameData().setSelectedHub(-1); // selectedHub wird immer auf -1 gesetzt, damit kein Hub ausgewaelt ist
         if (sourceHub == null) {
             this.sourceHub = gameServer.getGameData().getHubs().stream().filter(h -> h.getId() == sourceHubId).findFirst().orElseThrow(() -> new IllegalStateException("Hub not found"));
         }

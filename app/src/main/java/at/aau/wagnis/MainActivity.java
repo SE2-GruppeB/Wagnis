@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
+            // on create wird aufgerufen und durch die anderung von Listner wird dieser Teil ausgefuert und damit koennen alle Spieler das vorgehen sehen
             /*Code to be executed on UI thread*/
 
             if (newGameData != null && currentGameData != null && !(currentGameData.getMessages().equals(newGameData.getMessages()))) {

@@ -93,22 +93,22 @@ public class Hub implements Comparable<Hub>{
     public void setBigHubImage(String agency) {
         switch (agency) {
             case ("ESA"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome_x48);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome);
                 break;
             case ("NASA"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome6_x48);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome6);
                 break;
             case ("ISRO"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome5_x48);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome5);
                 break;
             case ("JAXA"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome4_x48);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome4);
                 break;
             case ("Roskosmos"):
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome3_x48);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome3);
                 break;
             default:
-                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome2_x48);
+                this.getHubButton().setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.dome2);
         }
     }
 

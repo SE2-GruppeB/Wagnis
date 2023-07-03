@@ -52,6 +52,7 @@ import at.aau.wagnis.server.communication.command.EndTurnCommand;
 import at.aau.wagnis.server.communication.command.IdentifyCommand;
 import at.aau.wagnis.server.communication.command.ProcessChatMessageCommand;
 import at.aau.wagnis.server.communication.command.ReinforceCommand;
+import at.aau.wagnis.server.communication.command.SelectHubCommand;
 import at.aau.wagnis.server.communication.command.StartGameCommand;
 import at.aau.wagnis.server.communication.command.UseCardsCommand;
 
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ((WagnisApplication) getApplication()).getGameManager().setGameDataListener(newGameData -> runOnUiThread(() -> {
+            // on create wird aufgerufen und durch die anderung von Listner wird dieser Teil ausgefuert und damit koennen alle Spieler das vorgehen sehen
             /*Code to be executed on UI thread*/
 
             if (newGameData != null && currentGameData != null && !(currentGameData.getMessages().equals(newGameData.getMessages()))) {
@@ -119,31 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 popupStart(btnCards);
                 wasDrawn = true;
             } else {
-                for (Hub h : currentGameData.getHubs()) {
-                    Hub uiHub = GlobalVariables.findHubById(h.getId());
-                    uiHub.setText(h.getAmountTroops() + ", " + h.getId());
-                    if (h.getOwner() != null) {
-                        switch (h.getOwner().getPlayerId()) {
-                            case 0:
-                                uiHub.setHubImage("ESA");
-                                break;
-                            case 1:
-                                uiHub.setHubImage("NASA");
-                                break;
-                            case 2:
-                                uiHub.setHubImage("JAXA");
-                                break;
-                            case 3:
-                                uiHub.setHubImage("ISRO");
-                                break;
-                            case 4:
-                                uiHub.setHubImage("Roskosmos");
-                                break;
-                            default:
-                                uiHub.setHubImage("China manned space program");
-                        }
-                    }
-                }
+                lastClickedHub = GlobalVariables.findHubById(currentGameData.getSelectedHub());
+                updateHubs();
                 btnCards.setOnClickListener(view -> popupCards(currentGameData.getPlayers().get(currentGameData.getCurrentPlayer())));
                 enableButtons();
                 showState();
@@ -163,6 +142,49 @@ public class MainActivity extends AppCompatActivity {
         }));
 
 
+    }
+
+    private void updateHubs(){
+        for (Hub h : currentGameData.getHubs()) {
+            Hub uiHub = GlobalVariables.findHubById(h.getId()); // Hubs die tatsaelich auf dem Geraet sind
+            uiHub.setText(h.getAmountTroops() + ", " + h.getId()); //h =  von Server
+            if (h.getOwner() != null) {
+                uiHub.setOwner(h.getOwner());
+                String agency;
+                switch (h.getOwner().getPlayerId()) {
+                    case 0:
+                        agency="ESA";
+                        break;
+                    case 1:
+                        agency="NASA";
+                        break;
+                    case 2:
+                        agency= "JAXA";
+                        break;
+                    case 3:
+                        agency="ISRO";
+                        break;
+                    case 4:
+                        agency="Roskosmos";
+                        break;
+                    default:
+                        agency="China manned space program";
+                }
+                if(lastClickedHub!=null){
+                    if(uiHub.getId()==lastClickedHub.getId()){
+                        uiHub.setBigHubImage(agency);
+                    }else if(isAdjacent(uiHub,lastClickedHub)){
+                        if(uiHub.getOwner().getPlayerId()!=lastClickedHub.getOwner().getPlayerId()) {
+                            uiHub.setBigHubImage(agency);
+                        }
+                    }else {
+                        uiHub.setHubImage(agency);
+                    }
+                }else {
+                    uiHub.setHubImage(agency);
+                }
+            }
+        }
     }
 
     // Überprüft, ob der aktuelle Spieler der Spieler des Geräts ist
@@ -297,16 +319,19 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Invalid Hub!", Toast.LENGTH_SHORT).show();
                         }
                         lastClickedHub = null;
+                        updateHubs();
                     } else {
                         // Überprüfen, ob der aktuelle Spieler der Besitzer des Quellhubs ist
                         if (currentGameData.getCurrentPlayer() == clickedHub.getOwner().getPlayerId()) {
                             if(currentGameData.getCurrentGameLogicState().equals("ReinforceGameState")){
                                 popupReinforceTroops(clickedHub);
                                 lastClickedHub=null;
+                            }else if(currentGameData.getCurrentGameLogicState().equals("ChooseAttackGameState")){
+                                getGameManager().postCommand(new SelectHubCommand(clickedHub.getId()));
                             }else{
                                 lastClickedHub = clickedHub;  // Den zuletzt geklickten Hub speichern
                             }
-                             } else {
+                        } else {
                             Toast.makeText(MainActivity.this, "Source must be in your possession!\nChoose a new Hub!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -355,6 +380,15 @@ public class MainActivity extends AppCompatActivity {
 
         }
         adjacencyView.setImageBitmap(bitmap);
+    }
+
+    private boolean isAdjacent(Hub hub1, Hub hub2){ //benachbarte Hubs pruefen
+        for(Adjacency a : GlobalVariables.getAdjacencies()){
+            if(a.isInPair(hub1, hub2)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void updatePlayerCount() {

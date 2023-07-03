@@ -19,6 +19,7 @@ public class GameData {
     private static final String CARD_STRING  = "CARD";
     private static final String HUB_STRING  = "HUB";
     private static final String CURRENT_PLAYER_STRING = "ACTIVE";
+    private static final String SELECTED_HUB = "SELECTED";
     protected static final int MSG_HISTORY_LENGTH = 10;
 
     private String seed;
@@ -30,6 +31,7 @@ public class GameData {
     private String currentGameLogicState;
     private int currentPlayerID;
     private Deck deck;
+    private int selectedHub;
 
     public GameData() {
         super();
@@ -40,6 +42,7 @@ public class GameData {
         messages = new ArrayList<>();
         currentGameLogicState = "LobbyState";
         currentPlayerID = 0;
+        selectedHub = -1; // ungueltig weil wenn nicht existiert, dann wird nicht angezeigt
     }
 
     public String getCurrentGameLogicState() {
@@ -115,6 +118,14 @@ public class GameData {
         return deck;
     }
 
+    public int getSelectedHub() {
+        return selectedHub;
+    }
+
+    public void setSelectedHub(int selectedHub) {
+        this.selectedHub = selectedHub;
+    }
+
     public String serialize() {
         // TYPE1<VALUE1>TYPE1TYPE2<VALUE2>TYPE2...
         // SEED(string), PLAYER[i](id, unassigned, cards[i](type)), HUB[i](hubID, ownerID, troops)
@@ -140,6 +151,11 @@ public class GameData {
         builder.append(GAMESTATE_STRING);
         builder.append(this.currentGameLogicState);
         builder.append(GAMESTATE_STRING);
+
+        // Selected Hub
+        builder.append(SELECTED_HUB);
+        builder.append(this.selectedHub);
+        builder.append(SELECTED_HUB);
 
         // Seed
         builder.append(SEED_STRING);
@@ -195,6 +211,9 @@ public class GameData {
 
         // current GameLocigState
         setCurrentGameLogicState(input.split(GAMESTATE_STRING)[1]);
+
+        // Selected Hub
+        setSelectedHub(Integer.parseInt(input.split(SELECTED_HUB)[1])); // Objekt in String umwandeln
 
         // Seed
         String[] seedData = input.split(SEED_STRING);

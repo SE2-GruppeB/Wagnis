@@ -71,4 +71,8 @@ public abstract class GameLogicState {
         Player currentPlayer = gameServer.getGameData().getPlayers().get(gameServer.getGameData().getCurrentPlayer());
         currentPlayer.useCards(index1, index2, index3);
     }
+
+    public void selectHub(int hubId){
+        gameServer.getGameData().setSelectedHub(hubId);
+    } // die ID die vom Server uber command gefangen wird, wird ueber gameData gespeichert
 }
